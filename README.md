@@ -30,6 +30,43 @@ This project uses AI to create customized learning paths based on:
 
 ### Installation
 ```bash
+ai_learning_path_generator/
+├── src/
+│   ├── core/
+│   │   ├── init.py
+│   │   ├── analytics.py
+│   │   ├── knowledge_graph.py
+│   │   ├── learning_path.py
+│   │   ├── path_optimization.py
+│   │   └── progress_tracker.py
+│   ├── advanced/
+│   ├── ml/
+│   ├── utils/
+│   ├── agent.py
+│   ├── embeddings.py
+│   ├── init.py
+│   ├── learning_path.py
+│   └── retriever.py
+├── web_app/
+│   ├── static/
+│   │   ├── css/
+│   │   │   └── style.css
+│   │   └── js/
+│   │       └── main.js
+│   ├── templates/
+│   │   ├── base.html
+│   │   ├── index.html
+│   │   └── learning_path.html
+│   └── app.py
+├── tests/
+│   ├── test_advanced_features.py
+│   ├── test_agent.py
+│   ├── test_embeddings.py
+│   ├── test_env.py
+│   ├── test_formatted_path.py
+│   ├── test_learning_path.py
+│   ├── test_ml_models.py
+│   └── test_retriever.py
 
 
 📝 License
