@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <div class="bg-white rounded-lg shadow-lg p-8">
+        <!-- Header -->
+        <div class="mb-8">
+            <h2 class="text-2xl font-bold text-gray-900">Your Learning Path</h2>
+            <p class="text-gray-600">Topic: {{ path.topic }} ({{ path.level }})</p>
+        </div>
+
+        <!-- Difficulty Analysis -->
+        <div class="mb-8">
+            <h3 class="text-xl font-semibold mb-4">Difficulty Analysis</h3>
+            <div class="grid grid-cols-3 gap-4">
+                <div class="p-4 bg-blue-50 rounded-lg">
+                    <p class="text-sm text-gray-600">Technical Complexity</p>
+                    <p class="text-2xl font-bold text-blue-600">
+                        {{ (path.difficulty_analysis.technical_density * 100) | round(1) }}%
+                    </p>
+                </div>
+                <div class="p-4 bg-green-50 rounded-lg">
+                    <p class="text-sm text-gray-600">Content Complexity</p>
+                    <p class="text-2xl font-bold text-green-600">
+                        {{ (path.difficulty_analysis.complexity_score * 100) | round(1) }}%
+                    </p>
+                </div>
+                <div class="p-4 bg-purple-50 rounded-lg">
+                    <p class="text-sm text-gray-600">Estimated Study Time</p>
+                    <p class="text-2xl font-bold text-purple-600">
+                        {{ path.difficulty_analysis.estimated_hours }} hours
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Learning Content -->
+        <div class="mb-8">
+            <h3 class="text-xl font-semibold mb-4">Learning Schedule</h3>
+            <div class="space-y-4">
+                {% for milestone in path.progress_timeline.weekly_milestones %}
+                <div class="p-4 border rounded-lg">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h4 class="font-medium">Week {{ milestone.week }}</h4>
+                            <p class="text-sm text-gray-600">
+                                Target: {{ milestone.hours_completed }} study hours
+                            </p>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-blue-600 font-medium">
+                                {{ (milestone.expected_progress * 100) | round }}% completion
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="bg-gray-50 p-4 rounded-lg text-center">
+            <p class="text-lg text-gray-700">
+                Total Duration: 
+                <span class="font-semibold">{{ path.progress_timeline.estimated_completion_days }}</span> days
+            </p>
+            <p class="text-sm text-gray-500 mt-1">
+                Confidence Level: {{ (path.progress_timeline.confidence_score * 100) | round }}%
+            </p>
+        </div>
+
+        <!-- Actions -->
+        <div class="mt-8 flex justify-center space-x-4">
+            <a href="{{ url_for('index') }}" 
+               class="px-6 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors">
+                Create New Path
+            </a>
+            <button onclick="window.print()" 
+                    class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+                Save as PDF
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <div class="bg-white rounded-lg shadow-lg p-8">
+        <form action="{{ url_for('generate_path') }}" method="POST" class="space-y-6">
+            <!-- Topic Selection -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Learning Topic</label>
+                <select name="topic" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                    <option value="">Select a topic</option>
+                    <option value="Machine Learning">Machine Learning</option>
+                    <option value="Deep Learning">Deep Learning</option>
+                    <option value="Computer Vision">Computer Vision</option>
+                    <option value="Natural Language Processing">NLP</option>
+                    <option value="MLOps">MLOps</option>
+                </select>
+            </div>
+
+            <!-- Experience Level -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Experience Level</label>
+                <div class="mt-2 grid grid-cols-3 gap-3">
+                    <label class="flex p-4 border rounded-lg cursor-pointer hover:bg-blue-50">
+                        <input type="radio" name="level" value="beginner" class="mr-2" required>
+                        <span>Beginner</span>
+                    </label>
+                    <label class="flex p-4 border rounded-lg cursor-pointer hover:bg-blue-50">
+                        <input type="radio" name="level" value="intermediate" class="mr-2">
+                        <span>Intermediate</span>
+                    </label>
+                    <label class="flex p-4 border rounded-lg cursor-pointer hover:bg-blue-50">
+                        <input type="radio" name="level" value="advanced" class="mr-2">
+                        <span>Advanced</span>
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit" class="w-full bg-blue-600 text-white px-4 py-3 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                Generate Learning Path
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}
