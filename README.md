@@ -68,6 +68,70 @@ ai_learning_path_generator/
 │   ├── test_ml_models.py
 │   └── test_retriever.py
 
+# Running the Application and Testing
+
+## Web Interface Setup
+```bash
+cd web_app
+python app.py
+Visit http://localhost:5000 in your browser
+Running Tests
+bashCopy# Run all tests
+python -m pytest tests/
+
+# Run specific test
+python -m pytest tests/test_learning_path.py
+Using the App
+Web Interface
+
+Select your learning topic
+Choose your experience level
+Get personalized learning path with:
+
+Prerequisites
+Learning modules
+Time estimates
+Resource links
+
+
+
+API Usage
+pythonCopyfrom src.core.learning_path import LearningPathGenerator
+
+# Initialize generator
+generator = LearningPathGenerator(api_key="your-openai-api-key")
+
+# Generate learning path
+path = generator.generate_learning_path(
+    topic="Machine Learning",
+    user_level="intermediate"
+)
+Key Features
+
+🤖 AI-powered path generation using LangChain and GPT
+📊 Difficulty assessment and progress tracking
+🔍 Vector-based content retrieval using ChromaDB
+📈 Learning analytics and visualizations
+🌐 Interactive web interface
+
+Built With
+
+LangChain & OpenAI
+ChromaDB
+Python & Flask
+HTML & Tailwind CSS
+
+License
+MIT
+Contact
+Your Name - your.email@example.com
+Acknowledgments
+
+OpenAI for GPT API
+LangChain framework
+ChromaDB for vector storage
+
+
 
 📝 License
 This project is licensed under the MIT License - see the LICENSE file for details.
