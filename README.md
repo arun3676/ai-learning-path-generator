@@ -96,7 +96,7 @@ Resource links
 
 
 API Usage
-pythonCopyfrom src.core.learning_path import LearningPathGenerator
+from src.core.learning_path import LearningPathGenerator
 
 # Initialize generator
 generator = LearningPathGenerator(api_key="your-openai-api-key")
