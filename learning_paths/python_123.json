@@ -1,0 +1,87 @@
+{
+  "id": "123",
+  "title": "Advanced Python Mastery",
+  "description": "This personalized learning path is designed for individuals with a solid understanding of Python who aim to deepen their expertise in the language. Through a series of milestones, you will enhance your Python skills and tackle more advanced concepts.",
+  "topic": "Python",
+  "expertise_level": "advanced",
+  "learning_style": "reading",
+  "time_commitment": "moderate",
+  "duration_weeks": 18,
+  "goals": [
+    "Enhance Python skills to an advanced level",
+    "Gain practical experience in advanced Python programming"
+  ],
+  "milestones": [
+    {
+      "title": "Advanced Python Libraries Exploration",
+      "description": "Dive into advanced Python libraries such as NumPy and Pandas for data manipulation and analysis.",
+      "estimated_hours": 10,
+      "resources": [
+        {
+          "title": "NumPy Documentation",
+          "link": "https://numpy.org/doc/",
+          "type": "Documentation",
+          "style_score": 1
+        },
+        {
+          "title": "Pandas User Guide",
+          "link": "https://pandas.pydata.org/docs/user_guide/index.html",
+          "type": "Guide",
+          "style_score": 1
+        }
+      ],
+      "skills_gained": [
+        "Data manipulation using NumPy and Pandas"
+      ]
+    },
+    {
+      "title": "Advanced Python Concepts",
+      "description": "Explore concepts like decorators, generators, and context managers in Python.",
+      "estimated_hours": 12,
+      "resources": [
+        {
+          "title": "Real Python - Decorators",
+          "link": "https://realpython.com/primer-on-python-decorators/",
+          "type": "Article",
+          "style_score": 1
+        },
+        {
+          "title": "Python Generators",
+          "link": "https://realpython.com/introduction-to-python-generators/",
+          "type": "Tutorial",
+          "style_score": 1
+        }
+      ],
+      "skills_gained": [
+        "Understanding of decorators, generators, and context managers"
+      ]
+    },
+    {
+      "title": "Advanced Python Projects",
+      "description": "Work on challenging Python projects to apply your advanced skills in real-world scenarios.",
+      "estimated_hours": 15,
+      "resources": [
+        {
+          "title": "GitHub - Python Projects",
+          "link": "https://github.com/search?l=Python&q=python+projects",
+          "type": "Projects Repository",
+          "style_score": 1
+        },
+        {
+          "title": "Real Python - Python Projects for Beginners",
+          "link": "https://realpython.com/tutorials/beginners/",
+          "type": "Projects",
+          "style_score": 1
+        }
+      ],
+      "skills_gained": [
+        "Practical application of advanced Python concepts"
+      ]
+    }
+  ],
+  "prerequisites": [
+    "Solid understanding of core Python principles"
+  ],
+  "total_hours": 37,
+  "created_at": "2022-10-18"
+}

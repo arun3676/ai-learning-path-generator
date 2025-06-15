@@ -1,0 +1,81 @@
+{
+  "id": "1",
+  "title": "Visual Learning Path for React.js Certification",
+  "description": "This personalized learning path is designed for visual learners with no prior knowledge in React.js who aim to achieve certification. The path includes visual resources to facilitate understanding and progression.",
+  "topic": "React.js",
+  "expertise_level": "beginner",
+  "learning_style": "visual",
+  "time_commitment": "minimal - 1-2 hours per week",
+  "duration_weeks": 16,
+  "goals": [
+    "Certification"
+  ],
+  "milestones": [
+    {
+      "title": "Introduction to React.js",
+      "description": "Understand the basics of React.js, components, and virtual DOM.",
+      "estimated_hours": 5,
+      "resources": [
+        {
+          "title": "React.js Official Tutorial",
+          "type": "text",
+          "link": "https://reactjs.org/tutorial/tutorial.html",
+          "style_score": 1
+        },
+        {
+          "title": "React.js Component Lifecycle Diagram",
+          "type": "image",
+          "link": "https://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/",
+          "style_score": 1
+        }
+      ],
+      "skills_gained": [
+        "Basic understanding of React.js components and virtual DOM"
+      ]
+    },
+    {
+      "title": "State and Props in React.js",
+      "description": "Learn about state management and props in React.js.",
+      "estimated_hours": 6,
+      "resources": [
+        {
+          "title": "React State and Props Visual Guide",
+          "type": "video",
+          "link": "https://www.youtube.com/watch?v=IYvD9oBCuJI",
+          "style_score": 5
+        }
+      ],
+      "skills_gained": [
+        "Understanding of managing state and passing props in React.js"
+      ]
+    },
+    {
+      "title": "React.js Routing and Forms",
+      "description": "Explore routing concepts and form handling in React.js.",
+      "estimated_hours": 8,
+      "resources": [
+        {
+          "title": "React Router Visualization",
+          "type": "video",
+          "link": "https://www.youtube.com/watch?v=Law7wfdg_ls",
+          "style_score": 5
+        },
+        {
+          "title": "Formik Form Handling Tutorial",
+          "type": "text",
+          "link": "https://formik.org/docs/tutorial",
+          "style_score": 1
+        }
+      ],
+      "skills_gained": [
+        "Understanding of routing in React.js",
+        "Ability to handle forms using Formik"
+      ]
+    }
+  ],
+  "prerequisites": [
+    "Basic understanding of programming concepts like variables, data types, and control structures"
+  ],
+  "total_hours": 19,
+  "created_at": "2022-12-14"
+}

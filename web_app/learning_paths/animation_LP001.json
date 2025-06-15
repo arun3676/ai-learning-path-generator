@@ -1,0 +1,88 @@
+{
+  "id": "LP001",
+  "title": "Visual Animation Certification Learning Path",
+  "description": "A personalized learning path for beginners who prefer visual learning style to achieve certification in Animation.",
+  "topic": "Animation",
+  "expertise_level": "Beginner",
+  "learning_style": "Visual",
+  "time_commitment": "Minimal (1-2 hours per week)",
+  "duration_weeks": 16,
+  "goals": [
+    "Achieve Certification in Animation"
+  ],
+  "milestones": [
+    {
+      "title": "Introduction to Animation Principles",
+      "description": "Learn the fundamental principles of animation through visual examples and diagrams.",
+      "estimated_hours": 10,
+      "resources": [
+        {
+          "title": "The Animator's Survival Kit",
+          "type": "Book",
+          "link": "https://www.amazon.com/The-Animators-Survival-Richard-Williams/dp/086547897X",
+          "style_score": 1
+        },
+        {
+          "title": "12 Principles of Animation - YouTube Playlist",
+          "type": "Video",
+          "link": "https://www.youtube.com/playlist?list=PL-bOh8btec4CXd2ya1NmSKpi92U_l6ZJd",
+          "style_score": 1
+        }
+      ],
+      "skills_gained": [
+        "Understanding of basic animation principles"
+      ]
+    },
+    {
+      "title": "Software Tools for Animation",
+      "description": "Explore animation software tools and their visual interfaces.",
+      "estimated_hours": 15,
+      "resources": [
+        {
+          "title": "Adobe Animate Tutorials",
+          "type": "Online Course",
+          "link": "https://helpx.adobe.com/animate/tutorials.html",
+          "style_score": 1
+        },
+        {
+          "title": "Toon Boom Harmony - Getting Started Guide",
+          "type": "PDF",
+          "link": "https://www.toonboom.com/resources/getting-started",
+          "style_score": 1
+        }
+      ],
+      "skills_gained": [
+        "Familiarity with animation software tools"
+      ]
+    },
+    {
+      "title": "Character Design and Storyboarding",
+      "description": "Learn character design and storyboarding techniques with visual examples.",
+      "estimated_hours": 20,
+      "resources": [
+        {
+          "title": "Character Design Course - Udemy",
+          "type": "Online Course",
+          "link": "https://www.udemy.com/course/character-design-for-animation/",
+          "style_score": 1
+        },
+        {
+          "title": "Storyboarding Essentials - Skillshare",
+          "type": "Online Course",
+          "link": "https://www.skillshare.com/classes/Storyboarding-Essentials-How-to-Create-a-Storyboard",
+          "style_score": 1
+        }
+      ],
+      "skills_gained": [
+        "Character design skills",
+        "Storyboarding skills"
+      ]
+    }
+  ],
+  "prerequisites": [
+    "Access to a computer with internet connection",
+    "Basic understanding of using computer applications"
+  ],
+  "total_hours": 45,
+  "created_at": "2022-11-15"
+}

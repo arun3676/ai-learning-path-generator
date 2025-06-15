@@ -1,0 +1,80 @@
+{
+  "id": "GD101",
+  "title": "Personalized Learning Path for Graphic Design Beginners",
+  "description": "This learning path is designed for beginners with no prior knowledge in graphic design who prefer to learn through reading materials and note-taking. The path will introduce fundamental concepts and skills in graphic design to help you kickstart your journey in this creative field.",
+  "topic": "Graphic Design",
+  "expertise_level": "Beginner",
+  "learning_style": "Reading",
+  "time_commitment": "Minimal (1-2 hours per week)",
+  "duration_weeks": 16,
+  "goals": [
+    "Understand the basic principles of graphic design",
+    "Learn essential design software tools and techniques",
+    "Create simple graphic design projects"
+  ],
+  "milestones": [
+    {
+      "title": "Introduction to Graphic Design",
+      "description": "Explore the history and principles of graphic design",
+      "estimated_hours": 2,
+      "resources": [
+        {
+          "title": "Graphic Design Basics: Core Principles for Visual Design",
+          "type": "Book",
+          "url": "example.com/book1",
+          "style_score": 1
+        },
+        {
+          "title": "Introduction to Graphic Design Course",
+          "type": "Online Course",
+          "url": "example.com/course1",
+          "style_score": 1
+        }
+      ],
+      "skills_gained": [
+        "Understanding of design fundamentals"
+      ]
+    },
+    {
+      "title": "Learning Design Software",
+      "description": "Familiarize yourself with popular design software tools",
+      "estimated_hours": 4,
+      "resources": [
+        {
+          "title": "Adobe Photoshop Basics Guide",
+          "type": "Online Tutorial",
+          "url": "example.com/tutorial1",
+          "style_score": 1
+        },
+        {
+          "title": "Canva Design Tutorials",
+          "type": "Website",
+          "url": "example.com/tutorial2",
+          "style_score": 1
+        }
+      ],
+      "skills_gained": [
+        "Basic software skills in graphic design"
+      ]
+    },
+    {
+      "title": "Practical Project Creation",
+      "description": "Apply your knowledge by creating simple design projects",
+      "estimated_hours": 6,
+      "resources": [
+        {
+          "title": "Design Projects for Beginners",
+          "type": "Online Resource",
+          "url": "example.com/projects",
+          "style_score": 1
+        }
+      ],
+      "skills_gained": [
+        "Hands-on design experience"
+      ]
+    }
+  ],
+  "prerequisites": [],
+  "total_hours": 12,
+  "created_at": "2022-10-25"
+}

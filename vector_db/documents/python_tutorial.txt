@@ -1,0 +1,42 @@
+Python Programming Tutorial
+==========================
+
+Python is a high-level, interpreted programming language. It's known for its:
+
+1. Key Features
+- Simple syntax
+- Dynamic typing
+- Automatic memory management
+- Large standard library
+- Cross-platform compatibility
+
+2. Basic Syntax
+- Use indentation instead of braces
+- No need for semicolons
+- Comments start with #
+- Functions defined with def keyword
+
+3. Common Data Structures
+- Lists: Ordered, mutable collections
+- Tuples: Ordered, immutable collections
+- Dictionaries: Key-value pairs
+- Sets: Unordered collections of unique elements
+
+4. Control Flow
+- if/elif/else statements
+- for loops
+- while loops
+- break and continue statements
+
+5. Functions
+- Defined with def keyword
+- Can have parameters
+- Can return values
+- Supports default parameters
+
+6. Best Practices
+- Follow PEP 8 style guide
+- Use meaningful variable names
+- Write docstrings for functions
+- Use list comprehensions when possible
+- Handle exceptions with try/except

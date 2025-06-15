@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}Autonomous Learning Agents{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/agents.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="fade-in">Meet Your Learning Agents</h1>
+    
+    <div class="agent-grid">
+        <!-- Research Agent Card -->
+        <div class="agent-card">
+            <div class="agent-card-header">
+                <div class="agent-avatar">
+                    🧠
+                </div>
+                <div class="agent-info">
+                    <h2 class="agent-name">Research Agent</h2>
+                    <p>Expert in knowledge acquisition and trend analysis</p>
+                </div>
+            </div>
+            
+            <div class="agent-actions">
+                <button class="action-button" id="startResearchBtn">
+                    Start Research
+                </button>
+                <button class="action-button" id="viewHistoryBtn">
+                    View History
+                </button>
+            </div>
+            
+            <div class="research-progress">
+                <div class="progress-bar">
+                    <div id="researchProgress" class="progress"></div>
+                </div>
+                <p id="researchStatus">Ready to research</p>
+            </div>
+        </div>
+
+        <!-- Teaching Agent Card -->
+        <div class="agent-card">
+            <div class="agent-card-header">
+                <div class="agent-avatar">
+                    🎓
+                </div>
+                <div class="agent-info">
+                    <h2 class="agent-name">Teaching Agent</h2>
+                    <p>Personalized learning path creator</p>
+                </div>
+            </div>
+            
+            <div class="agent-actions">
+                <button class="action-button" id="createPathBtn">
+                    Create Path
+                </button>
+                <button class="action-button" id="viewPathsBtn">
+                    View Paths
+                </button>
+            </div>
+            
+            <div class="teaching-progress">
+                <div class="progress-bar">
+                    <div id="teachingProgress" class="progress"></div>
+                </div>
+                <p id="teachingStatus">Ready to teach</p>
+            </div>
+        </div>
+
+        <!-- Chat Interface -->
+        <div class="chat-container">
+            <h3>Agent Chat</h3>
+            <div id="chatMessages" class="chat-messages">
+                <!-- Messages will be added here -->
+            </div>
+            
+            <div class="chat-input">
+                <input type="text" id="chatInput" placeholder="Ask your agents a question...">
+                <button id="sendMessageBtn">
+                    Send
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/agents.js') }}" defer></script>
+{% endblock %}

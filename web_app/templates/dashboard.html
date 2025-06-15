@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Dashboard | Learning Path</title>
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        magenta: '#ff50c5',
+                        magentaLight: '#ff97df',
+                        sunshine: '#FFCF40',
+                        sunnyYellow: '#F9C846'
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Custom styles -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700;800&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+        }
+        
+        .magenta-bg {
+            background-color: #ff50c5;
+        }
+        
+        .yellow-bg {
+            background-color: #F9C846;
+        }
+        
+        .wave-divider {
+            position: relative;
+            height: 70px;
+            width: 100%;
+        }
+        
+        .wave-divider svg {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 70px;
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .progress-bar {
+            background: linear-gradient(to right, #FF5F9E, #FF427F); /* Magenta gradient */
+            height: 100%;
+            border-radius: 9999px;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="py-4 px-6 flex justify-between items-center bg-white shadow-sm">
+        <div class="flex items-center space-x-2">
+            <a href="/" class="text-2xl font-extrabold">Learning<span class="text-magenta">Path</span></a>
+        </div>
+        <div class="flex items-center space-x-6">
+            <a href="/" class="text-gray-700 hover:text-magenta transition-colors duration-300">Home</a>
+            <a href="/dashboard" class="text-magenta font-medium">My Dashboard</a>
+            <a href="/#path-form" class="bg-magenta text-white px-5 py-2 rounded-full hover:bg-magentaLight transition-colors duration-300">Create New Path</a>
+            <div class="relative group">
+                <button class="flex items-center space-x-1 text-gray-700 hover:text-magenta transition-colors duration-300">
+                    <span>{{ current_user.username }}</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
+                <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 hidden group-hover:block">
+                    <a href="{{ url_for('auth.logout') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Hero Section -->
+    <section class="magenta-bg text-white py-12 px-6 relative overflow-hidden">
+        <div class="container mx-auto">
+            <div class="relative z-10">
+                <h1 class="text-4xl md:text-5xl font-extrabold mb-4">My Dashboard</h1>
+                <p class="text-xl opacity-90 mb-6">Track your learning progress and manage your personalized paths</p>
+            </div>
+            <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-sunshine rounded-full opacity-50 z-0"></div>
+            <div class="absolute -top-5 -left-5 w-20 h-20 bg-white rounded-full opacity-30 z-0"></div>
+        </div>
+    </section>
+    
+    <!-- Wave divider -->
+    <div class="wave-divider">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" preserveAspectRatio="none" class="fill-current text-magenta">
+            <path d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,149.3C960,160,1056,160,1152,138.7C1248,117,1344,75,1392,53.3L1440,32L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path>
+        </svg>
+    </div>
+
+    <!-- Dashboard Content -->
+    <div class="container mx-auto px-6 py-8">
+        <!-- Stats Overview -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white rounded-xl shadow-md p-6">
+                <h3 class="text-lg font-bold text-gray-700 mb-2">Learning Paths</h3>
+                <p class="text-3xl font-bold text-magenta">{{ user_paths|length }}</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-md p-6">
+                <h3 class="text-lg font-bold text-gray-700 mb-2">Completed Milestones</h3>
+                <p class="text-3xl font-bold text-magenta">{{ completed_milestones }}</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-md p-6">
+                <h3 class="text-lg font-bold text-gray-700 mb-2">Overall Progress</h3>
+                <div class="mt-2">
+                    <div class="flex justify-between text-sm mb-1">
+                        <span>{{ overall_progress }}%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="progress-bar" style="width: {{ overall_progress }}%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- My Learning Paths -->
+        <h2 class="text-2xl font-bold mb-6">My Learning Paths</h2>
+        
+        {% if user_paths %}
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for path in user_paths %}
+                    <div id="path-{{ path.id }}" class="bg-white rounded-xl shadow-md overflow-hidden card-hover path-card">
+                        <div class="p-6">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="px-3 py-1 bg-magentaLight text-white rounded-full text-xs font-medium">{{ path.topic }}</span>
+                                <span class="px-3 py-1 bg-sunshine text-gray-800 rounded-full text-xs font-medium">{{ path.expertise_level|default('Beginner')|title }}</span>
+                            </div>
+                            <h3 class="text-xl font-bold mb-2 text-gray-800">{{ path.title }}</h3>
+                            <p class="text-gray-500 text-sm mb-4">Created: {{ path.created_at }}</p>
+                            
+                            <!-- Progress bar -->
+                            <div class="mb-4">
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span>Progress</span>
+                                    <span>{{ path.progress_percentage }}%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="progress-bar" style="width: {{ path.progress_percentage }}%"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex space-x-2">
+                                <a href="{{ url_for('main.view_path', path_id=path.id) }}" class="inline-block bg-magenta text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-magentaLight transition-colors duration-300">Continue</a>
+                                <button onclick="archivePath('{{ path.id }}')" class="inline-block bg-gray-200 text-gray-700 px-4 py-2 rounded-full text-sm font-medium hover:bg-gray-300 transition-colors duration-300">
+                                    {% if path.is_archived %}
+                                    Unarchive
+                                    {% else %}
+                                    Archive
+                                    {% endif %}
+                                </button>
+                                <button onclick="deletePath('{{ path.id }}')" class="inline-block bg-red-100 text-red-600 px-4 py-2 rounded-full text-sm font-medium hover:bg-red-200 transition-colors duration-300">
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="bg-white rounded-xl shadow-md p-8 text-center">
+                <img src="https://img.freepik.com/free-vector/empty-concept-illustration_114360-1188.jpg" alt="No paths found" class="w-64 h-64 mx-auto mb-6">
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">No Learning Paths Found</h3>
+                <p class="text-gray-600 mb-6">You haven't created any learning paths yet. Get started by creating your first personalized learning journey!</p>
+                <a href="/#path-form" class="inline-block bg-magenta text-white px-6 py-3 rounded-full font-bold hover:bg-magentaLight transition-colors duration-300">Create Your First Path</a>
+            </div>
+        {% endif %}
+    </div>
+    
+    <!-- Footer with wave divider -->
+    <div class="wave-divider mt-12">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" preserveAspectRatio="none" class="fill-current text-gray-800">
+            <path d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,149.3C960,160,1056,160,1152,138.7C1248,117,1344,75,1392,53.3L1440,32L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path>
+        </svg>
+    </div>
+    <footer class="bg-gray-800 text-white py-16 px-6">
+        <div class="container mx-auto">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div class="md:col-span-2">
+                    <h3 class="text-2xl font-bold mb-4">Learning<span class="text-magenta">Path</span></h3>
+                    <p class="text-gray-400 mb-6">Creating personalized learning journeys tailored to your specific needs, learning style, and schedule.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="/" class="text-gray-400 hover:text-white transition-colors duration-300">Home</a></li>
+                        <li><a href="/#how-it-works" class="text-gray-400 hover:text-white transition-colors duration-300">How it works</a></li>
+                        <li><a href="/#features" class="text-gray-400 hover:text-white transition-colors duration-300">Features</a></li>
+                        <li><a href="/#path-form" class="text-gray-400 hover:text-white transition-colors duration-300">Create Path</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-4">Contact</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li>Email: support@learningpath.ai</li>
+                        <li>Phone: +1 (555) 123-4567</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-12 pt-8 text-center text-gray-500">
+                <p>&copy; {{ current_year }} LearningPath. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Function to archive/unarchive a learning path
+        function archivePath(pathId) {
+            fetch('/archive_path', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    path_id: pathId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Reload the page to reflect changes
+                    window.location.reload();
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            });
+        }
+    </script>
+    
+    <!-- JavaScript for path management -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Handle archive/unarchive buttons
+            const archiveButtons = document.querySelectorAll('.archive-btn');
+            const unarchiveButtons = document.querySelectorAll('.unarchive-btn');
+            
+            // Archive path
+            archiveButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const pathId = this.getAttribute('data-path-id');
+                    const pathCard = document.getElementById('path-' + pathId);
+                    
+                    // Send request to server
+                    fetch('/archive_path', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            path_id: pathId,
+                            archive: true
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            // Remove path card with animation
+                            pathCard.classList.add('opacity-0');
+                            setTimeout(() => {
+                                pathCard.remove();
+                                
+                                // Check if there are no more active paths
+                                const remainingPaths = document.querySelectorAll('.path-card');
+                                if (remainingPaths.length === 0) {
+                                    const pathsContainer = document.getElementById('active-paths-container');
+                                    pathsContainer.innerHTML = `
+                                        <div class="bg-white rounded-xl shadow-md p-8 text-center">
+                                            <img src="https://img.freepik.com/free-vector/empty-concept-illustration_114360-1188.jpg" alt="No paths found" class="w-64 h-64 mx-auto mb-6">
+                                            <h3 class="text-2xl font-bold text-gray-800 mb-4">No Active Learning Paths</h3>
+                                            <p class="text-gray-600 mb-6">You haven't created any learning paths yet or all your paths are archived.</p>
+                                            <a href="/" class="inline-block bg-magenta text-white px-6 py-3 rounded-full font-bold hover:bg-magentaLight transition-colors duration-300">Create Your First Path</a>
+                                        </div>
+                                    `;
+                                }
+                                
+                                // Update archived paths section
+                                const archivedPathsContainer = document.getElementById('archived-paths-container');
+                                const archivedPathsCount = document.getElementById('archived-paths-count');
+                                
+                                // Create new archived path card
+                                const pathTitle = this.getAttribute('data-path-title');
+                                const pathTopic = this.getAttribute('data-path-topic');
+                                const pathExpertise = this.getAttribute('data-path-expertise');
+                                const pathCreated = this.getAttribute('data-path-created');
+                                
+                                const newArchivedPath = document.createElement('div');
+                                newArchivedPath.id = 'archived-' + pathId;
+                                newArchivedPath.className = 'bg-white rounded-xl shadow-md overflow-hidden archived-path-card';
+                                newArchivedPath.innerHTML = `
+                                    <div class="p-6">
+                                        <div class="flex items-center gap-2 mb-2">
+                                            <span class="px-3 py-1 bg-magentaLight text-white rounded-full text-xs font-medium">${pathTopic}</span>
+                                            <span class="px-3 py-1 bg-sunshine text-gray-800 rounded-full text-xs font-medium">${pathExpertise}</span>
+                                        </div>
+                                        <h3 class="text-xl font-bold mb-2 text-gray-800">${pathTitle}</h3>
+                                        <p class="text-gray-500 text-sm mb-4">Created: ${pathCreated}</p>
+                                        <div class="flex space-x-2">
+                                            <a href="/result?id=${pathId}" class="inline-block bg-magenta text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-magentaLight transition-colors duration-300">View Path</a>
+                                            <button class="unarchive-btn inline-block bg-gray-200 text-gray-700 px-4 py-2 rounded-full text-sm font-medium hover:bg-gray-300 transition-colors duration-300" data-path-id="${pathId}" data-path-title="${pathTitle}" data-path-topic="${pathTopic}" data-path-expertise="${pathExpertise}" data-path-created="${pathCreated}">Unarchive</button>
+                                        </div>
+                                    </div>
+                                `;
+                                
+                                // Show archived paths section if it was hidden
+                                const archivedSection = document.getElementById('archived-section');
+                                if (archivedSection.classList.contains('hidden')) {
+                                    archivedSection.classList.remove('hidden');
+                                }
+                                
+                                // Add the new archived path
+                                archivedPathsContainer.appendChild(newArchivedPath);
+                                
+                                // Update count
+                                const currentCount = parseInt(archivedPathsCount.textContent) || 0;
+                                archivedPathsCount.textContent = currentCount + 1;
+                                
+                                // Add event listener to the new unarchive button
+                                const newUnarchiveBtn = newArchivedPath.querySelector('.unarchive-btn');
+                                addUnarchiveListener(newUnarchiveBtn);
+                            }, 300);
+                        } else {
+                            console.error('Error archiving path:', data.message);
+                            alert('Error archiving path. Please try again.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('An error occurred. Please try again.');
+                    });
+                });
+            });
+            
+            // Function to add unarchive event listener
+            function addUnarchiveListener(btn) {
+                btn.addEventListener('click', function() {
+                    const pathId = this.getAttribute('data-path-id');
+                    const archivedCard = document.getElementById('archived-' + pathId);
+                    
+                    // Send request to server
+                    fetch('/archive_path', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            path_id: pathId,
+                            archive: false
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            // Remove archived card with animation
+                            archivedCard.classList.add('opacity-0');
+                            setTimeout(() => {
+                                archivedCard.remove();
+                                
+                                // Check if there are no more archived paths
+                                const remainingArchived = document.querySelectorAll('.archived-path-card');
+                                if (remainingArchived.length === 0) {
+                                    const archivedSection = document.getElementById('archived-section');
+                                    archivedSection.classList.add('hidden');
+                                }
+                                
+                                // Update archived paths count
+                                const archivedPathsCount = document.getElementById('archived-paths-count');
+                                const currentCount = parseInt(archivedPathsCount.textContent) || 0;
+                                archivedPathsCount.textContent = Math.max(0, currentCount - 1);
+                                
+                                // Create new active path card
+                                const pathTitle = this.getAttribute('data-path-title');
+                                const pathTopic = this.getAttribute('data-path-topic');
+                                const pathExpertise = this.getAttribute('data-path-expertise');
+                                const pathCreated = this.getAttribute('data-path-created');
+                                
+                                const newActivePath = document.createElement('div');
+                                newActivePath.id = 'path-' + pathId;
+                                newActivePath.className = 'bg-white rounded-xl shadow-md overflow-hidden path-card opacity-0';
+                                newActivePath.innerHTML = `
+                                    <div class="p-6">
+                                        <div class="flex items-center gap-2 mb-2">
+                                            <span class="px-3 py-1 bg-magentaLight text-white rounded-full text-xs font-medium">${pathTopic}</span>
+                                            <span class="px-3 py-1 bg-sunshine text-gray-800 rounded-full text-xs font-medium">${pathExpertise}</span>
+                                        </div>
+                                        <h3 class="text-xl font-bold mb-2 text-gray-800">${pathTitle}</h3>
+                                        <p class="text-gray-500 text-sm mb-4">Created: ${pathCreated}</p>
+                                        
+                                        <!-- Progress bar (placeholder) -->
+                                        <div class="w-full bg-gray-200 rounded-full h-2 mb-4">
+                                            <div class="bg-magenta h-2 rounded-full" style="width: 0%"></div>
+                                        </div>
+                                        <p class="text-gray-500 text-sm mb-4">Progress: 0%</p>
+                                        
+                                        <div class="flex space-x-2">
+                                            <a href="/result?id=${pathId}" class="inline-block bg-magenta text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-magentaLight transition-colors duration-300">Continue Learning</a>
+                                            <button class="archive-btn inline-block bg-gray-200 text-gray-700 px-4 py-2 rounded-full text-sm font-medium hover:bg-gray-300 transition-colors duration-300" data-path-id="${pathId}" data-path-title="${pathTitle}" data-path-topic="${pathTopic}" data-path-expertise="${pathExpertise}" data-path-created="${pathCreated}">Archive</button>
+                                        </div>
+                                    </div>
+                                `;
+                                
+                                // Check if there are no active paths and remove placeholder if needed
+                                const activePathsContainer = document.getElementById('active-paths-container');
+                                const noPathsPlaceholder = activePathsContainer.querySelector('.text-center');
+                                if (noPathsPlaceholder) {
+                                    activePathsContainer.innerHTML = '';
+                                }
+                                
+                                // Add the new active path
+                                activePathsContainer.appendChild(newActivePath);
+                                
+                                // Fade in the new card
+                                setTimeout(() => {
+                                    newActivePath.classList.remove('opacity-0');
+                                }, 10);
+                                
+                                // Add event listener to the new archive button
+                                const newArchiveBtn = newActivePath.querySelector('.archive-btn');
+                                newArchiveBtn.addEventListener('click', archiveButtons[0].onclick);
+                            }, 300);
+                        } else {
+                            console.error('Error unarchiving path:', data.message);
+                            alert('Error unarchiving path. Please try again.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('An error occurred. Please try again.');
+                    });
+                });
+            }
+            
+            // Add listeners to all unarchive buttons
+            unarchiveButtons.forEach(btn => {
+                addUnarchiveListener(btn);
+            });
+        });
+    </script>
+    <script>
+        // Function to delete a learning path
+        function deletePath(pathId) {
+            if (!confirm('Are you sure you want to permanently delete this learning path?')) {
+                return;
+            }
+            fetch('/delete_path', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ path_id: pathId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    // Remove card from UI
+                    const card = document.getElementById('path-' + pathId);
+                    if (card) card.remove();
+                    // If no cards left, show placeholder
+                    const remaining = document.querySelectorAll('.path-card');
+                    if (remaining.length === 0) {
+                        window.location.reload();
+                    }
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            })
+            .catch(err => {
+                console.error('Error deleting path:', err);
+                alert('An error occurred. Please try again.');
+            });
+        }
+    </script>
+</body>
+</html>

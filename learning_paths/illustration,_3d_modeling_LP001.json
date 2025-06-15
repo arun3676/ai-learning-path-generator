@@ -1,0 +1,108 @@
+{
+  "id": "LP001",
+  "title": "Visual Learning Path for Illustration and 3D Modeling",
+  "description": "This personalized learning path is designed for individuals with intermediate familiarity in illustration and 3D modeling who prefer visual learning styles.",
+  "topic": "Illustration, 3D Modeling",
+  "expertise_level": "Intermediate",
+  "learning_style": "Visual",
+  "time_commitment": "Moderate - 3-5 hours per week",
+  "duration_weeks": 14,
+  "goals": [
+    "Enhance skills in illustration and 3D modeling through visual learning techniques."
+  ],
+  "milestones": [
+    {
+      "title": "Understanding Illustration Basics",
+      "description": "Learn about fundamental concepts in illustration including shapes, colors, and composition.",
+      "estimated_hours": 5,
+      "resources": [
+        {
+          "title": "Color Theory for Artists and Designers",
+          "type": "Book",
+          "link": "https://www.amazon.com/Color-Theory-Artists-Designers/dp/1581152118",
+          "style_score": 1
+        },
+        {
+          "title": "Fundamentals of Composition",
+          "type": "Online Course",
+          "link": "https://www.udemy.com/course/fundamentals-of-composition",
+          "style_score": 1
+        }
+      ],
+      "skills_gained": [
+        "Basic understanding of color theory and composition in illustration"
+      ]
+    },
+    {
+      "title": "Introduction to 3D Modeling",
+      "description": "Explore the basics of 3D modeling, including modeling tools and techniques.",
+      "estimated_hours": 10,
+      "resources": [
+        {
+          "title": "Introduction to Blender",
+          "type": "YouTube Tutorial Series",
+          "link": "https://www.youtube.com/watch?v=d7BtjVW8PNE&list=PLjEaoINr3zgH1B8CjzH0Pm7SuQsGwC2V8",
+          "style_score": 1
+        },
+        {
+          "title": "3D Modeling Fundamentals",
+          "type": "Online Course",
+          "link": "https://www.coursera.org/learn/3d-modeling",
+          "style_score": 1
+        }
+      ],
+      "skills_gained": [
+        "Basic understanding of 3D modeling tools and techniques"
+      ]
+    },
+    {
+      "title": "Creating Digital Illustrations",
+      "description": "Learn how to create digital illustrations using software tools.",
+      "estimated_hours": 15,
+      "resources": [
+        {
+          "title": "Digital Painting Basics",
+          "type": "Online Course",
+          "link": "https://www.skillshare.com/classes/Digital-Painting-Basics",
+          "style_score": 1
+        },
+        {
+          "title": "Adobe Illustrator Tutorials",
+          "type": "Website",
+          "link": "https://helpx.adobe.com/illustrator/tutorials.html",
+          "style_score": 1
+        }
+      ],
+      "skills_gained": [
+        "Knowledge of digital painting techniques and software tools"
+      ]
+    },
+    {
+      "title": "Advanced 3D Modeling Techniques",
+      "description": "Explore advanced techniques in 3D modeling for more complex projects.",
+      "estimated_hours": 20,
+      "resources": [
+        {
+          "title": "Advanced Blender Tutorials",
+          "type": "YouTube Playlist",
+          "link": "https://www.youtube.com/playlist?list=PLjEaoINr3zgEq0u2MzVjKv_CgA2gb1f5h",
+          "style_score": 1
+        },
+        {
+          "title": "Mastering 3D Modeling",
+          "type": "Online Course",
+          "link": "https://www.udemy.com/course/mastering-3d-modeling",
+          "style_score": 1
+        }
+      ],
+      "skills_gained": [
+        "Advanced 3D modeling skills and techniques"
+      ]
+    }
+  ],
+  "prerequisites": [
+    "Basic familiarity with illustration and 3D modeling concepts"
+  ],
+  "total_hours": 50,
+  "created_at": "2022-10-22"
+}

@@ -1,0 +1,73 @@
+{
+  "id": "1",
+  "title": "Kinesthetic Learning Path for Animation Enthusiasts",
+  "description": "This personalized learning path is designed for individuals with an intermediate level of familiarity with basic animation concepts who prefer a kinesthetic learning style. Through hands-on activities and physical interaction, you will explore the world of animation and develop your skills in a practical manner.",
+  "topic": "Animation",
+  "expertise_level": "Intermediate",
+  "learning_style": "Kinesthetic",
+  "time_commitment": "Minimal - 1-2 hours per week",
+  "duration_weeks": 19,
+  "goals": [
+    "Personal Learning"
+  ],
+  "milestones": [
+    {
+      "title": "Introduction to Animation Principles",
+      "description": "Understand the foundational principles of animation and how they contribute to creating compelling motion sequences.",
+      "estimated_hours": 5,
+      "resources": [
+        {
+          "title": "Animate Your Name Activity",
+          "description": "Hands-on activity to animate your name using basic animation principles",
+          "link": "https://www.youtube.com/watch?v=ABC123",
+          "type": "Video Tutorial",
+          "style_score": 1
+        }
+      ],
+      "skills_gained": [
+        "Basic Animation Principles"
+      ]
+    },
+    {
+      "title": "Character Design and Animation",
+      "description": "Learn how to design and animate characters, focusing on expressing personality and movement.",
+      "estimated_hours": 8,
+      "resources": [
+        {
+          "title": "Character Animation Workshop",
+          "description": "Interactive workshop on character design and animation",
+          "link": "https://www.characteranimationworkshop.com",
+          "type": "Online Workshop",
+          "style_score": 1
+        }
+      ],
+      "skills_gained": [
+        "Character Design",
+        "Character Animation"
+      ]
+    },
+    {
+      "title": "Storyboarding and Scene Creation",
+      "description": "Explore the art of storytelling through storyboarding and creating engaging scenes.",
+      "estimated_hours": 10,
+      "resources": [
+        {
+          "title": "Storyboarding Hands-On Activity",
+          "description": "Hands-on activity to create a storyboard for a short animation scene",
+          "link": "https://www.animationmentor.com/storyboarding-activity",
+          "type": "Activity Guide",
+          "style_score": 1
+        }
+      ],
+      "skills_gained": [
+        "Storyboarding",
+        "Scene Creation"
+      ]
+    }
+  ],
+  "prerequisites": [
+    "Some familiarity with basic animation concepts"
+  ],
+  "total_hours": 23,
+  "created_at": "2022-12-01"
+}

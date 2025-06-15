@@ -1,0 +1,31 @@
+Programming Basics
+===================
+
+Programming is the process of creating instructions for computers to follow. Here are some fundamental concepts:
+
+1. Variables and Data Types
+- Variables store data
+- Common data types: integers, floats, strings, booleans
+- Variables must be declared before use
+
+2. Control Structures
+- Conditional statements (if, else, switch)
+- Loops (for, while)
+- Functions and methods
+
+3. Basic Syntax
+- Use semicolons to end statements
+- Use curly braces for code blocks
+- Indentation is important for readability
+
+4. Common Programming Languages
+- Python: Easy to learn, great for beginners
+- JavaScript: For web development
+- Java: Enterprise applications
+- C++: System programming
+
+5. Best Practices
+- Write clear, readable code
+- Use meaningful variable names
+- Comment your code
+- Follow style guidelines

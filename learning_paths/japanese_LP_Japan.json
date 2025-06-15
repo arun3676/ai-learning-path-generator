@@ -1,0 +1,91 @@
+{
+  "id": "LP_Japanese_Auditory_Intermediate_Personal",
+  "title": "Personalized Japanese Learning Path for Auditory Learners at Intermediate Level",
+  "description": "This personalized learning path is designed for auditory learners with an intermediate level of expertise in Japanese. The path focuses on enhancing listening and speaking skills while building upon basic concepts.",
+  "topic": "Japanese",
+  "expertise_level": "Intermediate",
+  "learning_style": "Auditory",
+  "time_commitment": "Minimal - 1-2 hours per week",
+  "duration_weeks": 19,
+  "goals": [
+    "Improve listening comprehension in Japanese",
+    "Enhance speaking fluency and conversational skills",
+    "Expand vocabulary and understanding of Japanese grammar"
+  ],
+  "milestones": [
+    {
+      "title": "Basic Conversational Phrases",
+      "description": "Learn essential conversational phrases in Japanese for daily interactions.",
+      "estimated_hours": 5,
+      "resources": [
+        {
+          "title": "Pimsleur Japanese Audio Lessons",
+          "url": "https://www.pimsleur.com/learn-japanese",
+          "type": "Audio Lessons",
+          "style_score": 1
+        }
+      ],
+      "skills_gained": [
+        "Basic greetings and introductions",
+        "Common expressions for daily communication"
+      ]
+    },
+    {
+      "title": "Listening Comprehension Practice",
+      "description": "Practice listening to native Japanese speakers to improve comprehension skills.",
+      "estimated_hours": 8,
+      "resources": [
+        {
+          "title": "NHK Easy Japanese Podcast",
+          "url": "https://www.nhk.or.jp/lesson/english/",
+          "type": "Podcast",
+          "style_score": 1
+        }
+      ],
+      "skills_gained": [
+        "Improved listening skills",
+        "Ability to understand spoken Japanese at a moderate pace"
+      ]
+    },
+    {
+      "title": "Expanding Vocabulary",
+      "description": "Learn new words and phrases to enhance your Japanese language proficiency.",
+      "estimated_hours": 10,
+      "resources": [
+        {
+          "title": "JapanesePod101",
+          "url": "https://www.japanesepod101.com/",
+          "type": "Audio Lessons",
+          "style_score": 1
+        }
+      ],
+      "skills_gained": [
+        "Expanded vocabulary",
+        "Ability to express ideas more fluently"
+      ]
+    },
+    {
+      "title": "Grammar and Sentence Structure",
+      "description": "Focus on understanding Japanese grammar rules and sentence structures.",
+      "estimated_hours": 12,
+      "resources": [
+        {
+          "title": "Japanese Ammo with Misa",
+          "url": "https://www.youtube.com/c/JapaneseAmmoWithMisa",
+          "type": "YouTube Channel",
+          "style_score": 1
+        }
+      ],
+      "skills_gained": [
+        "Improved sentence construction",
+        "Understanding of basic grammar concepts"
+      ]
+    }
+  ],
+  "prerequisites": [
+    "Basic familiarity with hiragana and katakana",
+    "Understanding of basic Japanese greetings and expressions"
+  ],
+  "total_hours": 35,
+  "created_at": "2022-09-20"
+}

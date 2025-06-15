@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ path.title }} | Learning Path</title>
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        magenta: '#ff50c5',
+                        magentaLight: '#ff97df',
+                        sunshine: '#FFCF40',
+                        sunnyYellow: '#F9C846'
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Chart.js for progress visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Custom styles -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700;800&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+        }
+        
+        .magenta-bg {
+            background-color: #ff50c5;
+        }
+        
+        .yellow-bg {
+            background-color: #F9C846;
+        }
+        
+        .wave-divider {
+            position: relative;
+            height: 70px;
+            width: 100%;
+        }
+        
+        .wave-divider svg {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 70px;
+        }
+        
+        .loading-spinner {
+            display: none;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #ff50c5;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .float-animation {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .milestone-card {
+            transition: all 0.3s ease;
+        }
+        
+        .milestone-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-hover {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-hover:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: all 0.5s ease;
+        }
+        
+        .btn-hover:hover:after {
+            left: 100%;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            border-radius: 4px;
+            background: linear-gradient(90deg, #ff50c5 0%, #FFCF40 100%);
+            transition: width 1s ease-in-out;
+        }
+        
+        .resource-card {
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+        
+        .resource-card:hover {
+            border-left: 4px solid #ff50c5;
+            transform: translateX(5px);
+        }
+    </style>
+</head>
+<body class="bg-white min-h-screen">
+    <!-- Navigation -->
+    <nav class="py-4 px-6 flex justify-between items-center">
+        <div class="flex items-center space-x-2">
+            <a href="/" class="text-2xl font-extrabold">Learning<span class="text-magenta">Path</span></a>
+        </div>
+        <div class="flex items-center space-x-6">
+            {% if current_user.is_authenticated %}
+                <a href="/dashboard" class="text-gray-700 hover:text-magenta transition-colors duration-300">My Dashboard</a>
+                <a href="/" class="bg-magenta text-white px-5 py-2 rounded-full hover:bg-magentaLight transition-colors duration-300 btn-hover">Create New Path</a>
+                <a href="{{ url_for('auth.logout') }}" class="text-gray-700 hover:text-magenta transition-colors duration-300">Logout</a>
+            {% else %}
+                <a href="{{ url_for('auth.login') }}" class="text-gray-700 hover:text-magenta transition-colors duration-300">Login</a>
+                <a href="{{ url_for('auth.register') }}" class="bg-magenta text-white px-5 py-2 rounded-full hover:bg-magentaLight transition-colors duration-300 btn-hover">Register</a>
+            {% endif %}
+        </div>
+    </nav>
+    
+    <!-- Hero Section -->
+    <section class="magenta-bg text-white py-12 px-6 relative overflow-hidden">
+        <div class="container mx-auto">
+            <div class="relative z-10">
+                <h1 class="text-4xl font-extrabold mb-4">{{ path.title }}</h1>
+                <p class="text-xl opacity-90 mb-6">Your personalized learning journey awaits!</p>
+            </div>
+            <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-sunshine rounded-full opacity-50 z-0"></div>
+            <div class="absolute -top-5 -left-5 w-20 h-20 bg-white rounded-full opacity-30 z-0"></div>
+        </div>
+    </section>
+    
+    <!-- Wave divider -->
+    <div class="wave-divider">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" preserveAspectRatio="none" class="fill-current text-magenta">
+            <path d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,149.3C960,160,1056,160,1152,138.7C1248,117,1344,75,1392,53.3L1440,32L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path>
+        </svg>
+    </div>
+
+    <main class="container mx-auto px-6 py-8">
+        <!-- Learning Path Overview -->
+        <div class="max-w-5xl mx-auto">
+            <div class="bg-white rounded-xl shadow-xl p-8 my-8">
+                <!-- Path Details & Tags -->
+                <div class="flex flex-wrap items-center gap-3 mb-6">
+                    <span class="px-4 py-1.5 bg-magentaLight text-white rounded-full font-medium text-sm">{{ path.topic }}</span>
+                    <span class="px-4 py-1.5 bg-sunshine text-gray-800 rounded-full font-medium text-sm">{{ path.expertise_level|title }}</span>
+                    <span class="px-4 py-1.5 bg-magentaLight text-white rounded-full font-medium text-sm">{{ path.learning_style|title }} Learner</span>
+                    <span class="px-4 py-1.5 bg-sunshine text-gray-800 rounded-full font-medium text-sm">{{ path.time_commitment|title }} Commitment</span>
+                    <span class="px-4 py-1.5 bg-magentaLight text-white rounded-full font-medium text-sm">{{ path.total_hours }} Hours</span>
+                    <span class="px-4 py-1.5 bg-sunshine text-gray-800 rounded-full font-medium text-sm">{{ path.duration_weeks }} Weeks</span>
+                </div>
+                
+                <div class="grid md:grid-cols-3 gap-6">
+                    <!-- Left Column: Description -->
+                    <div class="md:col-span-2">
+                        <div class="mb-8">
+                            <h3 class="text-2xl font-bold text-gray-800 mb-4">About This Path</h3>
+                            <p class="text-gray-700 leading-relaxed">{{ path.description }}</p>
+                        </div>
+                        
+                        <div class="mb-8">
+                            <h3 class="text-2xl font-bold text-gray-800 mb-4">What You'll Learn</h3>
+                            <ul class="space-y-3">
+                                {% for goal in path.goals %}
+                                <li class="flex items-start">
+                                    <span class="text-magenta mr-2">✓</span>
+                                    <span class="text-gray-700">{{ goal }}</span>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        
+                        {% if path.prerequisites %}
+                        <div class="mb-8">
+                            <h3 class="text-2xl font-bold text-gray-800 mb-4">Before You Start</h3>
+                            <ul class="space-y-3">
+                                {% for prereq in path.prerequisites %}
+                                <li class="flex items-start">
+                                    <span class="text-sunshine mr-2">•</span>
+                                    <span class="text-gray-700">{{ prereq }}</span>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Right Column: Progress & Actions -->
+                    <div class="bg-gray-50 p-6 rounded-xl">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">Your Progress</h3>
+                        <div class="mb-6">
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-600 text-sm">Learning Journey</span>
+                                <span class="text-gray-800 text-sm font-medium">0%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="progress-bar w-0" id="progressBar"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <div class="flex justify-between">
+                                <div>
+                                    <p class="text-xl font-bold text-gray-800">{{ path.total_hours }}</p>
+                                    <p class="text-sm text-gray-600">Total Hours</p>
+                                </div>
+                                <div>
+                                    <p class="text-xl font-bold text-gray-800">{{ path.milestones|length }}</p>
+                                    <p class="text-sm text-gray-600">Milestones</p>
+                                </div>
+                                <div>
+                                    <p class="text-xl font-bold text-gray-800">{{ path.duration_weeks }}</p>
+                                    <p class="text-sm text-gray-600">Weeks</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Action Buttons -->
+                        <div class="space-y-3">
+                            <a href="/download/{{ path.id }}" class="block w-full bg-magenta text-white text-center py-3 rounded-full font-bold hover:bg-magentaLight transition-colors duration-300 btn-hover">
+                                Download Learning Path
+                            </a>
+                            {% if current_user.is_authenticated %}
+                            <a href="{{ url_for('main.save_path') }}" class="block w-full bg-sunshine text-gray-800 text-center py-3 rounded-full font-bold hover:bg-sunnyYellow transition-colors duration-300 btn-hover">
+                                Save to My Profile
+                            </a>
+                            {% else %}
+                            <a href="{{ url_for('auth.login') }}" class="block w-full bg-sunshine text-gray-800 text-center py-3 rounded-full font-bold hover:bg-sunnyYellow transition-colors duration-300 btn-hover">
+                                Login to Save Path
+                            </a>
+                            {% endif %}
+                            <button id="shareButton" class="block w-full border-2 border-magenta text-magenta text-center py-3 rounded-full font-bold hover:bg-magenta hover:text-white transition-colors duration-300">
+                                Share This Path
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Progress Visualization -->
+            <div class="bg-white rounded-xl shadow-xl p-8 my-12">
+                <h3 class="text-2xl font-bold text-gray-800 mb-6">Your Learning Journey</h3>
+                <div class="h-72">
+                    <canvas id="progressChart"></canvas>
+                </div>
+            </div>
+            
+            <!-- Milestones Section -->
+            <div class="my-12">
+                <h3 class="text-3xl font-bold text-gray-800 mb-8 text-center">Your Learning <span class="text-magenta">Milestones</span></h3>
+                
+                <!-- Action Buttons -->
+                <div class="space-y-3 mb-6 max-w-lg mx-auto">
+                    <a href="/download/{{ path.id }}" class="block w-full bg-magenta text-white text-center py-3 rounded-full font-bold hover:bg-magentaLight transition-colors duration-300 btn-hover">
+                        Download Learning Path
+                    </a>
+                    <button id="shareButton" class="block w-full border-2 border-magenta text-magenta text-center py-3 rounded-full font-bold hover:bg-magenta hover:text-white transition-colors duration-300">
+                        Share This Path
+                    </button>
+                </div>
+                
+                <!-- Summary Stats -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6 max-w-lg mx-auto text-center">
+                    <div class="bg-white rounded-lg shadow-md p-4">
+                        <p class="text-xl font-bold text-gray-800">{{ path.total_hours }}</p>
+                        <p class="text-sm text-gray-600">Total Hours</p>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-md p-4">
+                        <p class="text-xl font-bold text-gray-800">{{ path.milestones|length }}</p>
+                        <p class="text-sm text-gray-600">Milestones</p>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-md p-4">
+                        <p class="text-xl font-bold text-gray-800">{{ path.duration_weeks }}</p>
+                        <p class="text-sm text-gray-600">Weeks</p>
+                    </div>
+                </div>
+                
+
+                
+                <!-- Milestones Section -->
+                <!-- Milestone Timeline -->
+                <div class="relative py-8">
+                    <!-- Timeline Line -->
+                    
+                    <div class="space-y-12">
+                        {% for milestone in path.milestones %}
+                            <div class="relative milestone-card">
+                                <!-- Milestone Card -->
+                                <div class="w-full flex justify-center mb-12">
+                                    <div class="bg-white rounded-xl shadow-xl p-8 w-full max-w-3xl border-t-4 border-magenta">
+                                        <div class="mb-6 text-center">
+                                            <h3 class="text-2xl font-bold text-magenta">Milestone {{ loop.index }}</h3>
+                                        </div>
+                                        <h4 class="text-2xl font-bold text-gray-800 mb-3">{{ milestone.title }}</h4>
+                                        <div class="flex items-center gap-2 mb-4">
+                                            <span class="px-3 py-1 {% if loop.index % 2 == 0 %}bg-sunshine text-gray-800{% else %}bg-magentaLight text-white{% endif %} rounded-full text-sm font-medium">{{ milestone.estimated_hours }} hours</span>
+                                        </div>
+                                        
+                                        <p class="text-gray-700 mb-6">{{ milestone.description }}</p>
+                                        
+                                        <div class="mb-6">
+                                            <h5 class="font-bold text-gray-800 mb-3">Skills you'll gain:</h5>
+                                            <div class="flex flex-wrap gap-2">
+                                                {% for skill in milestone.skills_gained %}
+                                                <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">{{ skill }}</span>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Job Market Data -->
+                                        {% if milestone.job_market_data and not milestone.job_market_data.error %}
+                                            <div class="mt-6 p-4 bg-gray-50 rounded-lg">
+                                                <h4 class="text-lg font-semibold text-gray-800 mb-2">Job Market Snapshot</h4>
+                                                <ul class="space-y-2 text-gray-600">
+                                                    <li><strong>Open Positions:</strong> <span class="font-medium text-gray-900">{{ milestone.job_market_data.open_positions }}</span></li>
+                                                    <li><strong>Average Salary:</strong> <span class="font-medium text-gray-900">{{ milestone.job_market_data.average_salary }}</span></li>
+                                                    {% if milestone.job_market_data.trending_employers %}
+                                                    <li><strong>Trending Employers:</strong>
+                                                        <div class="flex flex-wrap gap-2 mt-1">
+                                                        {% for employer in milestone.job_market_data.trending_employers %}
+                                                            <span class="bg-magenta-light text-white px-2 py-1 text-sm rounded-full">{{ employer }}</span>
+                                                        {% endfor %}
+                                                        </div>
+                                                    </li>
+                                                    {% endif %}
+                                                </ul>
+                                            </div>
+                                        {% elif milestone.job_market_data.error %}
+                                            <p class="text-sm text-gray-500 mt-4"><em>Job market data unavailable: {{ milestone.job_market_data.error }}</em></p>
+                                        {% else %}
+                                            <p class="text-sm text-gray-500 mt-4"><em>Job market data currently unavailable.</em></p>
+                                        {% endif %}
+                                        
+                                        <!-- Resources -->
+                                        <div class="mt-8">
+                                            <h4 class="text-xl font-bold text-gray-800 mb-4">Recommended Resources:</h4>
+                                            {% if milestone.resources %}
+                                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                    {% for resource in milestone.resources %}
+                                                        <div class="bg-gray-50 p-4 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 border-l-4 border-magenta card-hover">
+                                                            <div class="font-semibold text-gray-800 mb-1">{{ resource.title }}</div>
+                                                            <div class="text-sm text-gray-500 mb-3 flex items-center">
+                                                                {% if resource.type == 'Video' %}
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1 text-sunshine" viewBox="0 0 20 20" fill="currentColor">
+                                                                        <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z" />
+                                                                    </svg>
+                                                                {% elif resource.type == 'Online Course' %}
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1 text-magenta" viewBox="0 0 20 20" fill="currentColor">
+                                                                        <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z" />
+                                                                    </svg>
+                                                                {% elif resource.type == 'Book' %}
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1 text-gray-800" viewBox="0 0 20 20" fill="currentColor">
+                                                                        <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z" />
+                                                                    </svg>
+                                                                {% elif resource.type == 'Article' or resource.type == 'Tutorial' %}
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1 text-sunnyYellow" viewBox="0 0 20 20" fill="currentColor">
+                                                                        <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd" />
+                                                                    </svg>
+                                                                {% else %}
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+                                                                        <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 01-1 1h-2a1 1 0 01-1-1v-2a1 1 0 00-1-1H8a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z" clip-rule="evenodd" />
+                                                                    </svg>
+                                                                {% endif %}
+                                                                <span>{{ resource.type }}</span>
+                                                            </div>
+                                                            <div class="flex justify-between items-center">
+                                                                <a href="{% if resource.url %}{{ resource.url }}{% else %}https://www.google.com/search?q={{ resource.title }}+{{ milestone.title }}+{{ path.topic }}+tutorial{% endif %}" target="_blank" class="inline-flex items-center text-magenta text-sm font-medium hover:text-magentaLight transition-colors duration-200">
+                                                                    <span>View Resource</span>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                                                                        <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                                                    </svg>
+                                                                </a>
+                                                                <span class="text-xs text-gray-400">{{ resource.format|default('') }}</span>
+                                                            </div>
+                                                        </div>
+                                                    {% endfor %}
+                                                </div>
+                                            {% else %}
+                                                <p class="text-gray-500 italic">No specific resources recommended for this milestone.</p>
+                                            {% endif %}
+                                            
+                                            {% if milestone.resources|length > 3 %}
+                                            <button class="text-sm {% if loop.index % 2 == 0 %}text-sunshine{% else %}text-magenta{% endif %} hover:underline font-medium">+ {{ milestone.resources|length - 3 }} more resources</button>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- FAQ Section -->  
+            <div class="bg-white rounded-xl shadow-xl p-8 my-12 relative overflow-hidden">  
+                <div class="absolute -top-6 -right-6 w-24 h-24 bg-sunshine rounded-full opacity-20"></div>
+                <h3 class="text-3xl font-bold text-gray-800 mb-4">Frequently Asked Questions</h3>
+                <p class="text-lg text-gray-600 mb-8">Common questions about your learning journey and how to use this path most effectively.</p>
+                
+                <div class="space-y-6">
+                    <!-- FAQ Search -->
+                    <div class="relative mb-8">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <input type="text" id="faqSearch" placeholder="Search FAQs..." class="w-full pl-10 pr-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-magenta focus:border-magenta">
+                    </div>
+                    
+                    <!-- FAQ Accordion -->
+                    <div class="faq-items space-y-4">
+                        <!-- FAQ Item 1 -->
+                        <div class="faq-item border border-gray-200 rounded-lg overflow-hidden">
+                            <button class="faq-question w-full flex justify-between items-center bg-white px-6 py-4 focus:outline-none hover:bg-gray-50">
+                                <span class="font-medium text-gray-800 text-left">How is this learning path personalized for me?</span>
+                                <svg class="faq-icon w-5 h-5 text-magenta transform transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+                            <div class="faq-answer hidden px-6 py-4 bg-gray-50">
+                                <p class="text-gray-700">This learning path is created specifically for you based on your chosen topic, expertise level, learning style, and time commitment. Our AI analyzes the best teaching approaches for your preferences and creates a structured path with milestones tailored to your needs. Unlike generic tutorials, this path adapts to your pace and learning preferences.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- FAQ Item 2 -->
+                        <div class="faq-item border border-gray-200 rounded-lg overflow-hidden">
+                            <button class="faq-question w-full flex justify-between items-center bg-white px-6 py-4 focus:outline-none hover:bg-gray-50">
+                                <span class="font-medium text-gray-800 text-left">How should I follow this learning path?</span>
+                                <svg class="faq-icon w-5 h-5 text-magenta transform transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+                            <div class="faq-answer hidden px-6 py-4 bg-gray-50">
+                                <p class="text-gray-700">Start with milestone 1 and work through the milestones in order. Each milestone builds upon the previous one. Complete the practical exercises and projects to reinforce your learning. Use the recommended resources for each milestone, and feel free to ask questions if you get stuck. Track your progress and celebrate completing each milestone!</p>
+                            </div>
+                        </div>
+                        
+                        <!-- FAQ Item 3 -->
+                        <div class="faq-item border border-gray-200 rounded-lg overflow-hidden">
+                            <button class="faq-question w-full flex justify-between items-center bg-white px-6 py-4 focus:outline-none hover:bg-gray-50">
+                                <span class="font-medium text-gray-800 text-left">How can I get the most out of the recommended resources?</span>
+                                <svg class="faq-icon w-5 h-5 text-magenta transform transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+                            <div class="faq-answer hidden px-6 py-4 bg-gray-50">
+                                <p class="text-gray-700">The resources are carefully selected to match your learning style. Take notes while using them and try to implement what you learn immediately. For video resources, watch actively by pausing and experimenting with the concepts. For reading materials, practice summarizing what you've learned. You can click the "View Resource" button to access each resource directly.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- FAQ Item 4 -->
+                        <div class="faq-item border border-gray-200 rounded-lg overflow-hidden">
+                            <button class="faq-question w-full flex justify-between items-center bg-white px-6 py-4 focus:outline-none hover:bg-gray-50">
+                                <span class="font-medium text-gray-800 text-left">What if I find a milestone too difficult?</span>
+                                <svg class="faq-icon w-5 h-5 text-magenta transform transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+                            <div class="faq-answer hidden px-6 py-4 bg-gray-50">
+                                <p class="text-gray-700">If you're struggling with a milestone, don't skip it entirely. Instead, focus on understanding the fundamental concepts before moving on. Try additional beginner-friendly resources on the topic, break the content into smaller parts, or ask specific questions. Remember that challenging topics often become clearer with time and practice.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- FAQ Item 5 -->
+                        <div class="faq-item border border-gray-200 rounded-lg overflow-hidden">
+                            <button class="faq-question w-full flex justify-between items-center bg-white px-6 py-4 focus:outline-none hover:bg-gray-50">
+                                <span class="font-medium text-gray-800 text-left">Can I modify this learning path?</span>
+                                <svg class="faq-icon w-5 h-5 text-magenta transform transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+                            <div class="faq-answer hidden px-6 py-4 bg-gray-50">
+                                <p class="text-gray-700">Absolutely! This learning path is a suggested roadmap, but you can adapt it to your needs. You can adjust the pace, spend more time on interesting topics, or add supplementary materials. You can also generate a new path with different parameters if your needs change. Download this path to keep a copy for reference.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Ask Question Section -->
+            <div class="bg-white rounded-xl shadow-xl p-8 my-12 relative overflow-hidden">
+                <div class="absolute -top-6 -right-6 w-24 h-24 bg-sunshine rounded-full opacity-20"></div>
+                <h3 class="text-3xl font-bold text-gray-800 mb-4">Questions about your learning journey?</h3>
+                <p class="text-lg text-gray-600 mb-6">Get personalized answers about this learning path, suggested resources, or how to approach difficult concepts.</p>
+                
+                <div class="mb-4">
+                    <textarea id="questionInput" rows="4" class="w-full p-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-magenta focus:border-magenta" placeholder="Ask anything about this learning path or how to get the most out of it..."></textarea>
+                </div>
+                
+                <div class="flex justify-end">
+                    <button id="askButton" class="bg-magenta text-white py-3 px-6 rounded-full font-bold shadow-lg hover:bg-magentaLight transition-all duration-300 flex items-center btn-hover">
+                        <span>Ask Question</span>
+                        <div id="questionSpinner" class="loading-spinner ml-3"></div>
+                    </button>
+                </div>
+                
+                <div id="answerContainer" class="mt-8 p-6 bg-gray-50 rounded-lg hidden">
+                    <h4 class="text-xl font-bold text-gray-800 mb-4">Answer:</h4>
+                    <p id="answerText" class="text-gray-700"></p>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Footer with wave divider -->
+    <div class="wave-divider">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" preserveAspectRatio="none" class="fill-current text-gray-800">
+            <path d="M0,64L48,80C96,96,192,128,288,149.3C384,171,480,181,576,165.3C672,149,768,107,864,112C960,117,1056,171,1152,170.7C1248,171,1344,117,1392,90.7L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+        </svg>
+    </div>
+    
+    <footer class="bg-gray-800 text-white py-16 px-6">
+        <div class="container mx-auto">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div class="md:col-span-2">
+                    <h3 class="text-2xl font-bold mb-4">Learning<span class="text-magenta">Path</span></h3>
+                    <p class="text-gray-400 mb-4">AI-powered personalized learning journeys. Built for every type of learner, every subject, and every goal.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-white hover:text-magenta transition-colors duration-200">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-2.719 0-4.924 2.204-4.924 4.924 0 .386.044.762.127 1.122-4.092-.205-7.72-2.166-10.149-5.145-.424.726-.664 1.574-.664 2.476 0 1.709.869 3.215 2.19 4.098-.807-.026-1.566-.248-2.228-.616v.061c0 2.387 1.697 4.384 3.95 4.835-.414.111-.849.171-1.296.171-.318 0-.626-.031-1.027-.09 2.179 1.957 4.767 3.38 7.548 3.38 9.057 0 14.009-7.5 14.009-14.008 0-.213-.005-.425-.014-.636.961-.693 1.797-1.56 2.457-2.549l-.047-.02" /></svg>
+                        </a>
+                        <a href="#" class="text-white hover:text-magenta transition-colors duration-200">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" /></svg>
+                        </a>
+                        <a href="#" class="text-white hover:text-magenta transition-colors duration-200">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" /></svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Learning</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">Technologies</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">Languages</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">Career Skills</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">Creative Arts</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Company</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">About Us</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">Careers</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">Privacy Policy</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-12 pt-8">
+                <p class="text-center text-gray-400">&copy; 2025 Learning Path Generator. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // FAQ Functionality
+            const faqQuestions = document.querySelectorAll('.faq-question');
+            const faqSearch = document.getElementById('faqSearch');
+            
+            // Initialize accordion functionality
+            faqQuestions.forEach(function(question) {
+                question.addEventListener('click', function() {
+                    const answer = question.nextElementSibling;
+                    const icon = question.querySelector('.faq-icon');
+                    
+                    // Toggle current FAQ item
+                    answer.classList.toggle('hidden');
+                    icon.classList.toggle('rotate-180');
+                    
+                    // Optional: Close other open items
+                    faqQuestions.forEach(function(otherQuestion) {
+                        if (otherQuestion !== question) {
+                            const otherAnswer = otherQuestion.nextElementSibling;
+                            const otherIcon = otherQuestion.querySelector('.faq-icon');
+                            otherAnswer.classList.add('hidden');
+                            otherIcon.classList.remove('rotate-180');
+                        }
+                    });
+                });
+            });
+            
+            // FAQ search functionality
+            if (faqSearch) {
+                faqSearch.addEventListener('input', function() {
+                    const searchTerm = faqSearch.value.toLowerCase();
+                    const faqItems = document.querySelectorAll('.faq-item');
+                    
+                    faqItems.forEach(function(item) {
+                        const question = item.querySelector('.faq-question span').textContent.toLowerCase();
+                        const answer = item.querySelector('.faq-answer p').textContent.toLowerCase();
+                        
+                        if (question.includes(searchTerm) || answer.includes(searchTerm)) {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                });
+            }
+            
+            // Setup Progress Chart
+            const ctx = document.getElementById('progressChart').getContext('2d');
+            
+            // Extract milestone data for chart
+            const pathMilestones = JSON.parse('{{ path.milestones|tojson }}');
+            const milestoneLabels = [];
+            const milestoneHours = [];
+            
+            for (let i = 0; i < pathMilestones.length; i++) {
+                milestoneLabels.push(pathMilestones[i].title);
+                milestoneHours.push(pathMilestones[i].estimated_hours);
+            }
+            
+            const totalHours = parseInt('{{ path.total_hours }}');
+            
+            // Calculate cumulative hours for progress view
+            let cumulativeHours = [];
+            let runningTotal = 0;
+            milestoneHours.forEach(function(hours) {
+                runningTotal += hours;
+                cumulativeHours.push(runningTotal);
+            });
+        
+        // Initialize progress bar and milestone tracking
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get all milestone toggle buttons
+            var toggleButtons = document.querySelectorAll('.toggle-complete-btn');
+            var totalMilestones = toggleButtons.length;
+            var completedMilestones = 0;
+            
+            // Initialize milestone states and count completed ones
+            for (var i = 0; i < toggleButtons.length; i++) {
+                var button = toggleButtons[i];
+                var isCompleted = button.getAttribute('data-is-completed') === 'True';
+                var milestoneIndex = button.getAttribute('data-milestone-index');
+                
+                if (isCompleted) {
+                    completedMilestones++;
+                    updateMilestoneUI(milestoneIndex, true);
+                }
+            }
+            
+            // Update progress bar width based on completed milestones
+            updateProgressBar(completedMilestones, totalMilestones);
+            
+            // Add event listeners to toggle buttons
+            for (var j = 0; j < toggleButtons.length; j++) {
+                (function(button) {
+                    button.addEventListener('click', function() {
+                        var milestoneIndex = this.getAttribute('data-milestone-index');
+                        var pathId = this.getAttribute('data-path-id');
+                        var isCompleted = this.getAttribute('data-is-completed') === 'True';
+                        var newState = !isCompleted;
+                        
+                        // Optimistically update UI
+                        updateMilestoneUI(milestoneIndex, newState);
+                        
+                        // Update progress count
+                        if (newState) {
+                            completedMilestones++;
+                        } else {
+                            completedMilestones--;
+                        }
+                        
+                        // Update progress bar
+                        updateProgressBar(completedMilestones, totalMilestones);
+                        
+                        // Send update to server
+                        fetch('/update_progress', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                path_id: pathId,
+                                milestone_index: milestoneIndex,
+                                is_completed: newState
+                            })
+                        })
+                        .then(function(response) {
+                            return response.json();
+                        })
+                        .then(function(data) {
+                            if (data.status !== 'success') {
+                                // Revert UI if server update failed
+                                updateMilestoneUI(milestoneIndex, isCompleted);
+                                if (isCompleted) {
+                                    completedMilestones++;
+                                } else {
+                                    completedMilestones--;
+                                }
+                                updateProgressBar(completedMilestones, totalMilestones);
+                                console.error('Failed to update progress:', data.message);
+                            }
+                        })
+                        .catch(function(error) {
+                            // Revert UI on error
+                            updateMilestoneUI(milestoneIndex, isCompleted);
+                            if (isCompleted) {
+                                completedMilestones++;
+                            } else {
+                                completedMilestones--;
+                            }
+                            updateProgressBar(completedMilestones, totalMilestones);
+                            console.error('Error updating progress:', error);
+                        });
+                    });
+                })(toggleButtons[j]);
+            }
+            
+            // Function to update progress bar
+            function updateProgressBar(completed, total) {
+                var percentage = (completed / total) * 100;
+                var progressBar = document.getElementById('progress-bar');
+                if (progressBar) {
+                    progressBar.style.width = percentage + '%';
+                    document.getElementById('progress-text').textContent = 
+                        completed + ' of ' + total + ' milestones completed (' + Math.round(percentage) + '%)';
+                }
+            }
+            });
+            
+            // Function to update milestone UI
+            function updateMilestoneUI(milestoneIndex, isCompleted) {
+                const milestone = document.getElementById('milestone-' + milestoneIndex);
+                const button = milestone.querySelector('.toggle-complete-btn');
+                
+                // Update button state
+                button.setAttribute('data-is-completed', isCompleted);
+                
+                if (isCompleted) {
+                    // Mark as completed
+                    milestone.classList.add('border-l-4');
+                    milestone.classList.add('border-green-500');
+                    button.classList.remove('bg-gray-100');
+                    button.classList.remove('text-gray-800');
+                    button.classList.add('bg-green-100');
+                    button.classList.add('text-green-800');
+                    button.innerHTML = '<i class="fas fa-check-circle mr-1"></i> Completed';
+                    
+                    // Gray out text
+                    var elements = milestone.querySelectorAll('h4, p, h5, li, a');
+                    for (var i = 0; i < elements.length; i++) {
+                        elements[i].classList.add('text-gray-400');
+                        elements[i].classList.add('text-gray-500');
+                        elements[i].classList.remove('text-gray-800');
+                        elements[i].classList.remove('text-gray-600');
+                        elements[i].classList.remove('text-gray-700');
+                        elements[i].classList.remove('text-blue-600');
+                    }
+                } else {
+                    // Mark as incomplete
+                    milestone.classList.remove('border-l-4');
+                    milestone.classList.remove('border-green-500');
+                    button.classList.remove('bg-green-100');
+                    button.classList.remove('text-green-800');
+                    button.classList.add('bg-gray-100');
+                    button.classList.add('text-gray-800');
+                    button.innerHTML = '<i class="far fa-circle mr-1"></i> Mark Complete';
+                    
+                    // Restore text color
+                    var h4Elements = milestone.querySelectorAll('h4');
+                    for (var j = 0; j < h4Elements.length; j++) {
+                        h4Elements[j].classList.remove('text-gray-400');
+                        h4Elements[j].classList.remove('text-gray-500');
+                        h4Elements[j].classList.add('text-gray-800');
+                    }
+                    
+                    var pElements = milestone.querySelectorAll('p');
+                    for (var k = 0; k < pElements.length; k++) {
+                        pElements[k].classList.remove('text-gray-400');
+                        pElements[k].classList.add('text-gray-600');
+                    }
+                    
+                    var h5Elements = milestone.querySelectorAll('h5');
+                    for (var l = 0; l < h5Elements.length; l++) {
+                        h5Elements[l].classList.remove('text-gray-500');
+                        h5Elements[l].classList.add('text-gray-700');
+                    }
+                    
+                    var aElements = milestone.querySelectorAll('a');
+                    for (var m = 0; m < aElements.length; m++) {
+                        aElements[m].classList.remove('text-gray-400');
+                        aElements[m].classList.add('text-blue-600');
+                    }
+                }
+                }
+            
+            // Animate progress bar
+            const progressBar = document.getElementById('progress-bar');
+            if (progressBar) {
+                setTimeout(function() {
+                    progressBar.style.width = '0%'; // Start animation
+                }, 500);
+            }
+            
+            // Initialize chart with vibrant colors
+            const progressChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: milestoneLabels,
+                    datasets: [
+                        {
+                            label: 'Milestone Hours',
+                            data: milestoneHours,
+                            backgroundColor: 'rgba(255, 80, 197, 0.6)',
+                            borderColor: 'rgba(255, 80, 197, 1)',
+                            borderWidth: 2,
+                            barPercentage: 0.6,
+                            type: 'bar'
+                        },
+                        {
+                            label: 'Cumulative Progress',
+                            data: cumulativeHours,
+                            borderColor: 'rgba(255, 207, 64, 1)',
+                            backgroundColor: 'rgba(255, 207, 64, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            type: 'line',
+                            tension: 0.3
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: Math.max(Math.max.apply(null, cumulativeHours) * 1.1, totalHours * 1.1),
+                            ticks: {
+                                callback: function(value) { return value + ' hrs'; }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Hours',
+                                color: '#374151',
+                                font: {
+                                    weight: 'bold'
+                                }
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                maxRotation: 45,
+                                minRotation: 45
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                font: {
+                                    family: "'Poppins', sans-serif",
+                                    weight: 'bold'
+                                }
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                            titleColor: '#374151',
+                            bodyColor: '#374151',
+                            borderColor: 'rgba(255, 80, 197, 0.5)',
+                            borderWidth: 1,
+                            callbacks: {
+                                label: function(tooltipItem) {
+                                    return tooltipItem.dataset.label + ': ' + tooltipItem.raw + ' hours';
+                                }
+                            }
+                        }
+                    },
+                    interaction: {
+                        mode: 'index',
+                        intersect: false
+                    },
+                    animation: {
+                        duration: 2000,
+                        easing: 'easeOutQuart'
+                    }
+                }
+            });
+            
+            // Setup the Ask Question form with enhanced UX
+            const askButton = document.getElementById('askButton');
+            const questionInput = document.getElementById('questionInput');
+            const questionSpinner = document.getElementById('questionSpinner');
+            const answerContainer = document.getElementById('answerContainer');
+            const answerText = document.getElementById('answerText');
+            const shareButton = document.getElementById('shareButton');
+            
+            if (askButton && questionInput) {
+                askButton.addEventListener('click', function() {
+                    // Validate input
+                    const question = questionInput.value.trim();
+                    if (!question) {
+                        alert('Please enter a question');
+                        return;
+                    }
+                    
+                    // Show loading spinner
+                    questionSpinner.style.display = 'block';
+                    
+                    // Add typing effect
+                    answerContainer.classList.add('hidden');
+                    
+                    // Prepare request data
+                    const requestData = {
+                        type: 'ask_question',
+                        question: question,
+                        path_id: '{{ path.id }}',
+                        topic: '{{ path.topic }}'
+                    };
+                    
+                    // Submit the question
+                    fetch('/api/ask', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(requestData)
+                    })
+                    .then(function(response) { return response.json(); })
+                    .then(function(data) {
+                        // Hide spinner
+                        questionSpinner.style.display = 'none';
+                        
+                        // Handle response
+                        if (data.success) {
+                            // Typing effect
+                            answerText.textContent = '';
+                            answerContainer.classList.remove('hidden');
+                            
+                            const answer = data.answer;
+                            let i = 0;
+                            let speed = 30;
+                            
+                            function typeWriter() {
+                                if (i < answer.length) {
+                                    answerText.textContent += answer.charAt(i);
+                                    i++;
+                                    setTimeout(typeWriter, speed);
+                                }
+                            }
+                            
+                            typeWriter();
+                        } else {
+                            alert('Error: ' + data.message);
+                        }
+                    })
+                    .catch(function(error) {
+                        // Hide spinner
+                        questionSpinner.style.display = 'none';
+                        
+                        // Show error
+                        alert('An error occurred while processing your question. Please try again.');
+                        console.error('Error:', error);
+                    });
+                });
+            }
+            
+            // Share functionality
+            if (shareButton) {
+                shareButton.addEventListener('click', function() {
+                    if (navigator.share) {
+                        navigator.share({
+                            title: '{{ path.title }} | Learning Path',
+                            text: 'Check out this personalized learning path: {{ path.title }}',
+                            url: window.location.href
+                        })
+                        .catch(function(error) {
+                            console.error('Error sharing:', error);
+                        });
+                    } else {
+                        // Fallback
+                        const dummyInput = document.createElement('input');
+                        dummyInput.value = window.location.href;
+                        document.body.appendChild(dummyInput);
+                        dummyInput.select();
+                        document.execCommand('copy');
+                        document.body.removeChild(dummyInput);
+                        alert('URL copied to clipboard!');
+                    }
+                });
+            }
+
+            // Chatbot UI elements
+            const learningPathTopic = {{ path.topic | tojson }};
+            const learningPathTitle = {{ path.title | tojson }};
+            const chatbotContainer = document.getElementById('chatbot-container');
+            const chatbotBody = document.getElementById('chatbot-body');
+            const chatbotInput = document.getElementById('chatbot-input');
+            const chatbotSendButton = document.getElementById('chatbot-send');
+            console.log('Chatbot Send Button:', chatbotSendButton);
+            const toggleChatbotHeader = document.getElementById('toggle-chatbot-header');
+            const toggleChatbotButton = document.getElementById('toggle-chatbot-button');
+            const chatbotBodyContainer = document.getElementById('chatbot-body-container');
+            console.log('Chatbot Body Container:', chatbotBodyContainer);
+
+                // Toggle chatbot visibility
+                if (toggleChatbotHeader && chatbotBodyContainer && toggleChatbotButton) {
+                    let isChatbotOpen = false; // Start closed
+
+                    toggleChatbotHeader.addEventListener('click', () => {
+                        isChatbotOpen = !isChatbotOpen;
+                        if (isChatbotOpen) {
+                            chatbotBodyContainer.style.display = 'block';
+                            toggleChatbotButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>`; // Down arrow
+                        } else {
+                            chatbotBodyContainer.style.display = 'none';
+                            toggleChatbotButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" /></svg>`; // Up arrow
+                        }
+                    });
+                } // Closes the 'if (toggleChatbotHeader && ...)' block
+
+            function addMessageToChatbot(message, sender) {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('flex', sender === 'user' ? 'justify-end' : 'justify-start');
+                
+                const messageBubble = document.createElement('div');
+                messageBubble.classList.add(sender === 'user' ? 'bg-magenta' : 'bg-gray-200', sender === 'user' ? 'text-white' : 'text-gray-800', 'p-3', 'rounded-lg', 'max-w-xs', 'break-words');
+                messageBubble.textContent = message;
+                
+                messageDiv.appendChild(messageBubble);
+                chatbotBody.appendChild(messageDiv);
+                if (chatbotBody) { // Ensure chatbotBody is not null
+                   chatbotBody.scrollTop = chatbotBody.scrollHeight; // Scroll to bottom
+                }
+            }
+
+            if (chatbotSendButton && chatbotInput) {
+                console.log('Attaching event listeners to send button and input field.');
+                chatbotSendButton.addEventListener('click', function() {
+                    console.log('Send button clicked.');
+                    sendMessageToBot();
+                });
+                chatbotInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        sendMessageToBot();
+                    }
+                });
+            }
+
+            function sendMessageToBot() {
+                console.log('sendMessageToBot function called.');
+                const userMessage = chatbotInput.value.trim();
+                if (!userMessage) return;
+
+                addMessageToChatbot(userMessage, 'user');
+                chatbotInput.value = ''; // Clear input
+
+                // Simulate thinking
+                const thinkingDiv = document.createElement('div');
+                thinkingDiv.classList.add('flex', 'justify-start', 'chatbot-thinking');
+                const thinkingBubble = document.createElement('div');
+                thinkingBubble.classList.add('bg-gray-200', 'text-gray-600', 'p-3', 'rounded-lg', 'max-w-xs', 'italic');
+                thinkingBubble.textContent = 'AI is thinking...';
+                thinkingDiv.appendChild(thinkingBubble);
+                chatbotBody.appendChild(thinkingDiv);
+                if (chatbotBody) { // Ensure chatbotBody is not null
+                    chatbotBody.scrollTop = chatbotBody.scrollHeight;
+                }
+
+                fetch('/chatbot_query', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                        message: userMessage,
+                        learning_path_topic: learningPathTopic,
+                        learning_path_title: learningPathTitle
+                    }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const existingThinkingDiv = chatbotBody.querySelector('.chatbot-thinking');
+                    if (existingThinkingDiv) chatbotBody.removeChild(existingThinkingDiv);
+                    if (data.reply) {
+                        addMessageToChatbot(data.reply, 'ai');
+                    } else if (data.error) {
+                        addMessageToChatbot(`Error: ${data.error}`, 'ai');
+                    }
+                })
+                .catch(error => {
+                    const existingThinkingDiv = chatbotBody.querySelector('.chatbot-thinking');
+                    if (existingThinkingDiv) chatbotBody.removeChild(existingThinkingDiv);
+                    console.error('Error sending message to chatbot:', error);
+                    addMessageToChatbot('Sorry, something went wrong. Please try again.', 'ai');
+                });
+            }
+        });
+    </script>
+    <!-- Chatbot Section -->
+    <section id="chatbot-container" class="fixed bottom-0 right-0 mb-4 mr-4 w-full max-w-md z-50 print:hidden">
+        <div class="bg-white rounded-lg shadow-xl border border-gray-200">
+            <div class="p-4 bg-magenta text-white rounded-t-lg flex justify-between items-center cursor-pointer" id="toggle-chatbot-header">
+                <h3 class="text-lg font-semibold">Career AI Assistant</h3>
+                <button id="toggle-chatbot-button" class="text-white hover:text-gray-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" /></svg>
+                </button>
+            </div>
+            <div id="chatbot-body-container" style="display: none;">
+                <div id="chatbot-body" class="h-80 overflow-y-auto p-4 space-y-2 bg-gray-50">
+                    <!-- Chat messages will appear here -->
+                    <div class="flex justify-start">
+                        <div class="bg-gray-200 text-gray-800 p-3 rounded-lg max-w-xs break-words">
+                            Hello! Ask me anything about your career or learning paths.
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4 border-t border-gray-200 bg-white rounded-b-lg">
+                    <div class="flex items-center space-x-2">
+                        <input type="text" id="chatbot-input" class="flex-grow p-3 border border-gray-300 rounded-lg focus:ring-magenta focus:border-magenta" placeholder="Type your message...">
+                        <button id="chatbot-send" class="bg-magenta text-white px-6 py-3 rounded-lg hover:bg-magentaLight transition-colors duration-300 font-semibold">
+                            Send
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</body>
+</html>

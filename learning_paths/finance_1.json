@@ -1,0 +1,65 @@
+{
+  "id": "1",
+  "title": "Kinesthetic Finance Learning Path",
+  "description": "A personalized learning path for individuals with intermediate expertise in finance who prefer kinesthetic learning style.",
+  "topic": "Finance",
+  "expertise_level": "Intermediate",
+  "learning_style": "Kinesthetic",
+  "time_commitment": "Minimal - 1-2 hours per week",
+  "duration_weeks": 19,
+  "goals": [
+    "Enhance understanding of personal finance concepts through hands-on activities."
+  ],
+  "milestones": [
+    {
+      "title": "Introduction to Personal Finance",
+      "description": "Basic overview of personal finance principles and budgeting techniques.",
+      "estimated_hours": 2,
+      "resources": [
+        {
+          "title": "Budgeting Worksheet",
+          "type": "Hands-on budgeting worksheet to track expenses and income.",
+          "style_score": 1
+        }
+      ],
+      "skills_gained": [
+        "Budgeting skills"
+      ]
+    },
+    {
+      "title": "Exploring Investment Options",
+      "description": "Learn about different investment vehicles such as stocks, bonds, and mutual funds.",
+      "estimated_hours": 3,
+      "resources": [
+        {
+          "title": "Stock Market Simulation Game",
+          "type": "Interactive game to simulate stock market trading.",
+          "style_score": 1
+        }
+      ],
+      "skills_gained": [
+        "Understanding investment options"
+      ]
+    },
+    {
+      "title": "Debt Management Techniques",
+      "description": "Strategies for managing and reducing debt effectively.",
+      "estimated_hours": 2,
+      "resources": [
+        {
+          "title": "Debt Repayment Plan Activity",
+          "type": "Hands-on activity to create a personalized debt repayment plan.",
+          "style_score": 1
+        }
+      ],
+      "skills_gained": [
+        "Debt management skills"
+      ]
+    }
+  ],
+  "prerequisites": [
+    "Basic understanding of financial terms and concepts"
+  ],
+  "total_hours": 7,
+  "created_at": "2022-12-01"
+}

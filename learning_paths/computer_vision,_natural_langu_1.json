@@ -1,0 +1,87 @@
+{
+  "id": "1",
+  "title": "Personalized Learning Path for Computer Vision and Natural Language Processing",
+  "description": "This learning path is designed for individuals with some familiarity with basic concepts in Computer Vision and Natural Language Processing who prefer reading materials and note-taking to enhance their understanding. The path aims to help learners achieve certification in these areas through a minimal time commitment of 1-2 hours per week.",
+  "topic": "Computer Vision, Natural Language Processing",
+  "expertise_level": "Intermediate",
+  "learning_style": "Reading",
+  "time_commitment": "Minimal - 1-2 hours per week",
+  "duration_weeks": 19,
+  "goals": [
+    "Certification"
+  ],
+  "milestones": [
+    {
+      "title": "Understanding Computer Vision Basics",
+      "description": "Learn the fundamental concepts and applications of Computer Vision.",
+      "estimated_hours": 10,
+      "resources": [
+        {
+          "title": "Book: Computer Vision: Algorithms and Applications",
+          "link": "https://www.amazon.com/Computer-Vision-Algorithms-Richard-Szeliski/dp/1848829345",
+          "type": "Book",
+          "style_score": 1
+        },
+        {
+          "title": "Article: Introduction to Computer Vision",
+          "link": "https://towardsdatascience.com/introduction-to-computer-vision-7f8f344a31fd",
+          "type": "Article",
+          "style_score": 1
+        }
+      ],
+      "skills_gained": [
+        "Basic understanding of Computer Vision principles"
+      ]
+    },
+    {
+      "title": "Exploring Natural Language Processing Concepts",
+      "description": "Dive into the key concepts and techniques used in Natural Language Processing.",
+      "estimated_hours": 12,
+      "resources": [
+        {
+          "title": "Book: Natural Language Processing in Action",
+          "link": "https://www.manning.com/books/natural-language-processing-in-action",
+          "type": "Book",
+          "style_score": 1
+        },
+        {
+          "title": "Tutorial: Introduction to Natural Language Processing",
+          "link": "https://monkeylearn.com/blog/introduction-to-natural-language-processing/",
+          "type": "Tutorial",
+          "style_score": 1
+        }
+      ],
+      "skills_gained": [
+        "Understanding of NLP fundamentals"
+      ]
+    },
+    {
+      "title": "Implementing Computer Vision and NLP Projects",
+      "description": "Apply your knowledge by working on practical projects in both Computer Vision and NLP.",
+      "estimated_hours": 20,
+      "resources": [
+        {
+          "title": "GitHub Repository: Awesome Computer Vision",
+          "link": "https://github.com/jbhuang0604/awesome-computer-vision",
+          "type": "Repository",
+          "style_score": 1
+        },
+        {
+          "title": "GitHub Repository: Awesome NLP",
+          "link": "https://github.com/keon/awesome-nlp",
+          "type": "Repository",
+          "style_score": 1
+        }
+      ],
+      "skills_gained": [
+        "Hands-on experience in Computer Vision and NLP projects"
+      ]
+    }
+  ],
+  "prerequisites": [
+    "Basic understanding of programming concepts",
+    "Familiarity with Python programming language"
+  ],
+  "total_hours": 42,
+  "created_at": "2022-11-01"
+}

@@ -1,0 +1,91 @@
+{
+  "id": "001",
+  "title": "Visual Learning Path for Beginners in Machine Learning",
+  "description": "This personalized learning path is designed for beginners with no prior knowledge in machine learning who prefer visual learning styles. The path will introduce fundamental concepts in machine learning through visually engaging resources.",
+  "topic": "Machine Learning",
+  "expertise_level": "Beginner",
+  "learning_style": "Visual",
+  "time_commitment": "Minimal (1-2 hours per week)",
+  "duration_weeks": 16,
+  "goals": [
+    "Understand basic concepts of machine learning",
+    "Develop foundational skills in machine learning",
+    "Gain exposure to visual resources in machine learning"
+  ],
+  "milestones": [
+    {
+      "title": "Introduction to Machine Learning",
+      "description": "Overview of machine learning and its applications, basic terminologies, and types of machine learning algorithms.",
+      "estimated_hours": 2,
+      "resources": [
+        {
+          "title": "Machine Learning Basics - Infographic",
+          "link": "https://www.example.com/infographic_ml_basics",
+          "type": "Infographic",
+          "style_score": 1
+        }
+      ],
+      "skills_gained": [
+        "Understanding of machine learning fundamentals",
+        "Exposure to basic concepts through visuals"
+      ]
+    },
+    {
+      "title": "Supervised Learning",
+      "description": "Focus on supervised learning, including regression and classification, with visual examples of algorithms.",
+      "estimated_hours": 3,
+      "resources": [
+        {
+          "title": "Supervised Learning - Video Tutorial",
+          "link": "https://www.example.com/video_tutorial_supervised_learning",
+          "type": "Video",
+          "style_score": 1
+        }
+      ],
+      "skills_gained": [
+        "Knowledge of supervised learning principles",
+        "Ability to differentiate between regression and classification"
+      ]
+    },
+    {
+      "title": "Unsupervised Learning",
+      "description": "Exploration of unsupervised learning techniques such as clustering and dimensionality reduction with visual representations.",
+      "estimated_hours": 3,
+      "resources": [
+        {
+          "title": "Unsupervised Learning - Interactive Visualization",
+          "link": "https://www.example.com/interactive_unsupervised_learning",
+          "type": "Interactive",
+          "style_score": 1
+        }
+      ],
+      "skills_gained": [
+        "Understanding of unsupervised learning concepts",
+        "Ability to interpret clustering results visually"
+      ]
+    },
+    {
+      "title": "Neural Networks and Deep Learning",
+      "description": "Introduction to neural networks, deep learning, and their visual representations.",
+      "estimated_hours": 4,
+      "resources": [
+        {
+          "title": "Neural Networks Explained - Visual Guide",
+          "link": "https://www.example.com/visual_guide_neural_networks",
+          "type": "Visual Guide",
+          "style_score": 1
+        }
+      ],
+      "skills_gained": [
+        "Knowledge of neural network architecture",
+        "Understanding of deep learning principles"
+      ]
+    }
+  ],
+  "prerequisites": [
+    "Basic understanding of mathematics",
+    "Interest in data analysis and pattern recognition"
+  ],
+  "total_hours": 12,
+  "created_at": "2022-10-12"
+}

@@ -1,0 +1,80 @@
+{
+  "id": "1",
+  "title": "Personalized Learning Path for Natural Language Processing",
+  "description": "This learning path is designed for beginners with no prior knowledge in Natural Language Processing (NLP) who prefer a visual learning style. The path aims to help learners achieve certification in NLP through a structured and visual approach.",
+  "topic": "Natural Language Processing",
+  "expertise_level": "beginner",
+  "learning_style": "visual",
+  "time_commitment": "moderate",
+  "duration_weeks": 12,
+  "goals": [
+    "Achieve Certification in Natural Language Processing"
+  ],
+  "milestones": [
+    {
+      "title": "Introduction to NLP",
+      "description": "Basic concepts and overview of Natural Language Processing",
+      "estimated_hours": 10,
+      "resources": [
+        {
+          "type": "Image-based tutorials",
+          "link": "example.com/nlp-intro",
+          "style_score": 1
+        },
+        {
+          "type": "Visual diagrams",
+          "link": "example.com/nlp-diagrams",
+          "style_score": 1
+        }
+      ],
+      "skills_gained": [
+        "Fundamental understanding of NLP"
+      ]
+    },
+    {
+      "title": "Text Preprocessing Techniques",
+      "description": "Learn about text cleaning, tokenization, and normalization",
+      "estimated_hours": 15,
+      "resources": [
+        {
+          "type": "Visual guides on text preprocessing",
+          "link": "example.com/text-preprocessing",
+          "style_score": 1
+        },
+        {
+          "type": "Interactive visual tools",
+          "link": "example.com/text-preprocessing-tools",
+          "style_score": 1
+        }
+      ],
+      "skills_gained": [
+        "Text preprocessing skills"
+      ]
+    },
+    {
+      "title": "Sentiment Analysis",
+      "description": "Understanding sentiment analysis and its applications in NLP",
+      "estimated_hours": 20,
+      "resources": [
+        {
+          "type": "Interactive sentiment analysis tutorials",
+          "link": "example.com/sentiment-analysis",
+          "style_score": 1
+        },
+        {
+          "type": "Visual sentiment analysis examples",
+          "link": "example.com/sentiment-analysis-examples",
+          "style_score": 1
+        }
+      ],
+      "skills_gained": [
+        "Sentiment analysis techniques"
+      ]
+    }
+  ],
+  "prerequisites": [
+    "Basic understanding of programming concepts"
+  ],
+  "total_hours": 45,
+  "created_at": "2022-12-20"
+}

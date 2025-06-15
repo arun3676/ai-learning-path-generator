@@ -1,0 +1,72 @@
+{
+  "id": "1",
+  "title": "Personalized TensorFlow Certification Learning Path for Kinesthetic Learners",
+  "description": "This personalized learning path is designed for intermediate learners with some familiarity with basic TensorFlow concepts who prefer a kinesthetic learning style. The path focuses on hands-on activities and physical interaction to help learners achieve their goal of obtaining a TensorFlow certification.",
+  "topic": "TensorFlow",
+  "expertise_level": "Intermediate",
+  "learning_style": "Kinesthetic",
+  "time_commitment": "Minimal - 1-2 hours per week",
+  "duration_weeks": 19,
+  "goals": [
+    "Certification"
+  ],
+  "milestones": [
+    {
+      "title": "Introduction to TensorFlow Basics",
+      "description": "Gain a solid understanding of TensorFlow fundamentals and basic concepts through interactive tutorials and coding exercises.",
+      "estimated_hours": 8,
+      "resources": [
+        {
+          "title": "TensorFlow Basics Hands-On Tutorial",
+          "type": "Interactive Tutorial",
+          "link": "https://www.tensorflow.org/tutorials",
+          "style_score": 1
+        }
+      ],
+      "skills_gained": [
+        "TensorFlow Fundamentals",
+        "Basic Neural Network Implementation"
+      ]
+    },
+    {
+      "title": "Exploring TensorFlow Models",
+      "description": "Dive deeper into building and training TensorFlow models with practical projects and real-world examples.",
+      "estimated_hours": 10,
+      "resources": [
+        {
+          "title": "TensorFlow Projects for Hands-On Learning",
+          "type": "Project-based Learning",
+          "link": "https://github.com/aymericdamien/TensorFlow-Examples",
+          "style_score": 1
+        }
+      ],
+      "skills_gained": [
+        "Model Building with TensorFlow",
+        "Training Neural Networks"
+      ]
+    },
+    {
+      "title": "Optimizing TensorFlow Performance",
+      "description": "Learn optimization techniques and best practices for improving TensorFlow model performance through hands-on experimentation.",
+      "estimated_hours": 12,
+      "resources": [
+        {
+          "title": "TensorFlow Performance Optimization Guide",
+          "type": "Guided Practice",
+          "link": "https://www.tensorflow.org/guide/performance/overview",
+          "style_score": 1
+        }
+      ],
+      "skills_gained": [
+        "Model Optimization",
+        "Performance Tuning in TensorFlow"
+      ]
+    }
+  ],
+  "prerequisites": [
+    "Basic understanding of Python programming",
+    "Familiarity with machine learning concepts"
+  ],
+  "total_hours": 30,
+  "created_at": "2023-10-01"
+}

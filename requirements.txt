@@ -1,0 +1,41 @@
+# Core dependencies
+gunicorn>=21.2.0
+python-dotenv==1.0.1
+Flask>=2.0.1
+langchain==0.0.267
+langchain-community>=0.0.1
+langchain-openai>=0.0.1
+openai>=1.0.0
+pydantic==2.5.3
+Flask-SQLAlchemy==3.1.1
+Flask-Login==0.6.3
+Flask-WTF==1.2.1
+Flask-Migrate==4.0.7
+email-validator==2.1.1
+
+# Document processing
+unstructured>=0.12.0
+
+python-magic-bin>=0.4.14
+pypandoc>=1.11
+
+# RAG and embeddings
+faiss-cpu>=1.7.4
+langchain-openai>=0.0.1
+
+# Vector database
+chromadb>=0.4.13
+
+# ML & NLP
+sentence-transformers>=2.2.2
+scikit-learn>=1.2.2
+numpy>=1.24.0
+pandas>=2.0.0
+
+# Web UI
+flask-wtf>=1.0.0
+Jinja2>=3.0.1
+werkzeug>=2.0.1
+
+# Development
+pytest>=7.0.0

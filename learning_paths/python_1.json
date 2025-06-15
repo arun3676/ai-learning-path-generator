@@ -1,0 +1,89 @@
+{
+  "id": "1",
+  "title": "Visual Python Certification Learning Path",
+  "description": "This learning path is designed for beginners with no prior knowledge in Python who prefer visual learning styles. The path focuses on providing a foundation in Python programming concepts using visual aids and diagrams, leading to certification.",
+  "topic": "Python",
+  "expertise_level": "beginner",
+  "learning_style": "visual",
+  "time_commitment": "minimal - 1-2 hours per week",
+  "duration_weeks": 16,
+  "goals": [
+    "Certification"
+  ],
+  "milestones": [
+    {
+      "title": "Introduction to Python Basics",
+      "description": "Learn about Python key features, basic syntax, and common data structures.",
+      "estimated_hours": 5,
+      "resources": [
+        {
+          "title": "Python Basics for Beginners (Video)",
+          "link": "https://www.youtube.com/watch?v=YYXdXT2l-Gg",
+          "type": "video",
+          "style_score": 5
+        },
+        {
+          "title": "Python Basics Infographic (PDF)",
+          "link": "https://www.example.com/python-basics-infographic",
+          "type": "pdf",
+          "style_score": 1
+        }
+      ],
+      "skills_gained": [
+        "Understanding Python syntax",
+        "Working with data structures"
+      ]
+    },
+    {
+      "title": "Control Flow and Functions in Python",
+      "description": "Explore control flow statements, loops, and functions in Python.",
+      "estimated_hours": 7,
+      "resources": [
+        {
+          "title": "Visual Guide to Python Control Flow (Website)",
+          "link": "https://www.example.com/python-control-flow",
+          "type": "website",
+          "style_score": 1
+        },
+        {
+          "title": "Python Functions Diagrams (Image Gallery)",
+          "link": "https://www.example.com/python-functions-diagrams",
+          "type": "image",
+          "style_score": 1
+        }
+      ],
+      "skills_gained": [
+        "Understanding control flow",
+        "Creating and using functions"
+      ]
+    },
+    {
+      "title": "Best Practices and Programming Basics",
+      "description": "Learn about Python best practices, programming basics, and common programming languages.",
+      "estimated_hours": 6,
+      "resources": [
+        {
+          "title": "Python Best Practices Infographic (PDF)",
+          "link": "https://www.example.com/python-best-practices",
+          "type": "pdf",
+          "style_score": 1
+        },
+        {
+          "title": "Programming Languages Comparison Chart (Infographic)",
+          "link": "https://www.example.com/programming-languages-comparison",
+          "type": "pdf",
+          "style_score": 1
+        }
+      ],
+      "skills_gained": [
+        "Following best practices",
+        "Understanding fundamental programming concepts"
+      ]
+    }
+  ],
+  "prerequisites": [
+    "None"
+  ],
+  "total_hours": 18,
+  "created_at": "2022-01-01"
+}

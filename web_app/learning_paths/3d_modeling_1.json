@@ -1,0 +1,82 @@
+{
+  "id": "1",
+  "title": "Visual 3D Modeling Learning Path",
+  "description": "This personalized learning path is designed for beginners with a visual learning style interested in 3D modeling. The path focuses on providing a comprehensive understanding of 3D modeling concepts and techniques, leading to certification.",
+  "topic": "3D Modeling",
+  "expertise_level": "beginner",
+  "learning_style": "visual",
+  "time_commitment": "minimal - 1-2 hours per week",
+  "duration_weeks": 16,
+  "goals": [
+    "Certification"
+  ],
+  "milestones": [
+    {
+      "title": "Introduction to 3D Modeling",
+      "description": "Learn the basics of 3D modeling, including tools and techniques.",
+      "estimated_hours": 5,
+      "resources": [
+        {
+          "type": "Video Tutorial",
+          "link": "example.com/video1",
+          "style_score": 1
+        },
+        {
+          "type": "Interactive 3D Modeling Software",
+          "link": "example.com/software1",
+          "style_score": 1
+        }
+      ],
+      "skills_gained": [
+        "Basic 3D modeling skills"
+      ]
+    },
+    {
+      "title": "Understanding 3D Shapes and Textures",
+      "description": "Explore creating and manipulating 3D shapes and textures.",
+      "estimated_hours": 8,
+      "resources": [
+        {
+          "type": "Image Gallery of 3D Shapes",
+          "link": "example.com/images",
+          "style_score": 1
+        },
+        {
+          "type": "Textured 3D Models",
+          "link": "example.com/models",
+          "style_score": 1
+        }
+      ],
+      "skills_gained": [
+        "Shape modeling",
+        "Texture mapping"
+      ]
+    },
+    {
+      "title": "Lighting and Rendering in 3D",
+      "description": "Learn about lighting techniques and rendering in 3D modeling.",
+      "estimated_hours": 10,
+      "resources": [
+        {
+          "type": "Lighting Diagrams",
+          "link": "example.com/diagrams",
+          "style_score": 1
+        },
+        {
+          "type": "Rendering Software",
+          "link": "example.com/software2",
+          "style_score": 1
+        }
+      ],
+      "skills_gained": [
+        "Lighting setup",
+        "Rendering techniques"
+      ]
+    }
+  ],
+  "prerequisites": [
+    "None"
+  ],
+  "total_hours": 23,
+  "created_at": "2022-10-25"
+}

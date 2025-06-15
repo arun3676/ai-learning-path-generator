@@ -1,0 +1,84 @@
+{
+  "id": "1",
+  "title": "Personalized Learning Path for Computer Vision Certification",
+  "description": "This personalized learning path is designed for individuals with some familiarity with basic computer vision concepts who prefer auditory learning and aim to achieve certification in the field. The path focuses on key theoretical and practical aspects of computer vision to prepare you for certification exams.",
+  "topic": "Computer Vision",
+  "expertise_level": "Intermediate",
+  "learning_style": "Auditory",
+  "time_commitment": "Minimal (1-2 hours per week)",
+  "duration_weeks": 19,
+  "goals": [
+    "Certification"
+  ],
+  "milestones": [
+    {
+      "title": "Introduction to Computer Vision Fundamentals",
+      "description": "Gain a solid understanding of basic computer vision concepts, including image processing, feature extraction, and object detection.",
+      "estimated_hours": 6,
+      "resources": [
+        {
+          "title": "Podcast: Introduction to Computer Vision Basics",
+          "link": "example.com/podcast1",
+          "style_score": 2
+        },
+        {
+          "title": "Online Lecture: Image Processing Techniques",
+          "link": "example.com/lecture1",
+          "style_score": 2
+        }
+      ],
+      "skills_gained": [
+        "Basic image processing knowledge",
+        "Understanding of feature extraction methods"
+      ]
+    },
+    {
+      "title": "Exploring Convolutional Neural Networks (CNNs)",
+      "description": "Dive deeper into CNNs, a key technology in computer vision, and learn how they are used for image classification and object recognition.",
+      "estimated_hours": 8,
+      "resources": [
+        {
+          "title": "Webinar: Introduction to CNNs",
+          "link": "example.com/webinar1",
+          "style_score": 2
+        },
+        {
+          "title": "Audio Book: CNNs Explained",
+          "link": "example.com/audiobook1",
+          "style_score": 2
+        }
+      ],
+      "skills_gained": [
+        "Understanding of CNN architecture",
+        "Practical experience in image classification"
+      ]
+    },
+    {
+      "title": "Hands-On Project: Object Detection and Localization",
+      "description": "Apply your knowledge by working on a project focused on object detection and localization using popular computer vision libraries.",
+      "estimated_hours": 10,
+      "resources": [
+        {
+          "title": "Hands-On Workshop: Object Detection Tutorial",
+          "link": "example.com/workshop1",
+          "style_score": 2
+        },
+        {
+          "title": "Podcast Series: Real-World Applications of Object Detection",
+          "link": "example.com/podcast2",
+          "style_score": 2
+        }
+      ],
+      "skills_gained": [
+        "Practical experience in object detection",
+        "Project-based learning"
+      ]
+    }
+  ],
+  "prerequisites": [
+    "Some familiarity with basic computer vision concepts",
+    "Interest in auditory learning"
+  ],
+  "total_hours": 24,
+  "created_at": "2022-12-01"
+}

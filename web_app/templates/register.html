@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | Learning Path</title>
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        magenta: '#ff50c5',
+                        magentaLight: '#ff97df',
+                        sunshine: '#FFCF40',
+                        sunnyYellow: '#F9C846'
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Custom styles -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700;800&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+        }
+        
+        .magenta-bg {
+            background-color: #ff50c5;
+        }
+        
+        .wave-divider {
+            position: relative;
+            height: 70px;
+            width: 100%;
+        }
+        
+        .wave-divider svg {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 70px;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="py-4 px-6 flex justify-between items-center bg-white shadow-sm">
+        <div class="flex items-center space-x-2">
+            <a href="/" class="text-2xl font-extrabold">Learning<span class="text-magenta">Path</span></a>
+        </div>
+        <div class="flex items-center space-x-6">
+            <a href="/" class="text-gray-700 hover:text-magenta transition-colors duration-300">Home</a>
+            <a href="/auth/login" class="text-gray-700 hover:text-magenta transition-colors duration-300">Login</a>
+        </div>
+    </nav>
+    
+    <!-- Registration Form Section -->
+    <section class="py-12 px-6">
+        <div class="container mx-auto max-w-md">
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Create an Account</h2>
+                
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="mb-4 p-4 rounded-md {% if category == 'success' %}bg-green-100 text-green-700{% else %}bg-red-100 text-red-700{% endif %}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                
+                <form method="POST" action="{{ url_for('auth.register') }}">
+                    {{ form.hidden_tag() }}
+                    
+                    <div class="mb-4">
+                        {{ form.username.label(class="block text-gray-700 text-sm font-bold mb-2") }}
+                        {{ form.username(class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-magenta") }}
+                        {% for error in form.username.errors %}
+                            <p class="text-red-500 text-xs italic">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="mb-4">
+                        {{ form.email.label(class="block text-gray-700 text-sm font-bold mb-2") }}
+                        {{ form.email(class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-magenta") }}
+                        {% for error in form.email.errors %}
+                            <p class="text-red-500 text-xs italic">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="mb-4">
+                        {{ form.password.label(class="block text-gray-700 text-sm font-bold mb-2") }}
+                        {{ form.password(class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-magenta") }}
+                        {% for error in form.password.errors %}
+                            <p class="text-red-500 text-xs italic">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="mb-6">
+                        {{ form.password2.label(class="block text-gray-700 text-sm font-bold mb-2") }}
+                        {{ form.password2(class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-magenta") }}
+                        {% for error in form.password2.errors %}
+                            <p class="text-red-500 text-xs italic">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="flex items-center justify-between">
+                        {{ form.submit(class="bg-magenta hover:bg-magentaLight text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full") }}
+                    </div>
+                </form>
+                
+                <div class="text-center mt-6">
+                    <p class="text-gray-600">Already have an account? <a href="{{ url_for('auth.login') }}" class="text-magenta hover:underline">Login</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer with wave divider -->
+    <div class="wave-divider mt-12">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" preserveAspectRatio="none" class="fill-current text-gray-800">
+            <path d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,149.3C960,160,1056,160,1152,138.7C1248,117,1344,75,1392,53.3L1440,32L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path>
+        </svg>
+    </div>
+    <footer class="bg-gray-800 text-white py-8 px-6">
+        <div class="container mx-auto text-center">
+            <p>&copy; {{ current_year }} LearningPath. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

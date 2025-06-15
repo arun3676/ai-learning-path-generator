@@ -1,0 +1,1347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Learning Path Generator</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Marked.js for Markdown parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        magenta: '#ff50c5',
+                        magentaLight: '#ff97df',
+                        sunshine: '#FFCF40',
+                        sunnyYellow: '#F9C846'
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Custom styles -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700;800&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        .agent-mode-btn.agent-mode-active {
+            font-weight: 600; /* semi-bold */
+            /* Uses Tailwind's ring color variable if available, or defaults to current text color */
+            box-shadow: 0 0 0 2px var(--tw-ring-color, currentColor);
+        }
+        
+        .magenta-bg {
+            background-color: #ff50c5;
+        }
+        
+        .yellow-bg {
+            background-color: #F9C846;
+        }
+        
+        .wave-divider {
+            position: relative;
+            height: 70px;
+            width: 100%;
+        }
+        
+        .wave-divider svg {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 70px;
+        }
+
+        /* Agent Cards */
+        .agent-card {
+            transition: all 0.3s ease;
+            border-top: 4px solid transparent;
+        }
+        
+        .agent-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .agent-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 24px;
+        }
+        
+        .chat-message {
+            max-width: 80%;
+            margin-bottom: 15px;
+            padding: 12px 16px;
+            border-radius: 18px;
+            position: relative;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        .chat-message.user {
+            background-color: #ff50c5;
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 4px;
+        }
+        
+        .chat-message.assistant {
+            background-color: #f3f4f6;
+            color: #1f2937;
+            margin-right: auto;
+            border-bottom-left-radius: 4px;
+        }
+        
+        .typing-indicator {
+            display: flex;
+            justify-content: center;
+            padding: 10px 0;
+        }
+        
+        .typing-indicator span {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: #9ca3af;
+            border-radius: 50%;
+            margin: 0 2px;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Chat interface styles */
+        .chat-container {
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+        }
+        
+        .chat-messages {
+            max-height: 400px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #cbd5e0 #edf2f7;
+        }
+        
+        .chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .chat-messages::-webkit-scrollbar-track {
+            background: #edf2f7;
+        }
+        
+        .chat-messages::-webkit-scrollbar-thumb {
+            background-color: #cbd5e0;
+            border-radius: 3px;
+        }
+        
+        .chat-input-container {
+            border-top: 1px solid #e2e8f0;
+            background: #f8fafc;
+        }
+        
+        .chat-input {
+            resize: none;
+            max-height: 120px;
+            overflow-y: auto;
+            border: 1px solid #e2e8f0;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        
+        .chat-input:focus {
+            outline: none;
+            border-color: #a78bfa;
+            box-shadow: 0 0 0 1px #a78bfa;
+        }
+        
+        .send-button {
+            transition: all 0.2s;
+        }
+        
+        .send-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .suggestion-button {
+            transition: all 0.2s;
+        }
+        
+        .suggestion-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .agent-card {
+                margin-bottom: 20px;
+            }
+            
+            .chat-message {
+                max-width: 90%;
+            }
+            
+            .chat-messages {
+                max-height: 300px;
+            }
+        }
+        
+        /* Animation for message appearance */
+        @keyframes messageAppear {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .message {
+            animation: messageAppear 0.3s ease-out forwards;
+        }
+        
+        .loading-spinner {
+            display: none;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #ff50c5;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .float-animation {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-hover {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-hover:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: all 0.5s ease;
+        }
+        
+        .btn-hover:hover:after {
+            left: 100%;
+        }
+    </style>
+</head>
+<body class="bg-white min-h-screen">
+    <!-- Navigation -->
+    <nav class="py-4 px-6 flex justify-between items-center">
+        <div class="flex items-center space-x-2">
+            <span class="text-2xl font-extrabold">Learning<span class="text-magenta">Path</span></span>
+        </div>
+        <div class="hidden md:flex items-center space-x-6">
+            <a href="#how-it-works" class="text-gray-700 hover:text-magenta transition-colors duration-300">How it works</a>
+            <a href="#features" class="text-gray-700 hover:text-magenta transition-colors duration-300">Features</a>
+            <a href="#about" class="text-gray-700 hover:text-magenta transition-colors duration-300">About</a>
+            {% if current_user.is_authenticated %}
+                <a href="/dashboard" class="text-gray-700 hover:text-magenta transition-colors duration-300">My Dashboard</a>
+                <a href="{{ url_for('auth.logout') }}" class="text-gray-700 hover:text-magenta transition-colors duration-300">Logout</a>
+            {% else %}
+                <a href="{{ url_for('auth.login') }}" class="text-gray-700 hover:text-magenta transition-colors duration-300">Login</a>
+                <a href="{{ url_for('auth.register') }}" class="bg-magenta text-white px-5 py-2 rounded-full hover:bg-magentaLight transition-colors duration-300">Register</a>
+            {% endif %}
+        </div>
+        <button class="md:hidden text-gray-700" id="mobile-menu-button">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+        </button>
+    </nav>
+    
+    <!-- Mobile menu (hidden by default) -->
+    <div class="md:hidden hidden bg-white shadow-lg absolute w-full z-10" id="mobile-menu">
+        <div class="flex flex-col space-y-4 p-4">
+            <a href="#how-it-works" class="text-gray-700 hover:text-magenta transition-colors duration-300">How it works</a>
+            <a href="#features" class="text-gray-700 hover:text-magenta transition-colors duration-300">Features</a>
+            <a href="#about" class="text-gray-700 hover:text-magenta transition-colors duration-300">About</a>
+            {% if current_user.is_authenticated %}
+                <a href="/dashboard" class="text-gray-700 hover:text-magenta transition-colors duration-300">My Dashboard</a>
+                <a href="{{ url_for('auth.logout') }}" class="text-gray-700 hover:text-magenta transition-colors duration-300">Logout</a>
+            {% else %}
+                <a href="{{ url_for('auth.login') }}" class="text-gray-700 hover:text-magenta transition-colors duration-300">Login</a>
+                <a href="{{ url_for('auth.register') }}" class="bg-magenta text-white px-5 py-2 rounded-full hover:bg-magentaLight transition-colors duration-300 inline-block text-center">Register</a>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Hero Section -->
+    <section class="magenta-bg text-white py-20 px-6 relative overflow-hidden">
+        <div class="container mx-auto grid md:grid-cols-2 items-center gap-12">
+            <div class="z-10">
+                <h1 class="text-5xl md:text-6xl font-extrabold mb-6">learning<br><span class="text-sunshine">path</span> generator</h1>
+                <p class="text-xl mb-8">A personalized AI learning journey tailored to your needs</p>
+                <p class="mb-8">Get customized milestones, resources, and progress tracking</p>
+                <a href="#path-form" class="inline-block bg-white text-magenta px-8 py-4 rounded-full font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 btn-hover">Create Learning Path</a>
+            </div>
+            <div class="relative">
+                <img src="https://img.freepik.com/free-vector/online-certification-illustration_23-2148575636.jpg" alt="Education Learning Path" class="rounded-lg shadow-2xl float-animation relative z-10 w-full h-auto" onerror="this.onerror=null; this.src='https://placehold.co/600x600/ff50c5/FFFFFF?text=Learning+Path';">
+                <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-sunshine rounded-full opacity-50 z-0 animate-pulse"></div>
+                <div class="absolute -top-5 -left-5 w-20 h-20 bg-white rounded-full opacity-30 z-0 animate-ping"></div>
+                <div class="absolute top-1/2 left-1/4 w-12 h-12 bg-magentaLight rounded-full opacity-40 z-0" style="animation: float 4s ease-in-out infinite;"></div>
+                <div class="absolute bottom-1/3 right-1/3 w-16 h-16 bg-sunnyYellow rounded-full opacity-40 z-0" style="animation: float 5s ease-in-out infinite 1s;"></div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Wave divider -->
+    <div class="wave-divider">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" preserveAspectRatio="none" class="fill-current text-magenta">
+            <path d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,149.3C960,160,1056,160,1152,138.7C1248,117,1344,75,1392,53.3L1440,32L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path>
+        </svg>
+    </div>
+
+    <!-- The future of learning section -->
+    <section class="py-16 px-6">
+        <div class="container mx-auto">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="relative">
+                    <img src="https://img.freepik.com/free-vector/education-concept-illustration_114360-7708.jpg" alt="Learning Journey" class="rounded-lg shadow-xl relative z-10 w-full h-auto" onerror="this.onerror=null; this.src='https://placehold.co/600x600/F9C846/000000?text=Learning+Journey';">
+                    <div class="absolute -bottom-4 -left-4 w-32 h-32 bg-sunshine rounded-full opacity-40 z-0"></div>
+                </div>
+                <div>
+                    <h2 class="text-4xl font-bold mb-6">The future of<br>learning journeys</h2>
+                    <p class="text-xl mb-6">Need personalized learning paths, intuitive milestones, and curated educational resources? Welcome home.</p>
+                    <p class="mb-6">We're LearningPath, your AI education partner. We're all about delivering the perfect learning journey tailored to your unique needs and goals.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How it works section -->
+    <section id="how-it-works" class="yellow-bg py-16 px-6">
+        <div class="container mx-auto">
+            <h2 class="text-4xl font-bold text-center mb-16">How it works</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Card 1 -->
+                <div class="bg-white rounded-xl p-6 card-hover">
+                    <div class="bg-magentaLight rounded-lg p-4 inline-block mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-magenta" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-2">Tell Us Your Goals</h3>
+                    <p class="text-gray-700 mb-4">Start by telling us what you want to learn, your current expertise level, and how you prefer to learn new skills.</p>
+                    <div class="border-t border-gray-200 pt-4 mt-2">
+                        <p class="text-sm text-gray-500">+ Personalized for your needs</p>
+                    </div>
+                </div>
+                
+                <!-- Card 2 -->
+                <div class="bg-white rounded-xl p-6 card-hover">
+                    <div class="bg-magentaLight rounded-lg p-4 inline-block mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-magenta" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-2">Request</h3>
+                    <p class="text-gray-700 mb-4">Alright, you're in! Now, it's time to fill out our form and tell us what you want to learn. Need a personal coding curriculum? A language learning plan? No sweat.</p>
+                    <div class="border-t border-gray-200 pt-4 mt-2">
+                        <p class="text-sm text-gray-500">+ Just keep those requests coming!</p>
+                    </div>
+                </div>
+                
+                <!-- Card 3 -->
+                <div class="bg-white rounded-xl p-6 card-hover">
+                    <div class="bg-magentaLight rounded-lg p-4 inline-block mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-magenta" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-2">Review</h3>
+                    <p class="text-gray-700 mb-4">Hold tight! In just 48 hours, you'll get your personalized learning design. And if it's not quite right, no worries! We can tweak and tune it until it's just right.</p>
+                    <div class="border-t border-gray-200 pt-4 mt-2">
+                        <p class="text-sm text-gray-500">+ That's the beauty of unlimited revisions</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Form Section -->
+    <section id="path-form" class="py-16 px-6 bg-gray-50">
+        <div class="container mx-auto max-w-4xl">
+            <h2 class="text-4xl font-bold mb-12 text-center">Create Your <span class="text-magenta">Learning Path</span></h2>
+            
+            <!-- Error message (if any) -->
+            {% if error %}
+            <div class="bg-red-50 text-red-800 p-4 rounded-lg mb-6">
+                {{ error }}
+            </div>
+            {% endif %}
+            
+            <div class="bg-white rounded-xl shadow-xl p-8">
+                <form id="pathGeneratorForm" class="space-y-6" action="/generate" method="POST">
+                    <!-- AI Provider -->
+                    <div>
+                        <label for="ai_provider" class="block text-lg font-medium text-gray-700 mb-2">Select AI Provider</label>
+                        <select id="ai_provider" name="ai_provider" class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-magenta focus:border-magenta">
+                            <option value="openai">OpenAI</option>
+                            <option value="deepseek">DeepSeek</option>
+                        </select>
+                    </div>
+                    <!-- Expertise Level -->
+                    <div>
+                        <label for="expertise_level" class="block text-lg font-medium text-gray-700 mb-2">Your current expertise level</label>
+                        <select id="expertise_level" name="expertise_level" required
+                                class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-magenta focus:border-magenta">
+                            {% for level, description in expertise_levels.items() %}
+                                <option value="{{ level }}">{{ level.title() }} - {{ description }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <!-- Topic Categories -->
+                    <div>
+                        <label for="topic" class="block text-lg font-medium text-gray-700 mb-2">What do you want to learn?</label>
+                        <div class="mb-3">
+                            <select id="category-selector" class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-magenta focus:border-magenta mb-3">
+                                <option value="">-- Select a category --</option>
+                                <option value="programming">Programming & Development</option>
+                                <option value="data">Data Science & Analytics</option>
+                                <option value="design">Design & Creativity</option>
+                                <option value="business">Business & Management</option>
+                                <option value="language">Languages & Communication</option>
+                                <option value="ai_skills_roles">Latest AI Skills and Roles in 2025</option>
+                                <option value="other">Other Skills</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Programming Topics -->
+                        <div id="programming-topics" class="topic-list hidden mb-4">
+                            <h4 class="font-medium text-gray-700 mb-2">Popular Programming Topics:</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">JavaScript</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Python</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">React.js</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Node.js</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Swift</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Java</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">C#</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Go</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Rust</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Web Development</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Data Science Topics -->
+                        <div id="data-topics" class="topic-list hidden mb-4">
+                            <h4 class="font-medium text-gray-700 mb-2">Popular Data Science Topics:</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Machine Learning</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Deep Learning</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Natural Language Processing</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Computer Vision</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Big Data</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Data Analysis</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">SQL</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">R Programming</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">TensorFlow</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Design Topics -->
+                        <div id="design-topics" class="topic-list hidden mb-4">
+                            <h4 class="font-medium text-gray-700 mb-2">Popular Design Topics:</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">UI/UX Design</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Graphic Design</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">3D Modeling</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Animation</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Figma</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Adobe Photoshop</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Illustration</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Business Topics -->
+                        <div id="business-topics" class="topic-list hidden mb-4">
+                            <h4 class="font-medium text-gray-700 mb-2">Popular Business Topics:</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Project Management</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Marketing</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Finance</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Entrepreneurship</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Sales</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Leadership</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Public Speaking</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Language Topics -->
+                        <div id="language-topics" class="topic-list hidden mb-4">
+                            <h4 class="font-medium text-gray-700 mb-2">Popular Language Topics:</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">English</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Spanish</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Mandarin</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">French</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">German</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Japanese</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Technical Writing</button>
+                            </div>
+                        </div>
+                        <!-- Latest AI Skills and Roles Topics -->
+                        <div id="ai_skills_roles-topics" class="topic-list hidden mb-4">
+                            <h4 class="font-medium text-gray-700 mb-2">Latest AI Skills and Roles for 2025:</h4>
+                            
+                            <h5 class="font-medium text-gray-600 mt-3 mb-2 text-sm">In-demand AI Skills:</h5>
+                            <div class="flex flex-wrap gap-2">
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Prompt Engineering</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">AI Ethics and Governance</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Large Language Model (LLM) Operations</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">AI-powered Data Analysis</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Reinforcement Learning from Human Feedback (RLHF)</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Multimodal AI Development</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">AI Security and Privacy</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Explainable AI (XAI)</button>
+                            </div>
+
+                            <h5 class="font-medium text-gray-600 mt-3 mb-2 text-sm">Emerging AI Roles:</h5>
+                            <div class="flex flex-wrap gap-2">
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">AI Product Manager</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">AI Ethicist</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">LLM Operations Engineer</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">AI Tutor/Educator</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">AI Content Creator</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">AI Auditor</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Robotics Process Automation (RPA) Specialist (AI-focused)</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">AI Bias Detection Specialist</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Other Skills Topics -->
+                        <div id="other-topics" class="topic-list hidden mb-4">
+                            <h4 class="font-medium text-gray-700 mb-2">Other Popular Skills:</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Photography</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Music Production</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Digital Marketing</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Video Editing</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Cooking</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Fitness</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Input with selected topics and custom input -->
+                        <div class="relative">
+                            <input type="text" id="topic" name="topic" placeholder="e.g., Machine Learning, JavaScript, Data Science" class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-magenta focus:border-magenta" required>
+                            <div id="selected-topics" class="mt-2 flex flex-wrap gap-2"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Learning Style -->
+                    <div>
+                        <label for="learning_style" class="block text-lg font-medium text-gray-700 mb-2">Your Learning Style</label>
+                        <select id="learning_style" name="learning_style" required
+                                class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-magenta focus:border-magenta mb-4">
+                            <option value="visual">Visual - Learn best through images, diagrams, and spatial understanding</option>
+                            <option value="auditory">Auditory - Learn best through listening and speaking</option>
+                            <option value="reading">Reading/Writing - Learn best through written materials and note-taking</option>
+                            <option value="kinesthetic">Kinesthetic - Learn best through hands-on activities and physical interaction</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Duration in Weeks -->
+                    <div>
+                        <label for="duration_weeks" class="block text-lg font-medium text-gray-700 mb-2">
+                            Duration (in weeks)
+                        </label>
+                        <input type="number" id="duration_weeks" name="duration_weeks" min="1" max="52" required
+                               class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-magenta focus:border-magenta"
+                               placeholder="e.g., 4">
+                        <p class="mt-1 text-sm text-gray-500">How many weeks do you plan to study this topic?</p>
+                    </div>
+                    
+                    <!-- Time Commitment -->
+                    <div>
+                        <label for="time_commitment" class="block text-lg font-medium text-gray-700 mb-2">How much time can you commit weekly?</label>
+                        <select id="time_commitment" name="time_commitment" required
+                                class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-magenta focus:border-magenta">
+                            {% for commitment, description in time_commitments.items() %}
+                                <option value="{{ commitment }}">{{ commitment.title() }} - {{ description }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <!-- Goals -->
+                    <div>
+                        <label for="goals" class="block text-lg font-medium text-gray-700 mb-2">Your learning goals (comma-separated)</label>
+                        <input type="text" id="goals" name="goals"
+                               class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-magenta focus:border-magenta"
+                               placeholder="e.g., Build a portfolio, Pass certification, Understand core concepts">
+                    </div>
+                    
+                    <!-- Additional Info -->
+                    <div>
+                        <label for="additional_info" class="block text-lg font-medium text-gray-700 mb-2">Any other preferences or information? (optional)</label>
+                        <textarea id="additional_info" name="additional_info" rows="3"
+                                  class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-magenta focus:border-magenta"
+                                  placeholder="Any specific topics to focus on or avoid, preferred resources, etc."></textarea>
+                    </div>
+                    
+                    <!-- Submit Button -->
+                    <div class="pt-6">
+                        <button type="submit" class="w-full bg-magenta text-white py-4 px-6 rounded-full font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 btn-hover flex items-center justify-center relative overflow-hidden group">
+                            <span class="relative z-10">Generate My Learning Path</span>
+                            <div class="loading-spinner ml-3" id="loadingSpinner"></div>
+                            <div class="absolute inset-0 h-full w-full scale-0 rounded-full transition-all duration-300 group-hover:scale-100 group-hover:bg-magentaLight/30"></div>
+                        </button>
+                        <p class="text-center text-gray-500 mt-4 text-sm">Free, no credit card required</p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Features Section -->
+    <section id="features" class="py-16 px-6">
+        <div class="container mx-auto">
+            <h2 class="text-4xl font-bold text-center mb-4">Powered by Advanced AI</h2>
+            <p class="text-xl text-center text-gray-600 mb-12">Our intelligent agents work together to create the perfect learning experience</p>
+            
+            <div class="grid md:grid-cols-3 gap-8 mb-16">
+                <div class="bg-white p-8 rounded-xl shadow-lg card-hover">
+                    <div class="bg-sunshine rounded-lg p-4 inline-block mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3">AI-powered generation</h3>
+                    <p class="text-gray-700">Uses state-of-the-art AI technologies to create highly personalized learning plans tailored to your preferences.</p>
+                </div>
+                
+                <div class="bg-white p-8 rounded-xl shadow-lg card-hover">
+                    <div class="bg-sunshine rounded-lg p-4 inline-block mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3">Learning style adaptation</h3>
+                    <p class="text-gray-700">Tailors content to match your preferred learning style, whether visual, auditory, reading, or kinesthetic.</p>
+                </div>
+                
+                <div class="bg-white p-8 rounded-xl shadow-lg card-hover">
+                    <div class="bg-sunshine rounded-lg p-4 inline-block mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3">Progress tracking</h3>
+                    <p class="text-gray-700">Track your learning journey with intuitive milestones and achievements to keep you motivated.</p>
+                </div>
+            </div>
+
+            <!-- Agents Section -->
+            <h2 class="text-4xl font-bold text-center mt-20 mb-8">Meet Your AI Assistants</h2>
+            <p class="text-xl text-center text-gray-600 mb-12">Specialized AI agents to enhance your learning experience</p>
+            
+            <!-- Agent cards removed. Agent selection will be integrated into chat input. -->
+
+            <!-- Chat Interface -->
+            <div class="chat-container mt-16 bg-white rounded-xl shadow-xl overflow-hidden">
+                <!-- Chat Header -->
+                <div class="bg-gradient-to-r from-purple-600 to-magenta text-white p-4">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 rounded-full bg-white bg-opacity-20 flex items-center justify-center mr-3">
+                            <span class="text-xl">🤖</span>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-lg">AI Learning Assistant</h3>
+                            <p class="text-xs text-purple-100">Online</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Chat Messages -->
+                <div id="chatMessages" class="chat-messages p-4 space-y-3 bg-gray-50">
+                    <div class="text-center text-gray-500 py-8 initial-hello-message">
+                        <div class="w-16 h-16 mx-auto bg-purple-100 rounded-full flex items-center justify-center mb-3">
+                            <span class="text-3xl">👋</span>
+                        </div>
+                        <h4 class="font-semibold text-gray-700">Hello! I'm your AI Learning Assistant</h4>
+                        <p class="text-sm text-gray-500 mt-1">How can I help you learn today?</p>
+                        <div class="mt-4 space-x-2">
+                            <button onclick="document.getElementById('chatInput').value = 'Show me learning paths'; sendMessage();" class="suggestion-button text-xs bg-purple-100 hover:bg-purple-200 text-purple-800 px-3 py-1.5 rounded-full">
+                                Show learning paths
+                            </button>
+                            <button onclick="document.getElementById('chatInput').value = 'Help me research a topic'; sendMessage();" class="suggestion-button text-xs bg-blue-100 hover:bg-blue-200 text-blue-800 px-3 py-1.5 rounded-full">
+                                Research a topic
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Chat Input -->
+                <div class="chat-input-container p-4 border-t border-gray-200">
+                    <div id="agentModeSelector" class="flex items-center space-x-2 mb-2">
+                        <span class="text-sm font-medium text-gray-600">Mode:</span>
+                        <button type="button" id="selectChatModeBtn" class="agent-mode-btn agent-mode-active text-xs bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-1 rounded-full transition-colors">Chat</button>
+                        <button type="button" id="selectResearchModeBtn" class="agent-mode-btn text-xs bg-pink-100 hover:bg-pink-200 text-pink-700 px-3 py-1 rounded-full transition-colors">Research</button>
+                        <button type="button" id="selectTeachModeBtn" class="agent-mode-btn text-xs bg-yellow-100 hover:bg-yellow-200 text-yellow-700 px-3 py-1 rounded-full transition-colors">Path</button>
+                    </div>
+                    <form id="chatForm" class="flex items-end space-x-2" onsubmit="event.preventDefault(); sendMessage();">
+                        <div class="flex-1 relative">
+                            <textarea 
+                                id="chatInput" 
+                                class="chat-input w-full rounded-lg p-3 pr-12 focus:ring-2 focus:ring-magenta focus:ring-opacity-50" 
+                                placeholder="Type your message..."
+                                rows="1"
+                            ></textarea>
+                            <button type="button" class="absolute right-3 bottom-3 text-gray-400 hover:text-gray-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </button>
+                        </div>
+                        <button 
+                            type="submit" 
+                            class="send-button bg-magenta text-white p-3 rounded-lg hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-magenta focus:ring-opacity-50"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13a1 1 0 102 0V9.414l1.293 1.293a1 1 0 001.414-1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="bg-gray-800 text-white py-16 px-6">
+        <div class="container mx-auto">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div class="md:col-span-2">
+                    <h3 class="text-2xl font-bold mb-4">Learning<span class="text-magenta">Path</span></h3>
+                    <p class="text-gray-400 mb-4">AI-powered personalized learning journeys. Built for every type of learner, every subject, and every goal.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-white hover:text-magenta transition-colors duration-200">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-2.719 0-4.924 2.204-4.924 4.924 0 .386.044.762.127 1.122-4.092-.205-7.72-2.166-10.149-5.145-.424.726-.664 1.574-.664 2.476 0 1.709.869 3.215 2.19 4.098-.807-.026-1.566-.248-2.228-.616v.061c0 2.387 1.697 4.384 3.95 4.835-.414.111-.849.171-1.296.171-.318 0-.626-.031-1.296-.171 2.253 1.957 4.767 3.38 7.54 3.419-1.685 1.321-3.808 2.108-6.114 2.108-.398 0-.79-.023-1.175-.068 2.179 1.397 4.767 2.212 7.548 2.212 9.057 0 14.009-7.5 14.009-14.008 0-.213-.005-.425-.014-.636.961-.693 1.797-1.56 2.457-2.549l-.047-.02z"></path></svg>
+                        </a>
+                        <a href="#" class="text-white hover:text-magenta transition-colors duration-200">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        </a>
+                        <a href="#" class="text-white hover:text-magenta transition-colors duration-200">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"></path></svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Learning</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">Technologies</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">Languages</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">Career Skills</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">Creative Arts</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Company</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">About Us</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">Careers</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">Privacy Policy</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-12 pt-8">
+    </footer>
+    
+    <!-- External Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        // Configure marked.js
+        marked.setOptions({
+            breaks: true,
+            gfm: true,
+            headerIds: false,
+            mangle: false
+        });
+    </script>
+    
+    <!-- Main Application Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Chat functionality
+            const chatMessages = document.getElementById('chatMessages');
+            const chatInput = document.getElementById('chatInput');
+            const chatForm = document.getElementById('chatForm');
+            const selectChatModeBtn = document.getElementById('selectChatModeBtn');
+            const selectResearchModeBtn = document.getElementById('selectResearchModeBtn');
+            const selectTeachModeBtn = document.getElementById('selectTeachModeBtn');
+            const agentModeBtns = document.querySelectorAll('.agent-mode-btn');
+
+            let currentAgentMode = 'Chat'; // Default mode, matches button text
+
+            function updateActiveModeButton() {
+                agentModeBtns.forEach(btn => {
+                    // Reset all buttons to their base style first
+                    btn.classList.remove('agent-mode-active');
+                    if (btn.id === 'selectChatModeBtn') {
+                        btn.classList.remove('bg-pink-200', 'text-pink-800', 'bg-yellow-200', 'text-yellow-800', 'bg-purple-200', 'text-purple-800');
+                        btn.classList.add('bg-gray-200', 'text-gray-700', 'hover:bg-gray-300');
+                    } else if (btn.id === 'selectResearchModeBtn') {
+                        btn.classList.remove('bg-gray-300', 'text-gray-800', 'bg-yellow-200', 'text-yellow-800', 'bg-purple-200', 'text-purple-800');
+                        btn.classList.add('bg-pink-100', 'text-pink-700', 'hover:bg-pink-200');
+                    } else if (btn.id === 'selectTeachModeBtn') {
+                        btn.classList.remove('bg-gray-300', 'text-gray-800', 'bg-pink-200', 'text-pink-800', 'bg-purple-200', 'text-purple-800');
+                        btn.classList.add('bg-yellow-100', 'text-yellow-700', 'hover:bg-yellow-200');
+                    }
+
+                    // Apply active style to the current mode button
+                    if (btn.textContent === currentAgentMode) {
+                        btn.classList.add('agent-mode-active');
+                        if (currentAgentMode === 'Chat') {
+                            btn.classList.remove('bg-gray-200', 'text-gray-700', 'hover:bg-gray-300');
+                            btn.classList.add('bg-purple-200', 'text-purple-800'); 
+                        } else if (currentAgentMode === 'Research') {
+                            btn.classList.remove('bg-pink-100', 'text-pink-700', 'hover:bg-pink-200');
+                            btn.classList.add('bg-pink-200', 'text-pink-800'); 
+                        } else if (currentAgentMode === 'Path') {
+                            btn.classList.remove('bg-yellow-100', 'text-yellow-700', 'hover:bg-yellow-200');
+                            btn.classList.add('bg-yellow-200', 'text-yellow-800'); 
+                        }
+                    }
+                });
+            }
+
+            if (selectChatModeBtn) {
+                selectChatModeBtn.addEventListener('click', () => {
+                    currentAgentMode = 'Chat';
+                    updateActiveModeButton();
+                    console.log('Mode changed to:', currentAgentMode);
+                });
+            }
+            if (selectResearchModeBtn) {
+                selectResearchModeBtn.addEventListener('click', () => {
+                    currentAgentMode = 'Research';
+                    updateActiveModeButton();
+                    console.log('Mode changed to:', currentAgentMode);
+                });
+            }
+            if (selectTeachModeBtn) {
+                selectTeachModeBtn.addEventListener('click', () => {
+                    currentAgentMode = 'Path';
+                    updateActiveModeButton();
+                    console.log('Mode changed to:', currentAgentMode);
+                });
+            }
+
+            function addMessage(text, isUser = false) {
+                if (!chatMessages) return;
+
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('message', 'mb-4', 'p-3', 'rounded-lg', 'max-w-xl', 'break-words');
+                
+                if (isUser) {
+                    messageElement.classList.add('user-message', 'bg-magenta', 'text-white', 'self-end', 'ml-auto');
+                } else {
+                    messageElement.classList.add('ai-message', 'bg-gray-200', 'text-gray-800', 'self-start', 'mr-auto');
+                }
+
+                if (typeof marked !== 'undefined') {
+                    try {
+                        const textAsString = String(text);
+                        messageElement.innerHTML = marked.parse(textAsString);
+                    } catch (e) {
+                        console.error('Error parsing markdown:', e);
+                        messageElement.textContent = text;
+                    }
+                } else {
+                    messageElement.textContent = text;
+                }
+            
+                // Attempt to remove initial greeting if it exists and this is the first real message exchange
+                const initialHello = chatMessages.querySelector('.initial-hello-message');
+                if (initialHello && initialHello.parentNode === chatMessages) {
+                     // Only remove if we are about to add the first user or AI message after it
+                    if (chatMessages.children.length === 1 && chatMessages.firstChild === initialHello) {
+                         chatMessages.removeChild(initialHello);
+                    }
+                }
+                chatMessages.appendChild(messageElement);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            async function fetchMessageResponse(message) {
+                if (!chatInput) return;
+                const sendButton = chatForm ? chatForm.querySelector('button[type="submit"]') : null;
+
+                addMessage(message, true); // Display user's message
+                chatInput.value = '';
+                chatInput.disabled = true;
+                if (sendButton) sendButton.disabled = true;
+                
+                chatInput.style.height = 'auto'; 
+                const newHeight = Math.min(chatInput.scrollHeight, 120);
+                chatInput.style.height = newHeight + 'px';
+
+                let typingIndicator;
+                if (chatMessages) {
+                    typingIndicator = document.createElement('div');
+                    typingIndicator.classList.add('message', 'ai-message', 'typing-indicator', 'mb-4', 'p-3', 'rounded-lg', 'max-w-xl', 'bg-gray-200', 'text-gray-800', 'self-start', 'mr-auto');
+                    typingIndicator.innerHTML = '<span class="italic">AI is thinking...</span> <div class="dot-flashing"></div>';
+                    chatMessages.appendChild(typingIndicator);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }
+
+                try {
+                    console.log(`Sending to /direct_chat: Mode - ${currentAgentMode}, Message - ${message}`);
+                    const response = await fetch('/direct_chat', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ message: message, mode: currentAgentMode })
+                    });
+
+                    if (typingIndicator && typingIndicator.parentNode) {
+                        typingIndicator.parentNode.removeChild(typingIndicator);
+                    }
+
+                    if (!response.ok) {
+                        let errorText = `Server error: ${response.status}`;
+                        try {
+                            const errorData = await response.json();
+                            errorText = errorData.error || errorData.message || errorText;
+                        } catch (e) {
+                            errorText = await response.text() || errorText; 
+                        }
+                        throw new Error(errorText);
+                    }
+
+                    const data = await response.json();
+                    addMessage(data.reply || "Sorry, I didn't get a valid response.", false);
+
+                } catch (error) {
+                    console.error('Error sending message:', error);
+                    if (typingIndicator && typingIndicator.parentNode) {
+                        typingIndicator.parentNode.removeChild(typingIndicator);
+                    }
+                    addMessage(`Error: ${error.message || 'Could not connect to the AI assistant.'}`, false);
+                } finally {
+                    if (chatInput) chatInput.disabled = false;
+                    if (sendButton) sendButton.disabled = false;
+                    if (chatInput) chatInput.focus();
+                }
+            }
+
+            if (chatForm) {
+                chatForm.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    if (chatInput) {
+                        const message = chatInput.value.trim();
+                        if (message) {
+                            fetchMessageResponse(message);
+                        }
+                    }
+                });
+            }
+
+            if (chatInput) {
+                chatInput.addEventListener('input', function () {
+                    this.style.height = 'auto';
+                    const newHeight = Math.min(this.scrollHeight, 120);
+                    this.style.height = newHeight + 'px';
+                });
+                chatInput.style.height = 'auto';
+                const initialHeight = Math.min(chatInput.scrollHeight, 120);
+                chatInput.style.height = initialHeight + 'px';
+            }
+            
+            updateActiveModeButton(); // Initialize button styles
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', function() {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+            
+            // Topic category selector
+            const categorySelector = document.getElementById('category-selector');
+            const topicLists = document.querySelectorAll('.topic-list');
+            const topicInput = document.getElementById('topic');
+            const selectedTopicsContainer = document.getElementById('selected-topics');
+            let selectedTopics = [];
+            
+            // Handle category changes
+            if (categorySelector) {
+                categorySelector.addEventListener('change', function() {
+                    // Hide all topic lists
+                    topicLists.forEach(list => list.classList.add('hidden'));
+                    
+                    // Show selected category topics
+                    const selectedCategory = this.value;
+                    if (selectedCategory) {
+                        const selectedList = document.getElementById(selectedCategory + '-topics');
+                        if (selectedList) {
+                            selectedList.classList.remove('hidden');
+                            
+                            // Add animation
+                            selectedList.style.opacity = '0';
+                            selectedList.style.transform = 'translateY(10px)';
+                            setTimeout(() => {
+                                selectedList.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                                selectedList.style.opacity = '1';
+                                selectedList.style.transform = 'translateY(0)';
+                            }, 10);
+                        }
+                    }
+                });
+                
+                // Trigger a change event on page load to initialize if there's a default value
+                setTimeout(() => categorySelector.dispatchEvent(new Event('change')), 100);
+            }
+            
+            // Handle topic button clicks
+            const topicButtons = document.querySelectorAll('.topic-btn');
+            topicButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const topic = this.textContent.trim();
+                    
+                    // Toggle active state for the button
+                    this.classList.toggle('bg-magenta');
+                    this.classList.toggle('text-white');
+                    this.classList.toggle('bg-gray-200');
+                    
+                    // Add or remove from selected topics
+                    if (this.classList.contains('bg-magenta')) {
+                        // Add to selected topics if not already there
+                        if (!selectedTopics.includes(topic)) {
+                            selectedTopics.push(topic);
+                        }
+                    } else {
+                        // Remove from selected topics
+                        selectedTopics = selectedTopics.filter(t => t !== topic);
+                    }
+                    
+                    // Update the input value and selected topics display
+                    updateTopicDisplay();
+                });
+            });
+            
+            // Custom input handling
+            if (topicInput) {
+                topicInput.addEventListener('input', function() {
+                    // Extract comma-separated values from manual input
+                    const inputVal = this.value;
+                    if (inputVal.includes(',')) {
+                        const parts = inputVal.split(',');
+                        const lastComplete = parts.slice(0, -1).join(',');
+                        const newTopic = parts[parts.length - 2].trim();
+                        
+                        // Add as a selected topic if not empty and not already there
+                        if (newTopic && !selectedTopics.includes(newTopic)) {
+                            selectedTopics.push(newTopic);
+                        }
+                        
+                        // Update the input to contain only the part after the last comma
+                        this.value = parts[parts.length - 1].trim();
+                        
+                        updateTopicDisplay();
+                    }
+                });
+                
+                // Handle Enter key
+                topicInput.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' && !e.shiftKey && this.value.trim()) {
+                        e.preventDefault(); // Prevent form submission
+                        
+                        const newTopic = this.value.trim();
+                        if (!selectedTopics.includes(newTopic)) {
+                            selectedTopics.push(newTopic);
+                        }
+                        
+                        this.value = '';
+                        updateTopicDisplay();
+                    }
+                });
+            }
+            
+            // Function to update the topic display
+            function updateTopicDisplay() {
+                // Update the hidden input value
+                topicInput.value = selectedTopics.join(', ');
+                
+                // Update the visual display of selected topics
+                if (selectedTopicsContainer) {
+                    selectedTopicsContainer.innerHTML = '';
+                    
+                    selectedTopics.forEach(topic => {
+                        const topicTag = document.createElement('div');
+                        topicTag.className = 'inline-flex items-center bg-magenta text-white px-3 py-1 rounded-full text-sm';
+                        
+                        const topicText = document.createElement('span');
+                        topicText.textContent = topic;
+                        
+                        const removeBtn = document.createElement('button');
+                        removeBtn.type = 'button';
+                        removeBtn.className = 'ml-2 focus:outline-none';
+                        removeBtn.innerHTML = '&times;';
+                        removeBtn.addEventListener('click', function() {
+                            // Remove this topic
+                            selectedTopics = selectedTopics.filter(t => t !== topic);
+                            updateTopicDisplay();
+                            
+                            // Also update any corresponding topic buttons
+                            topicButtons.forEach(btn => {
+                                if (btn.textContent.trim() === topic) {
+                                    btn.classList.remove('bg-magenta', 'text-white');
+                                    btn.classList.add('bg-gray-200');
+                                }
+                            });
+                        });
+                        
+                        topicTag.appendChild(topicText);
+                        topicTag.appendChild(removeBtn);
+                        selectedTopicsContainer.appendChild(topicTag);
+                    });
+                }
+            }
+            
+            // Add floating animation to buttons
+            const animateButtons = () => {
+                const allBtns = document.querySelectorAll('.btn-hover, .topic-btn');
+                allBtns.forEach((btn, index) => {
+                    btn.style.animationDelay = (index * 0.1) + 's';
+                });
+            };
+            
+            animateButtons();
+
+            // Agent Mode Selection
+            const selectChatModeBtn = document.getElementById('selectChatModeBtn');
+            const selectResearchModeBtn = document.getElementById('selectResearchModeBtn');
+            const selectTeachModeBtn = document.getElementById('selectTeachModeBtn');
+            const agentModeButtons = [selectChatModeBtn, selectResearchModeBtn, selectTeachModeBtn].filter(btn => btn);
+
+            function updateButtonStyles(activeButton) {
+                const defaultStyles = {
+                    'selectChatModeBtn': ['bg-gray-200', 'hover:bg-gray-300', 'text-gray-700'],
+                    'selectResearchModeBtn': ['bg-pink-100', 'hover:bg-pink-200', 'text-pink-700'],
+                    'selectTeachModeBtn': ['bg-yellow-100', 'hover:bg-yellow-200', 'text-yellow-700']
+                };
+                const activeStyles = {
+                    'selectChatModeBtn': ['bg-purple-500', 'text-white'],
+                    'selectResearchModeBtn': ['bg-pink-500', 'text-white'],
+                    'selectTeachModeBtn': ['bg-yellow-500', 'text-white']
+                };
+
+                agentModeButtons.forEach(btn => {
+                    btn.classList.remove('agent-mode-active', ...Object.values(activeStyles).flat());
+                    btn.classList.add(...defaultStyles[btn.id]);
+                });
+
+                if (activeButton) {
+                    activeButton.classList.add('agent-mode-active');
+                    activeButton.classList.remove(...defaultStyles[activeButton.id]);
+                    activeButton.classList.add(...activeStyles[activeButton.id]);
+                }
+            }
+
+            // Agent mode button click handlers
+            selectChatModeBtn?.addEventListener('click', function() {
+                window.currentAgentMode = 'chat';
+                updateButtonStyles(this);
+                chatInput.placeholder = 'Type your message...';
+                console.log('Current agent mode:', window.currentAgentMode || 'chat');
+            });
+
+            selectResearchModeBtn?.addEventListener('click', function() {
+                window.currentAgentMode = 'research';
+                updateButtonStyles(this);
+                chatInput.placeholder = 'What would you like to research?';
+                console.log('Current agent mode:', window.currentAgentMode || 'chat');
+            });
+
+            selectTeachModeBtn?.addEventListener('click', function() {
+                window.currentAgentMode = 'teach';
+                updateButtonStyles(this);
+                chatInput.placeholder = 'What would you like to learn about?';
+                console.log('Current agent mode:', window.currentAgentMode || 'chat');
+            });
+
+            // Initialize chat button as active
+            if (selectChatModeBtn) {
+                updateButtonStyles(selectChatModeBtn);
+                chatInput.placeholder = 'Type your message...';
+            }
+
+            // Attach event listeners for agent card buttons on index.html (This line is now a comment as the button is removed)
+            // const indexStartResearchButton = document.getElementById('indexStartResearchBtn');
+            if (indexStartResearchButton) {
+                indexStartResearchButton.addEventListener('click', startResearch); // Uses startResearch from this script
+            }
+            const indexViewHistoryButton = document.getElementById('indexViewHistoryBtn');
+            if (indexViewHistoryButton) {
+                indexViewHistoryButton.addEventListener('click', viewResearchHistory); // Uses viewResearchHistory from this script
+            }
+            const indexCreatePathButton = document.getElementById('indexCreatePathBtn');
+            if (indexCreatePathButton) {
+                indexCreatePathButton.addEventListener('click', createLearningPath); // Uses createLearningPath from this script
+            }
+            const indexViewPathsButton = document.getElementById('indexViewPathsBtn');
+            if (indexViewPathsButton) {
+                indexViewPathsButton.addEventListener('click', viewPaths); // Uses viewPaths from this script
+            }
+            
+            // // Handle expertise level selection (Commented out as expertise buttons are removed)
+            // const expertiseButtons = document.querySelectorAll('.expertise-btn');
+            // const expertiseLevelSelect = document.getElementById('expertise_level');
+            
+            // expertiseButtons.forEach(button => {
+            //     button.addEventListener('click', function() {
+            //         // Remove active class from all buttons
+            //         expertiseButtons.forEach(btn => {
+            //             btn.classList.remove('bg-magenta', 'text-white', 'border-magenta');
+            //             btn.classList.add('bg-gray-200', 'text-gray-700');
+            //         });
+            //         
+            //         // Add active class to clicked button
+            //         this.classList.remove('bg-gray-200', 'text-gray-700');
+            //         this.classList.add('bg-magenta', 'text-white', 'border-magenta');
+            //         
+            //         // Update hidden select value
+            //         const value = this.getAttribute('data-value');
+            //         if (expertiseLevelSelect) {
+            //             expertiseLevelSelect.value = value;
+            //         }
+            //     });
+            // });
+            
+            // // Set default expertise level (Commented out)
+            // if (expertiseButtons.length > 0) {
+            //     setTimeout(() => expertiseButtons[0].click(), 200);
+            // }
+            
+            // Learning style select is now a standard dropdown, no need for button handling
+            
+            // Add floating effect and animations to all buttons
+            document.querySelectorAll('button').forEach((button, index) => {
+                if (!button.classList.contains('float-added')) {
+                    button.classList.add('float-added');
+                    button.addEventListener('mouseover', function() {
+                        this.style.transform = 'translateY(-3px)';
+                        this.style.boxShadow = '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)';
+                    });
+                    
+                    button.addEventListener('mouseout', function() {
+                        this.style.transform = 'translateY(0)';
+                        this.style.boxShadow = '';
+                    });
+                }
+            });
+            
+            // Path generator form submission
+            const pathForm = document.getElementById('pathGeneratorForm');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            
+            if (pathForm && loadingSpinner) {
+                pathForm.addEventListener('submit', function(e) {
+                    // Do NOT prevent default - allow normal form submission
+                    // e.preventDefault(); -- removed this line
+                    
+                    // Make sure topic input is properly set from button selections
+                    if (selectedTopics && selectedTopics.length > 0) {
+                        document.getElementById('topic').value = selectedTopics.join(', ');
+                    }
+                    
+                    // Validate required fields
+                    const topicInput = document.getElementById('topic');
+                    if (!topicInput.value.trim()) {
+                        alert('Please select at least one topic or enter a topic manually.');
+                        e.preventDefault(); // Only prevent submission if validation fails
+                        return;
+                    }
+                    
+                    // Show loading spinner
+                    loadingSpinner.style.display = 'block';
+                    
+                    // Scroll to form to show loading spinner
+                    window.scrollTo({
+                        top: pathForm.offsetTop,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Log form data for debugging
+                    console.log('Submitting form data to server...');
+                    
+                    // Form will submit normally - no need to manually call submit()
+                    // The action and method are already set in the HTML
+                });
+            }
+        });
+    </script>
+</body>
+</html>

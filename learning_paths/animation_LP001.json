@@ -1,0 +1,86 @@
+{
+  "id": "LP001",
+  "title": "Visual Learning Path for Animation",
+  "description": "This personalized learning path is designed for individuals with intermediate expertise in animation who prefer visual learning. It covers key concepts and tools in animation through visual resources.",
+  "topic": "Animation",
+  "expertise_level": "Intermediate",
+  "learning_style": "Visual",
+  "time_commitment": "Minimal",
+  "duration_weeks": 19,
+  "goals": [
+    "Enhance animation skills through visual learning"
+  ],
+  "milestones": [
+    {
+      "title": "Understanding Animation Principles",
+      "description": "Explore the foundational principles of animation such as timing, squash and stretch, and anticipation.",
+      "estimated_hours": 4,
+      "resources": [
+        {
+          "title": "The Animator's Survival Kit by Richard Williams",
+          "link": "https://www.amazon.com/The-Animators-Survival-Richard-Williams/dp/0571202284",
+          "type": "Book",
+          "style_score": 1
+        },
+        {
+          "title": "12 Principles of Animation Video Series by AlanBeckerTutorials",
+          "link": "https://www.youtube.com/playlist?list=PL8B9A5FF1A0FAE3A4",
+          "type": "Video Series",
+          "style_score": 1
+        }
+      ],
+      "skills_gained": [
+        "Understanding animation principles"
+      ]
+    },
+    {
+      "title": "Learning Animation Software Basics",
+      "description": "Acquire basic skills in popular animation software like Adobe Animate or Toon Boom Harmony.",
+      "estimated_hours": 6,
+      "resources": [
+        {
+          "title": "Adobe Animate Tutorials on LinkedIn Learning",
+          "link": "https://www.linkedin.com/learning/adobe-animate-cc-essential-training-2018",
+          "type": "Online Course",
+          "style_score": 1
+        },
+        {
+          "title": "Toon Boom Harmony Video Tutorials by Toon Boom Animation",
+          "link": "https://learn.toonboom.com/courses/introduction-to-harmony-20",
+          "type": "Video Tutorials",
+          "style_score": 1
+        }
+      ],
+      "skills_gained": [
+        "Basic animation software skills"
+      ]
+    },
+    {
+      "title": "Creating Character Animation",
+      "description": "Master the art of character animation including rigging, posing, and movement.",
+      "estimated_hours": 8,
+      "resources": [
+        {
+          "title": "Character Animation Crash Course by Eric Goldberg",
+          "link": "https://www.amazon.com/Character-Animation-Crash-Course-Goldberg/dp/1879505975",
+          "type": "Book",
+          "style_score": 1
+        },
+        {
+          "title": "Character Animation Tutorials on CartoonSmart",
+          "link": "https://cartoonsmart.com/character-animation-video-tutorials/",
+          "type": "Video Tutorials",
+          "style_score": 1
+        }
+      ],
+      "skills_gained": [
+        "Character animation techniques"
+      ]
+    }
+  ],
+  "prerequisites": [
+    "Basic understanding of animation concepts"
+  ],
+  "total_hours": 18,
+  "created_at": "2022-10-15"
+}

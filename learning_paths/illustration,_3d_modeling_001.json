@@ -1,0 +1,91 @@
+{
+  "id": "001",
+  "title": "Visual Learning Path for Illustration and 3D Modeling",
+  "description": "This personalized learning path is designed for beginners with a visual learning style who want to explore the world of illustration and 3D modeling. The path will cover foundational concepts and skills in both areas, allowing you to create stunning visual artworks and models.",
+  "topic": "Illustration, 3D Modeling",
+  "expertise_level": "beginner",
+  "learning_style": "visual",
+  "time_commitment": "moderate",
+  "duration_weeks": 12,
+  "goals": [
+    "Develop basic illustration skills",
+    "Learn 3D modeling fundamentals"
+  ],
+  "milestones": [
+    {
+      "title": "Introduction to Digital Illustration",
+      "description": "Learn about digital illustration tools, basic drawing techniques, and color theory.",
+      "estimated_hours": 20,
+      "resources": [
+        {
+          "title": "Digital Art Basics: Introduction to Procreate",
+          "link": "https://www.youtube.com/watch?v=xxxx",
+          "description": "Video tutorial on using Procreate for digital art creation.",
+          "style_score": 3
+        },
+        {
+          "title": "Color Theory for Beginners",
+          "link": "https://www.canva.com/colors/color-wheel/",
+          "description": "Interactive guide to understanding color relationships.",
+          "style_score": 3
+        }
+      ],
+      "skills_gained": [
+        "Digital drawing skills",
+        "Color theory understanding"
+      ]
+    },
+    {
+      "title": "Introduction to 3D Modeling",
+      "description": "Explore the basics of 3D modeling software, polygon modeling, and texturing.",
+      "estimated_hours": 25,
+      "resources": [
+        {
+          "title": "Blender Beginner Tutorial Series",
+          "link": "https://www.youtube.com/watch?v=xxxx",
+          "description": "Step-by-step tutorials for learning Blender basics.",
+          "style_score": 3
+        },
+        {
+          "title": "Understanding Polygon Modeling",
+          "link": "https://www.youtube.com/watch?v=xxxx",
+          "description": "Visual guide to polygon modeling techniques.",
+          "style_score": 3
+        }
+      ],
+      "skills_gained": [
+        "Basic 3D modeling skills",
+        "Texture mapping knowledge"
+      ]
+    },
+    {
+      "title": "Creating Illustrative Scenes in 3D",
+      "description": "Combine illustration principles with 3D modeling to create visually appealing scenes.",
+      "estimated_hours": 30,
+      "resources": [
+        {
+          "title": "Fusion of 2D Illustration and 3D Modeling",
+          "link": "https://www.youtube.com/watch?v=xxxx",
+          "description": "Tutorial on integrating 2D and 3D elements for illustrations.",
+          "style_score": 3
+        },
+        {
+          "title": "Texturing and Lighting in 3D",
+          "link": "https://www.youtube.com/watch?v=xxxx",
+          "description": "Visual guide to enhancing 3D scenes with textures and lighting.",
+          "style_score": 3
+        }
+      ],
+      "skills_gained": [
+        "Scene composition techniques",
+        "Texturing and lighting skills"
+      ]
+    }
+  ],
+  "prerequisites": [
+    "Access to digital drawing tablet (optional)",
+    "Basic computer proficiency"
+  ],
+  "total_hours": 75,
+  "created_at": "2022-10-25"
+}

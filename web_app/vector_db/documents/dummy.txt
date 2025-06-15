@@ -1,0 +1,1 @@
+This is a dummy document to initialize the vector store.

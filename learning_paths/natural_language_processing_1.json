@@ -1,0 +1,88 @@
+{
+  "id": "1",
+  "title": "Visual Learning Path for Natural Language Processing Certification",
+  "description": "This personalized learning path is designed for individuals with intermediate expertise level in Natural Language Processing who prefer a visual learning style. The path aims to prepare learners for certification by covering key concepts through visual aids such as images, diagrams, and spatial understanding.",
+  "topic": "Natural Language Processing",
+  "expertise_level": "Intermediate",
+  "learning_style": "Visual",
+  "time_commitment": "Minimal - 1-2 hours per week",
+  "duration_weeks": 19,
+  "goals": [
+    "Certification"
+  ],
+  "milestones": [
+    {
+      "title": "Introduction to NLP",
+      "description": "Understand the basics of Natural Language Processing and its applications",
+      "estimated_hours": 5,
+      "resources": [
+        {
+          "title": "NLP Infographics",
+          "link": "example.com/nlp-infographics",
+          "type": "Image-based learning material",
+          "style_score": 1
+        },
+        {
+          "title": "NLP Basics Video Tutorial",
+          "link": "example.com/nlp-basics-video",
+          "type": "Visual tutorial",
+          "style_score": 1
+        }
+      ],
+      "skills_gained": [
+        "Fundamental NLP concepts"
+      ]
+    },
+    {
+      "title": "Text Preprocessing Techniques",
+      "description": "Learn about text cleaning, tokenization, and normalization",
+      "estimated_hours": 8,
+      "resources": [
+        {
+          "title": "Text Preprocessing Diagrams",
+          "link": "example.com/text-preprocessing-diagrams",
+          "type": "Visual aids",
+          "style_score": 1
+        },
+        {
+          "title": "Text Preprocessing Webinar",
+          "link": "example.com/text-preprocessing-webinar",
+          "type": "Interactive visual session",
+          "style_score": 1
+        }
+      ],
+      "skills_gained": [
+        "Text cleaning skills",
+        "Tokenization methods"
+      ]
+    },
+    {
+      "title": "Sentiment Analysis Visualization",
+      "description": "Explore sentiment analysis techniques with visual representations",
+      "estimated_hours": 10,
+      "resources": [
+        {
+          "title": "Sentiment Analysis Infographics",
+          "link": "example.com/sentiment-analysis-infographics",
+          "type": "Visual learning material",
+          "style_score": 1
+        },
+        {
+          "title": "Sentiment Analysis Case Studies",
+          "link": "example.com/sentiment-analysis-cases",
+          "type": "Visual case studies",
+          "style_score": 1
+        }
+      ],
+      "skills_gained": [
+        "Sentiment analysis visualization skills",
+        "Interpreting results visually"
+      ]
+    }
+  ],
+  "prerequisites": [
+    "Basic understanding of Natural Language Processing concepts"
+  ],
+  "total_hours": 23,
+  "created_at": "2022-12-12"
+}
