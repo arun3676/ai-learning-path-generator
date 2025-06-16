@@ -14,14 +14,12 @@ Flask-Migrate==4.0.7
 email-validator==2.1.1
 
 # Document processing
-unstructured>=0.12.0
-
-python-magic-bin>=0.4.14
+unstructured[all-docs]==0.10.30  # Pinned to a stable version
 pypandoc>=1.11
+python-magic>=0.4.27; sys_platform != 'win32'
 
 # RAG and embeddings
 faiss-cpu>=1.7.4
-langchain-openai>=0.0.1
 
 # Vector database
 chromadb>=0.4.13
@@ -39,3 +37,6 @@ werkzeug>=2.0.1
 
 # Development
 pytest>=7.0.0
+
+# Platform-specific dependencies
+--find-links https://download.pytorch.org/whl/torch_stable.html
