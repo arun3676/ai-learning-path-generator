@@ -7,7 +7,7 @@ from flask_login import current_user, login_required
 from web_app.models import db, UserLearningPath, LearningProgress
 import uuid
 from werkzeug.utils import secure_filename
-from pydantic.v1.error_wrappers import ValidationError as PydanticValidationError
+from pydantic import ValidationError as PydanticValidationError
 
 from src.learning_path import LearningPath, LearningPathGenerator
 from src.data.resources import ResourceManager # Assuming this is the correct path
