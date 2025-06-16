@@ -6,7 +6,8 @@ langchain==0.0.267
 langchain-community>=0.0.1
 langchain-openai>=0.0.1
 openai>=1.0.0
-pydantic==2.5.3
+pydantic>=2.0.0,<3.0.0  # Using >=2.0.0 to allow pre-built wheels
+pydantic-core>=2.0.0,<3.0.0  # Explicitly specify pydantic-core with pre-built wheel
 Flask-SQLAlchemy==3.1.1
 Flask-Login==0.6.3
 Flask-WTF==1.2.1
