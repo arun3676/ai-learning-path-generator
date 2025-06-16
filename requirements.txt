@@ -6,8 +6,8 @@ langchain==0.0.267
 langchain-community>=0.0.1
 langchain-openai>=0.0.1
 openai>=1.0.0
-pydantic==2.4.2  # Pin to version with pre-built wheels
-pydantic-core==2.10.1  # Compatible pre-built wheel for Py3.11
+pydantic==1.10.13  # Downgraded to v1 for wider binary wheel support and to avoid Rust build
+# pydantic-core removed (not needed for v1)
 Flask-SQLAlchemy==3.1.1
 Flask-Login==0.6.3
 Flask-WTF==1.2.1
