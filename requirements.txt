@@ -15,9 +15,10 @@ Flask-Migrate==4.0.7
 email-validator==2.1.1
 
 # Document processing
-unstructured[all-docs]==0.10.30  # Pinned to a stable version
+unstructured==0.10.30  # Using base package without all-docs to avoid complex deps
 pypandoc>=1.11
 python-magic>=0.4.27; sys_platform != 'win32'
+onnxruntime>=1.20.0  # Explicitly specify a compatible version
 
 # RAG and embeddings
 faiss-cpu>=1.7.4
