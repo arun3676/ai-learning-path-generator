@@ -1,4 +1,4 @@
-# AI Learning Path Generator 🎓
+# AI Learning Path Generator 
 
 An intelligent system that generates personalized learning paths using AI, built with Python, LangChain, and ML technologies.
 

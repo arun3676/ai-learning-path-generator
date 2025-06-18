@@ -14,6 +14,11 @@ migrate = Migrate()
 def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
+    
+    # Set DEV_MODE from environment
+    app.config['DEV_MODE'] = os.environ.get('DEV_MODE', 'False').lower() == 'true'
+    if app.config['DEV_MODE']:
+        print("\033[93m⚠️  Running in DEV_MODE - API calls will be stubbed!\033[0m")
 
     db.init_app(app)
     login_manager.init_app(app)

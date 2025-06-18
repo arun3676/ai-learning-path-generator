@@ -17,6 +17,7 @@
     </style>
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
@@ -284,40 +285,62 @@
 </head>
 <body class="bg-white min-h-screen">
     <!-- Navigation -->
-    <nav class="py-4 px-6 flex justify-between items-center">
+    <nav class="relative py-4 px-6 flex justify-between items-center bg-white dark:bg-gray-900">
         <div class="flex items-center space-x-2">
             <span class="text-2xl font-extrabold">Learning<span class="text-magenta">Path</span></span>
         </div>
         <div class="hidden md:flex items-center space-x-6">
-            <a href="#how-it-works" class="text-gray-700 hover:text-magenta transition-colors duration-300">How it works</a>
-            <a href="#features" class="text-gray-700 hover:text-magenta transition-colors duration-300">Features</a>
-            <a href="#about" class="text-gray-700 hover:text-magenta transition-colors duration-300">About</a>
+            <a href="#how-it-works" class="text-gray-700 dark:text-gray-300 hover:text-magenta dark:hover:text-magentaLight transition-colors duration-300">How it works</a>
+            <a href="#features" class="text-gray-700 dark:text-gray-300 hover:text-magenta dark:hover:text-magentaLight transition-colors duration-300">Features</a>
+            <a href="#about" class="text-gray-700 dark:text-gray-300 hover:text-magenta dark:hover:text-magentaLight transition-colors duration-300">About</a>
             {% if current_user.is_authenticated %}
-                <a href="/dashboard" class="text-gray-700 hover:text-magenta transition-colors duration-300">My Dashboard</a>
-                <a href="{{ url_for('auth.logout') }}" class="text-gray-700 hover:text-magenta transition-colors duration-300">Logout</a>
+                <a href="/dashboard" class="text-gray-700 dark:text-gray-300 hover:text-magenta dark:hover:text-magentaLight transition-colors duration-300">My Dashboard</a>
+                <a href="{{ url_for('auth.logout') }}" class="text-gray-700 dark:text-gray-300 hover:text-magenta dark:hover:text-magentaLight transition-colors duration-300">Logout</a>
             {% else %}
-                <a href="{{ url_for('auth.login') }}" class="text-gray-700 hover:text-magenta transition-colors duration-300">Login</a>
+                <a href="{{ url_for('auth.login') }}" class="text-gray-700 dark:text-gray-300 hover:text-magenta dark:hover:text-magentaLight transition-colors duration-300">Login</a>
                 <a href="{{ url_for('auth.register') }}" class="bg-magenta text-white px-5 py-2 rounded-full hover:bg-magentaLight transition-colors duration-300">Register</a>
             {% endif %}
         </div>
-        <button class="md:hidden text-gray-700" id="mobile-menu-button">
+        <div class="flex items-center space-x-2 md:hidden">
+            <button id="theme-toggle-mobile" class="items-center justify-center w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-magenta" aria-label="Toggle dark mode">
+                <svg id="theme-toggle-mobile-light-icon" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10 15a5 5 0 100-10 5 5 0 000 10z"></path>
+                    <path fill-rule="evenodd" d="M10 1a1 1 0 011 1v1a1 1 0 11-2 0V2a1 1 0 011-1zm0 14a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm9-5a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM3 10a1 1 0 01-1 1H1a1 1 0 110-2h1a1 1 0 011 1zm12.364-6.364a1 1 0 010 1.414L14.95 6.464a1 1 0 01-1.414-1.414l1.414-1.414a1 1 0 011.414 0zM5.05 14.95a1 1 0 011.414 0l1.414-1.414a1 1 0 10-1.414-1.414L5.05 13.536a1 1 0 010 1.414zm9.9 0a1 1 0 10-1.414-1.414l-1.414 1.414a1 1 0 101.414 1.414l1.414-1.414zM5.05 5.05a1 1 0 011.414 0L7.878 6.464A1 1 0 116.464 7.878L5.05 6.464A1 1 0 015.05 5.05z" clip-rule="evenodd"></path>
+                </svg>
+                <svg id="theme-toggle-mobile-dark-icon" class="w-6 h-6 hidden" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8 8 0 1010.586 10.586z"></path>
+                </svg>
+            </button>
+            <button class="text-gray-700 dark:text-gray-200" id="mobile-menu-button" aria-expanded="false" aria-controls="mobile-menu">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+        </button>
+            <!-- Dark mode toggle (desktop) -->
+        <button id="theme-toggle" class="hidden md:inline-flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-magenta" aria-label="Toggle dark mode">
+            <!-- Sun icon -->
+            <svg id="theme-toggle-light-icon" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10 15a5 5 0 100-10 5 5 0 000 10z"></path>
+                <path fill-rule="evenodd" d="M10 1a1 1 0 011 1v1a1 1 0 11-2 0V2a1 1 0 011-1zm0 14a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm9-5a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM3 10a1 1 0 01-1 1H1a1 1 0 110-2h1a1 1 0 011 1zm12.364-6.364a1 1 0 010 1.414L14.95 6.464a1 1 0 01-1.414-1.414l1.414-1.414a1 1 0 011.414 0zM5.05 14.95a1 1 0 011.414 0l1.414-1.414a1 1 0 10-1.414-1.414L5.05 13.536a1 1 0 010 1.414zm9.9 0a1 1 0 10-1.414-1.414l-1.414 1.414a1 1 0 101.414 1.414l1.414-1.414zM5.05 5.05a1 1 0 011.414 0L7.878 6.464A1 1 0 116.464 7.878L5.05 6.464A1 1 0 015.05 5.05z" clip-rule="evenodd"></path>
+            </svg>
+            <!-- Moon icon -->
+            <svg id="theme-toggle-dark-icon" class="w-6 h-6 hidden" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path d="M17.293 13.293A8 8 0 016.707 2.707a8 8 0 1010.586 10.586z"></path>
             </svg>
         </button>
     </nav>
     
     <!-- Mobile menu (hidden by default) -->
-    <div class="md:hidden hidden bg-white shadow-lg absolute w-full z-10" id="mobile-menu">
+    <div id="mobile-menu" class="md:hidden hidden bg-white dark:bg-gray-900 shadow-lg absolute top-full left-0 w-full z-40">
         <div class="flex flex-col space-y-4 p-4">
-            <a href="#how-it-works" class="text-gray-700 hover:text-magenta transition-colors duration-300">How it works</a>
-            <a href="#features" class="text-gray-700 hover:text-magenta transition-colors duration-300">Features</a>
-            <a href="#about" class="text-gray-700 hover:text-magenta transition-colors duration-300">About</a>
+            <a href="#how-it-works" class="text-gray-700 dark:text-gray-300 hover:text-magenta dark:hover:text-magentaLight transition-colors duration-300">How it works</a>
+            <a href="#features" class="text-gray-700 dark:text-gray-300 hover:text-magenta dark:hover:text-magentaLight transition-colors duration-300">Features</a>
+            <a href="#about" class="text-gray-700 dark:text-gray-300 hover:text-magenta dark:hover:text-magentaLight transition-colors duration-300">About</a>
             {% if current_user.is_authenticated %}
-                <a href="/dashboard" class="text-gray-700 hover:text-magenta transition-colors duration-300">My Dashboard</a>
-                <a href="{{ url_for('auth.logout') }}" class="text-gray-700 hover:text-magenta transition-colors duration-300">Logout</a>
+                <a href="/dashboard" class="text-gray-700 dark:text-gray-300 hover:text-magenta dark:hover:text-magentaLight transition-colors duration-300">My Dashboard</a>
+                <a href="{{ url_for('auth.logout') }}" class="text-gray-700 dark:text-gray-300 hover:text-magenta dark:hover:text-magentaLight transition-colors duration-300">Logout</a>
             {% else %}
-                <a href="{{ url_for('auth.login') }}" class="text-gray-700 hover:text-magenta transition-colors duration-300">Login</a>
+                <a href="{{ url_for('auth.login') }}" class="text-gray-700 dark:text-gray-300 hover:text-magenta dark:hover:text-magentaLight transition-colors duration-300">Login</a>
                 <a href="{{ url_for('auth.register') }}" class="bg-magenta text-white px-5 py-2 rounded-full hover:bg-magentaLight transition-colors duration-300 inline-block text-center">Register</a>
             {% endif %}
         </div>
@@ -1035,8 +1058,18 @@
             const mobileMenu = document.getElementById('mobile-menu');
             
             if (mobileMenuButton && mobileMenu) {
-                mobileMenuButton.addEventListener('click', function() {
-                    mobileMenu.classList.toggle('hidden');
+                const toggleMenu = () => {
+                    const isHidden = mobileMenu.classList.toggle('hidden');
+                    mobileMenuButton.setAttribute('aria-expanded', String(!isHidden));
+                };
+                mobileMenuButton.addEventListener('click', toggleMenu);
+                // Close the menu when any link inside it is clicked (better UX)
+                mobileMenu.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        if (!mobileMenu.classList.contains('hidden')) {
+                            toggleMenu();
+                        }
+                    });
                 });
             }
             

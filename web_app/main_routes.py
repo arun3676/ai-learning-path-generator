@@ -574,40 +574,75 @@ from openai import OpenAI
 
 @bp.route('/chatbot_query', methods=['POST'])
 def chatbot_query():
-    client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
-    data = request.get_json()
-    user_message = data.get('message')
-    learning_path_topic = data.get('learning_path_topic', 'a general topic') # Default if not provided
-    learning_path_title = data.get('learning_path_title', 'your current learning path') # Default if not provided
+    if current_app.config.get('DEV_MODE'):
+        # Return stub data in dev mode
+        learning_path = f"# {request.json.get('topic', 'Untitled Topic')} Learning Path (Stub Data)\n\n"
+        learning_path += "## Week 1: Getting Started\n"
+        learning_path += "- Introduction to the topic\n"
+        learning_path += "- Key concepts and terminology\n"
+        learning_path += f"- Why {request.json.get('topic', 'Untitled Topic')} is important\n\n"
+        learning_path += "## Week 2: Core Concepts\n"
+        learning_path += "- Deep dive into fundamentals\n"
+        learning_path += "- Practical examples\n"
+        learning_path += "- Common challenges\n"
+        return jsonify({
+            'topic': request.json.get('topic', 'Untitled Topic'),
+            'learning_path': learning_path,
+            'timestamp': datetime.datetime.utcnow().isoformat(),
+            'mode': 'dev'
+        })
+    else:
+        client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+        data = request.get_json()
+        user_message = data.get('message')
+        learning_path_topic = data.get('learning_path_topic', 'a general topic') # Default if not provided
+        learning_path_title = data.get('learning_path_title', 'your current learning path') # Default if not provided
 
-    if not user_message:
-        return jsonify({'error': 'No message provided'}), 400
+        if not user_message:
+            return jsonify({'error': 'No message provided'}), 400
 
-    try:
-        system_prompt = (
-            f"You are a helpful AI career assistant. The user is currently viewing a learning path titled "
-            f"'{learning_path_title}' which is about '{learning_path_topic}'. "
-            f"Your goal is to answer the user's questions in the context of this learning path. "
-            f"Be concise and helpful."
-        )
+        try:
+            system_prompt = (
+                f"You are a helpful AI career assistant. The user is currently viewing a learning path titled "
+                f"'{learning_path_title}' which is about '{learning_path_topic}'. "
+                f"Your goal is to answer the user's questions in the context of this learning path. "
+                f"Be concise and helpful."
+            )
 
-        completion = client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_message}
-            ]
-        )
-        ai_response = completion.choices[0].message.content
-    except Exception as e:
-        print(f"Error calling OpenAI API: {e}") # Log to server console
-        ai_response = "Sorry, I encountered an error trying to connect to the AI service. Please try again later."
+            completion = client.chat.completions.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": user_message}
+                ]
+            )
+            ai_response = completion.choices[0].message.content
+        except Exception as e:
+            print(f"Error calling OpenAI API: {e}") # Log to server console
+            ai_response = "Sorry, I encountered an error trying to connect to the AI service. Please try again later."
 
-    return jsonify({'reply': ai_response})
+        return jsonify({'reply': ai_response})
 
 
 @bp.route('/direct_chat', methods=['POST'])
 def direct_chat():
+    if current_app.config.get('DEV_MODE'):
+        # Return stub data in dev mode
+        learning_path = f"# {request.json.get('topic', 'Untitled Topic')} Learning Path (Stub Data)\n\n"
+        learning_path += "## Week 1: Getting Started\n"
+        learning_path += "- Introduction to the topic\n"
+        learning_path += "- Key concepts and terminology\n"
+        learning_path += f"- Why {request.json.get('topic', 'Untitled Topic')} is important\n\n"
+        learning_path += "## Week 2: Core Concepts\n"
+        learning_path += "- Deep dive into fundamentals\n"
+        learning_path += "- Practical examples\n"
+        learning_path += "- Common challenges\n"
+        return jsonify({
+            'topic': request.json.get('topic', 'Untitled Topic'),
+            'learning_path': learning_path,
+            'timestamp': datetime.datetime.utcnow().isoformat(),
+            'mode': 'dev'
+        })
     client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
     data = request.get_json()
     user_message = data.get('message')

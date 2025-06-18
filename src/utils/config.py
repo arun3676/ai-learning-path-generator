@@ -23,13 +23,16 @@ else:
     else:
         print("--- WARNING: .env file not found by explicit path or default search. Environment variables may not be set. ---")
 
+# Development mode flag - checked before raising key errors
+DEV_MODE = os.getenv('DEV_MODE', 'False').lower() == 'true'
+
 # API Keys
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 DEEPSEEK_API_KEY = os.getenv("DEEPSEEK_API_KEY")
 PERPLEXITY_API_KEY = os.getenv("PERPLEXITY_API_KEY")
 
-# Ensure at least one API key is available
-if not OPENAI_API_KEY and not DEEPSEEK_API_KEY and not PERPLEXITY_API_KEY:
+# Ensure at least one API key is available (unless in DEV_MODE)
+if not DEV_MODE and not any([OPENAI_API_KEY, DEEPSEEK_API_KEY, PERPLEXITY_API_KEY]):
     raise EnvironmentError("No valid AI provider API key found. Please set OPENAI_API_KEY, DEEPSEEK_API_KEY, or PERPLEXITY_API_KEY in your environment.")
 
 # Default model provider (can be 'openai' or 'deepseek')
