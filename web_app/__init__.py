@@ -31,6 +31,12 @@ def create_app(config_class=Config):
     from web_app.auth_routes import bp as auth_bp
     app.register_blueprint(auth_bp, url_prefix='/auth')
 
+    # Google OAuth blueprint (Flask-Dance)
+    from web_app.google_oauth import google_bp, bp as google_auth_bp
+    app.register_blueprint(google_bp, url_prefix="/login")  # handles /login/google
+    app.register_blueprint(google_auth_bp)
+
+
     # Import models here to ensure they are registered with SQLAlchemy
     from web_app import models
 

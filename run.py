@@ -33,8 +33,10 @@ os.makedirs("learning_paths", exist_ok=True)
 print("--- API key checked and dirs created ---")
 
 # Import and run Flask app
-from web_app.app import app
-print("--- web_app.app imported ---")
+from web_app import create_app
+
+app = create_app()
+print("--- Flask app created via factory ---")
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 5000))

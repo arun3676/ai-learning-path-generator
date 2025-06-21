@@ -32,6 +32,8 @@ scikit-learn>=1.2.2
 numpy>=1.24.0
 pandas>=2.0.0
 
+Flask-Dance[google]==7.1.0
+
 # Web UI
 flask-wtf>=1.0.0
 Jinja2>=3.0.1
@@ -42,3 +44,8 @@ pytest>=7.0.0
 
 # Platform-specific dependencies
 --find-links https://download.pytorch.org/whl/torch_stable.html
+
+
+google-auth>=2.0.0
+google-auth-httplib2>=0.2.0
+google-auth-oauthlib>=0.4.6

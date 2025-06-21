@@ -58,6 +58,7 @@ This project uses AI to create customized learning paths based on:
 >>>>>>> 9b8b2e98932f5384f9c6ce135c1ef98e1f213177
 - Python 3.8+
 - OpenAI API key
+- (Optional) Perplexity AI API key – enables real resource search
 
 ### Installation
 <<<<<<< HEAD

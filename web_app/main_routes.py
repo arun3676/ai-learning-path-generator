@@ -55,6 +55,41 @@ def index():
 
 @bp.route('/generate', methods=['POST'])
 def generate_path():
+    # Mock response for UI testing when ENABLE_MOCK_DATA=True and special topic provided
+    if os.getenv('ENABLE_MOCK_DATA') == 'True' and request.form.get('topic') == 'mock_path':
+        current_app.logger.info('Returning mock learning path for UI development.')
+        mock_path_data = {
+            "id": str(uuid.uuid4()),
+            "topic": "Mock Path: Introduction to Mocking Data",
+            "expertise_level": "Beginner",
+            "learning_style": "Visual",
+            "time_commitment": "3-5 hours/week",
+            "generated_at": datetime.datetime.utcnow().isoformat() + 'Z',
+            "path": [
+                {
+                    "milestone": "Week 1: Understanding Mocks",
+                    "description": "Learn what mocks are and why they are essential for frontend development.",
+                    "duration_weeks": 1,
+                    "resources": [
+                        {"title": "Article: What is Mocking?", "url": "#", "resource_type": "article"},
+                        {"title": "Video: Mocking APIs with Postman", "url": "#", "resource_type": "video"}
+                    ]
+                },
+                {
+                    "milestone": "Week 2: Creating Mock Data Structures",
+                    "description": "Practice creating realistic JSON data structures for your learning path.",
+                    "duration_weeks": 1,
+                    "resources": [
+                        {"title": "Tutorial: Building a Mock JSON Server", "url": "#", "resource_type": "tutorial"},
+                        {"title": "Tool: Online JSON Formatter", "url": "#", "resource_type": "tool"}
+                    ]
+                }
+            ]
+        }
+        # Store in session for the result page
+        session['current_path'] = mock_path_data
+        return jsonify({'success': True, 'redirect_url': url_for('main.result')})
+
     current_app.logger.info('Generate path route called')
     current_app.logger.info(f'Form data: {request.form}')
     

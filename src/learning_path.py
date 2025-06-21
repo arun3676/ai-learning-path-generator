@@ -26,6 +26,8 @@ from src.utils.helpers import (
     difficulty_to_score,
     match_resources_to_learning_style,
 )
+# New import for Perplexity-powered resource search
+from src.ml.resource_search import search_resources
 
 
 class ResourceItem(BaseModel):
@@ -376,6 +378,17 @@ class LearningPathGenerator:
                     milestone.skills_gained, ai_provider=ai_provider, ai_model=ai_model
                 )
                 milestone.job_market_data.related_roles = related_roles
+
+                # Fetch real learning resources via Perplexity search API and override / augment resources
+                try:
+                    perplexity_results = search_resources(milestone.title, k=3)
+                    milestone.resources = [
+                        ResourceItem(type=r.get("type", "article"), url=r.get("url", ""), description=r.get("description", ""))
+                        for r in perplexity_results
+                    ]
+                except Exception as _err:
+                    # If search fails, keep existing resources (already handled by stub inside helper)
+                    pass
 
         topic_weights = {
             milestone.title: milestone.estimated_hours

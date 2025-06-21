@@ -282,14 +282,35 @@
             left: 100%;
         }
     </style>
+    <style>
+        /* Stripe hover effect for nav links */
+        .nav-stripe a {
+            position: relative;
+        }
+        .nav-stripe a::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -4px;
+            width: 100%;
+            height: 3px;
+            background-color: #ff50c5; /* magenta */
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+        .nav-stripe a:hover::after {
+            transform: scaleX(1);
+        }
+    </style>
 </head>
-<body class="bg-white min-h-screen">
+<body class="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 min-h-screen">
     <!-- Navigation -->
     <nav class="relative py-4 px-6 flex justify-between items-center bg-white dark:bg-gray-900">
         <div class="flex items-center space-x-2">
             <span class="text-2xl font-extrabold">Learning<span class="text-magenta">Path</span></span>
         </div>
-        <div class="hidden md:flex items-center space-x-6">
+        <div class="hidden md:flex items-center space-x-6 nav-stripe">
             <a href="#how-it-works" class="text-gray-700 dark:text-gray-300 hover:text-magenta dark:hover:text-magentaLight transition-colors duration-300">How it works</a>
             <a href="#features" class="text-gray-700 dark:text-gray-300 hover:text-magenta dark:hover:text-magentaLight transition-colors duration-300">Features</a>
             <a href="#about" class="text-gray-700 dark:text-gray-300 hover:text-magenta dark:hover:text-magentaLight transition-colors duration-300">About</a>
@@ -300,34 +321,33 @@
                 <a href="{{ url_for('auth.login') }}" class="text-gray-700 dark:text-gray-300 hover:text-magenta dark:hover:text-magentaLight transition-colors duration-300">Login</a>
                 <a href="{{ url_for('auth.register') }}" class="bg-magenta text-white px-5 py-2 rounded-full hover:bg-magentaLight transition-colors duration-300">Register</a>
             {% endif %}
+            <!-- Desktop dark mode toggle -->
+            <button id="theme-toggle" class="ml-2 inline-flex items-center justify-center w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-magenta" aria-label="Toggle dark mode">
+                <svg id="theme-toggle-light-icon" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10 15a5 5 0 100-10 5 5 0 000 10zM10 1a1 1 0 011 1v1a1 1 0 11-2 0V2a1 1 0 011-1zm0 14a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm9-5a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM3 10a1 1 0 01-1 1H1a1 1 0 110-2h1a1 1 0 011 1zm12.364-6.364a1 1 0 010 1.414L14.95 6.464a1 1 0 01-1.414-1.414l1.414-1.414a1 1 0 011.414 0zM5.05 14.95a1 1 0 011.414 0l1.414-1.414a1 1 0 10-1.414-1.414L5.05 13.536a1 1 0 010 1.414zm9.9 0a1 1 0 10-1.414-1.414l-1.414 1.414a1 1 0 101.414 1.414l1.414-1.414zM5.05 5.05a1 1 0 011.414 0L7.878 6.464A1 1 0 116.464 7.878L5.05 6.464A1 1 0 015.05 5.05z" clip-rule="evenodd"></path>
+                </svg>
+                <svg id="theme-toggle-dark-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8 8 0 1010.586 10.586z"></path>
+                </svg>
+            </button>
         </div>
+        <!-- Mobile Nav -->
         <div class="flex items-center space-x-2 md:hidden">
-            <button id="theme-toggle-mobile" class="items-center justify-center w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-magenta" aria-label="Toggle dark mode">
+            <!-- Mobile dark mode toggle -->
+            <button id="theme-toggle-mobile" class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-magenta" aria-label="Toggle dark mode">
                 <svg id="theme-toggle-mobile-light-icon" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M10 15a5 5 0 100-10 5 5 0 000 10z"></path>
-                    <path fill-rule="evenodd" d="M10 1a1 1 0 011 1v1a1 1 0 11-2 0V2a1 1 0 011-1zm0 14a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm9-5a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM3 10a1 1 0 01-1 1H1a1 1 0 110-2h1a1 1 0 011 1zm12.364-6.364a1 1 0 010 1.414L14.95 6.464a1 1 0 01-1.414-1.414l1.414-1.414a1 1 0 011.414 0zM5.05 14.95a1 1 0 011.414 0l1.414-1.414a1 1 0 10-1.414-1.414L5.05 13.536a1 1 0 010 1.414zm9.9 0a1 1 0 10-1.414-1.414l-1.414 1.414a1 1 0 101.414 1.414l1.414-1.414zM5.05 5.05a1 1 0 011.414 0L7.878 6.464A1 1 0 116.464 7.878L5.05 6.464A1 1 0 015.05 5.05z" clip-rule="evenodd"></path>
+                    <path d="M10 15a5 5 0 100-10 5 5 0 000 10zM10 1a1 1 0 011 1v1a1 1 0 11-2 0V2a1 1 0 011-1zm0 14a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm9-5a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM3 10a1 1 0 01-1 1H1a1 1 0 110-2h1a1 1 0 011 1zm12.364-6.364a1 1 0 010 1.414L14.95 6.464a1 1 0 01-1.414-1.414l1.414-1.414a1 1 0 011.414 0zM5.05 14.95a1 1 0 011.414 0l1.414-1.414a1 1 0 10-1.414-1.414L5.05 13.536a1 1 0 010 1.414zm9.9 0a1 1 0 10-1.414-1.414l-1.414 1.414a1 1 0 101.414 1.414l1.414-1.414zM5.05 5.05a1 1 0 011.414 0L7.878 6.464A1 1 0 116.464 7.878L5.05 6.464A1 1 0 015.05 5.05z" clip-rule="evenodd"></path>
                 </svg>
                 <svg id="theme-toggle-mobile-dark-icon" class="w-6 h-6 hidden" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                     <path d="M17.293 13.293A8 8 0 016.707 2.707a8 8 0 1010.586 10.586z"></path>
                 </svg>
             </button>
             <button class="text-gray-700 dark:text-gray-200" id="mobile-menu-button" aria-expanded="false" aria-controls="mobile-menu">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-        </button>
-            <!-- Dark mode toggle (desktop) -->
-        <button id="theme-toggle" class="hidden md:inline-flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-magenta" aria-label="Toggle dark mode">
-            <!-- Sun icon -->
-            <svg id="theme-toggle-light-icon" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                <path d="M10 15a5 5 0 100-10 5 5 0 000 10z"></path>
-                <path fill-rule="evenodd" d="M10 1a1 1 0 011 1v1a1 1 0 11-2 0V2a1 1 0 011-1zm0 14a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm9-5a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM3 10a1 1 0 01-1 1H1a1 1 0 110-2h1a1 1 0 011 1zm12.364-6.364a1 1 0 010 1.414L14.95 6.464a1 1 0 01-1.414-1.414l1.414-1.414a1 1 0 011.414 0zM5.05 14.95a1 1 0 011.414 0l1.414-1.414a1 1 0 10-1.414-1.414L5.05 13.536a1 1 0 010 1.414zm9.9 0a1 1 0 10-1.414-1.414l-1.414 1.414a1 1 0 101.414 1.414l1.414-1.414zM5.05 5.05a1 1 0 011.414 0L7.878 6.464A1 1 0 116.464 7.878L5.05 6.464A1 1 0 015.05 5.05z" clip-rule="evenodd"></path>
-            </svg>
-            <!-- Moon icon -->
-            <svg id="theme-toggle-dark-icon" class="w-6 h-6 hidden" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                <path d="M17.293 13.293A8 8 0 016.707 2.707a8 8 0 1010.586 10.586z"></path>
-            </svg>
-        </button>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+        </div>
     </nav>
     
     <!-- Mobile menu (hidden by default) -->
@@ -347,7 +367,7 @@
     </div>
     
     <!-- Hero Section -->
-    <section class="magenta-bg text-white py-20 px-6 relative overflow-hidden">
+        <section class="magenta-bg dark:bg-opacity-90 text-white py-20 px-6 relative overflow-hidden">
         <div class="container mx-auto grid md:grid-cols-2 items-center gap-12">
             <div class="z-10">
                 <h1 class="text-5xl md:text-6xl font-extrabold mb-6">learning<br><span class="text-sunshine">path</span> generator</h1>
@@ -366,14 +386,14 @@
     </section>
     
     <!-- Wave divider -->
-    <div class="wave-divider">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" preserveAspectRatio="none" class="fill-current text-magenta">
+        <div class="wave-divider">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" preserveAspectRatio="none" class="fill-current text-magenta dark:text-gray-900">
             <path d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,149.3C960,160,1056,160,1152,138.7C1248,117,1344,75,1392,53.3L1440,32L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path>
         </svg>
     </div>
 
     <!-- The future of learning section -->
-    <section class="py-16 px-6">
+        <section class="py-16 px-6 bg-white dark:bg-gray-900">
         <div class="container mx-auto">
             <div class="grid md:grid-cols-2 gap-12 items-center">
                 <div class="relative">
@@ -381,59 +401,59 @@
                     <div class="absolute -bottom-4 -left-4 w-32 h-32 bg-sunshine rounded-full opacity-40 z-0"></div>
                 </div>
                 <div>
-                    <h2 class="text-4xl font-bold mb-6">The future of<br>learning journeys</h2>
-                    <p class="text-xl mb-6">Need personalized learning paths, intuitive milestones, and curated educational resources? Welcome home.</p>
-                    <p class="mb-6">We're LearningPath, your AI education partner. We're all about delivering the perfect learning journey tailored to your unique needs and goals.</p>
+                    <h2 class="text-4xl font-bold mb-6 dark:text-white">The future of<br>learning journeys</h2>
+                    <p class="text-xl mb-6 dark:text-gray-300">Need personalized learning paths, intuitive milestones, and curated educational resources? Welcome home.</p>
+                    <p class="mb-6 dark:text-gray-300">We're LearningPath, your AI education partner. We're all about delivering the perfect learning journey tailored to your unique needs and goals.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- How it works section -->
-    <section id="how-it-works" class="yellow-bg py-16 px-6">
+    <section id="how-it-works" class="yellow-bg dark:bg-yellow-700 py-16 px-6">
         <div class="container mx-auto">
-            <h2 class="text-4xl font-bold text-center mb-16">How it works</h2>
+            <h2 class="text-4xl font-bold text-center mb-16 dark:text-white">How it works</h2>
             <div class="grid md:grid-cols-3 gap-8">
                 <!-- Card 1 -->
-                <div class="bg-white rounded-xl p-6 card-hover">
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-6 card-hover">
                     <div class="bg-magentaLight rounded-lg p-4 inline-block mb-4">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-magenta" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                         </svg>
                     </div>
-                    <h3 class="text-2xl font-bold mb-2">Tell Us Your Goals</h3>
-                    <p class="text-gray-700 mb-4">Start by telling us what you want to learn, your current expertise level, and how you prefer to learn new skills.</p>
-                    <div class="border-t border-gray-200 pt-4 mt-2">
-                        <p class="text-sm text-gray-500">+ Personalized for your needs</p>
+                    <h3 class="text-2xl font-bold mb-2 dark:text-white">Tell Us Your Goals</h3>
+                    <p class="text-gray-700 dark:text-gray-300 mb-4">Start by telling us what you want to learn, your current expertise level, and how you prefer to learn new skills.</p>
+                    <div class="border-t border-gray-200 dark:border-gray-700 pt-4 mt-2">
+                        <p class="text-sm text-gray-500 dark:text-gray-400">+ Personalized for your needs</p>
                     </div>
                 </div>
                 
                 <!-- Card 2 -->
-                <div class="bg-white rounded-xl p-6 card-hover">
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-6 card-hover">
                     <div class="bg-magentaLight rounded-lg p-4 inline-block mb-4">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-magenta" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
                         </svg>
                     </div>
-                    <h3 class="text-2xl font-bold mb-2">Request</h3>
-                    <p class="text-gray-700 mb-4">Alright, you're in! Now, it's time to fill out our form and tell us what you want to learn. Need a personal coding curriculum? A language learning plan? No sweat.</p>
-                    <div class="border-t border-gray-200 pt-4 mt-2">
-                        <p class="text-sm text-gray-500">+ Just keep those requests coming!</p>
+                    <h3 class="text-2xl font-bold mb-2 dark:text-white">Request</h3>
+                    <p class="text-gray-700 dark:text-gray-300 mb-4">Alright, you're in! Now, it's time to fill out our form and tell us what you want to learn. Need a personal coding curriculum? A language learning plan? No sweat.</p>
+                    <div class="border-t border-gray-200 dark:border-gray-700 pt-4 mt-2">
+                        <p class="text-sm text-gray-500 dark:text-gray-400">+ Just keep those requests coming!</p>
                     </div>
                 </div>
                 
                 <!-- Card 3 -->
-                <div class="bg-white rounded-xl p-6 card-hover">
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-6 card-hover">
                     <div class="bg-magentaLight rounded-lg p-4 inline-block mb-4">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-magenta" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                         </svg>
                     </div>
-                    <h3 class="text-2xl font-bold mb-2">Review</h3>
-                    <p class="text-gray-700 mb-4">Hold tight! In just 48 hours, you'll get your personalized learning design. And if it's not quite right, no worries! We can tweak and tune it until it's just right.</p>
-                    <div class="border-t border-gray-200 pt-4 mt-2">
-                        <p class="text-sm text-gray-500">+ That's the beauty of unlimited revisions</p>
+                    <h3 class="text-2xl font-bold mb-2 dark:text-white">Review</h3>
+                    <p class="text-gray-700 dark:text-gray-300 mb-4">Hold tight! In just 48 hours, you'll get your personalized learning design. And if it's not quite right, no worries! We can tweak and tune it until it's just right.</p>
+                    <div class="border-t border-gray-200 dark:border-gray-700 pt-4 mt-2">
+                        <p class="text-sm text-gray-500 dark:text-gray-400">+ That's the beauty of unlimited revisions</p>
                     </div>
                 </div>
             </div>
@@ -441,9 +461,9 @@
     </section>
     
     <!-- Form Section -->
-    <section id="path-form" class="py-16 px-6 bg-gray-50">
+    <section id="path-form" class="py-16 px-6 bg-gray-50 dark:bg-gray-800">
         <div class="container mx-auto max-w-4xl">
-            <h2 class="text-4xl font-bold mb-12 text-center">Create Your <span class="text-magenta">Learning Path</span></h2>
+            <h2 class="text-4xl font-bold mb-12 text-center dark:text-white">Create Your <span class="text-magenta">Learning Path</span></h2>
             
             <!-- Error message (if any) -->
             {% if error %}
@@ -452,21 +472,21 @@
             </div>
             {% endif %}
             
-            <div class="bg-white rounded-xl shadow-xl p-8">
+            <div class="bg-white dark:bg-gray-700 rounded-xl shadow-xl p-8">
                 <form id="pathGeneratorForm" class="space-y-6" action="/generate" method="POST">
                     <!-- AI Provider -->
                     <div>
-                        <label for="ai_provider" class="block text-lg font-medium text-gray-700 mb-2">Select AI Provider</label>
-                        <select id="ai_provider" name="ai_provider" class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-magenta focus:border-magenta">
+                        <label for="ai_provider" class="block text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">Select AI Provider</label>
+                        <select id="ai_provider" name="ai_provider" class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-magenta focus:border-magenta dark:bg-gray-600 dark:border-gray-500 dark:text-white">
                             <option value="openai">OpenAI</option>
                             <option value="deepseek">DeepSeek</option>
                         </select>
                     </div>
                     <!-- Expertise Level -->
                     <div>
-                        <label for="expertise_level" class="block text-lg font-medium text-gray-700 mb-2">Your current expertise level</label>
+                        <label for="expertise_level" class="block text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">Your current expertise level</label>
                         <select id="expertise_level" name="expertise_level" required
-                                class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-magenta focus:border-magenta">
+                                class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-magenta focus:border-magenta dark:bg-gray-600 dark:border-gray-500 dark:text-white">
                             {% for level, description in expertise_levels.items() %}
                                 <option value="{{ level }}">{{ level.title() }} - {{ description }}</option>
                             {% endfor %}
@@ -475,7 +495,7 @@
                     
                     <!-- Topic Categories -->
                     <div>
-                        <label for="topic" class="block text-lg font-medium text-gray-700 mb-2">What do you want to learn?</label>
+                        <label for="topic" class="block text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">What do you want to learn?</label>
                         <div class="mb-3">
                             <select id="category-selector" class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-magenta focus:border-magenta mb-3">
                                 <option value="">-- Select a category --</option>
@@ -491,130 +511,148 @@
                         
                         <!-- Programming Topics -->
                         <div id="programming-topics" class="topic-list hidden mb-4">
-                            <h4 class="font-medium text-gray-700 mb-2">Popular Programming Topics:</h4>
+                            <h4 class="font-medium text-gray-700 dark:text-gray-300 mb-2">Popular Programming Topics:</h4>
                             <div class="flex flex-wrap gap-2">
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">JavaScript</button>
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Python</button>
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">React.js</button>
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Node.js</button>
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Swift</button>
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Java</button>
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">C#</button>
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Go</button>
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Rust</button>
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Web Development</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">JavaScript</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">Python</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">React.js</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">Node.js</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">Swift</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">Java</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">C#</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">Go</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">Rust</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">Web Development</button>
                             </div>
                         </div>
                         
                         <!-- Data Science Topics -->
                         <div id="data-topics" class="topic-list hidden mb-4">
-                            <h4 class="font-medium text-gray-700 mb-2">Popular Data Science Topics:</h4>
+                            <h4 class="font-medium text-gray-700 dark:text-gray-300 mb-2">Popular Data Science Topics:</h4>
                             <div class="flex flex-wrap gap-2">
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Machine Learning</button>
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Deep Learning</button>
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Natural Language Processing</button>
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Computer Vision</button>
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Big Data</button>
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Data Analysis</button>
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">SQL</button>
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">R Programming</button>
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">TensorFlow</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">Machine Learning</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">Deep Learning</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">Natural Language Processing</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">Computer Vision</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">Big Data</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">Data Analysis</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">SQL</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">R Programming</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">TensorFlow</button>
                             </div>
                         </div>
                         
                         <!-- Design Topics -->
                         <div id="design-topics" class="topic-list hidden mb-4">
-                            <h4 class="font-medium text-gray-700 mb-2">Popular Design Topics:</h4>
+                            <h4 class="font-medium text-gray-700 dark:text-gray-300 mb-2">Popular Design Topics:</h4>
                             <div class="flex flex-wrap gap-2">
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">UI/UX Design</button>
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Graphic Design</button>
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">3D Modeling</button>
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Animation</button>
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Figma</button>
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Adobe Photoshop</button>
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Illustration</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">UI/UX Design</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">Graphic Design</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">3D Modeling</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">Animation</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">Figma</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">Adobe Photoshop</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">Illustration</button>
                             </div>
                         </div>
                         
                         <!-- Business Topics -->
                         <div id="business-topics" class="topic-list hidden mb-4">
-                            <h4 class="font-medium text-gray-700 mb-2">Popular Business Topics:</h4>
+                            <h4 class="font-medium text-gray-700 dark:text-gray-300 mb-2">Popular Business Topics:</h4>
                             <div class="flex flex-wrap gap-2">
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Project Management</button>
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Marketing</button>
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Finance</button>
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Entrepreneurship</button>
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Sales</button>
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Leadership</button>
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Public Speaking</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">Project Management</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">Marketing</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">Finance</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">Entrepreneurship</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">Sales</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">Leadership</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">Public Speaking</button>
                             </div>
                         </div>
                         
                         <!-- Language Topics -->
                         <div id="language-topics" class="topic-list hidden mb-4">
-                            <h4 class="font-medium text-gray-700 mb-2">Popular Language Topics:</h4>
+                            <h4 class="font-medium text-gray-700 dark:text-gray-300 mb-2">Popular Language Topics:</h4>
                             <div class="flex flex-wrap gap-2">
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">English</button>
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Spanish</button>
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Mandarin</button>
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">French</button>
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">German</button>
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Japanese</button>
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Technical Writing</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">English</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">Spanish</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">Mandarin</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">French</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">German</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">Japanese</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">Technical Writing</button>
                             </div>
                         </div>
                         <!-- Latest AI Skills and Roles Topics -->
                         <div id="ai_skills_roles-topics" class="topic-list hidden mb-4">
-                            <h4 class="font-medium text-gray-700 mb-2">Latest AI Skills and Roles for 2025:</h4>
+                            <h4 class="font-medium text-gray-700 dark:text-gray-300 mb-2">Latest AI Skills and Roles for 2025:</h4>
                             
-                            <h5 class="font-medium text-gray-600 mt-3 mb-2 text-sm">In-demand AI Skills:</h5>
+                            <h5 class="font-medium text-gray-600 dark:text-gray-400 mt-3 mb-2 text-sm">In-demand AI Skills:</h5>
                             <div class="flex flex-wrap gap-2">
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Prompt Engineering</button>
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">AI Ethics and Governance</button>
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Large Language Model (LLM) Operations</button>
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">AI-powered Data Analysis</button>
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Reinforcement Learning from Human Feedback (RLHF)</button>
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Multimodal AI Development</button>
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">AI Security and Privacy</button>
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Explainable AI (XAI)</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">Prompt Engineering</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">AI Ethics and Governance</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">Large Language Model (LLM) Operations</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">AI-powered Data Analysis</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">Reinforcement Learning from Human Feedback (RLHF)</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">Multimodal AI Development</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">AI Security and Privacy</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">Explainable AI (XAI)</button>
                             </div>
 
-                            <h5 class="font-medium text-gray-600 mt-3 mb-2 text-sm">Emerging AI Roles:</h5>
+                            <h5 class="font-medium text-gray-600 dark:text-gray-400 mt-3 mb-2 text-sm">Emerging AI Roles:</h5>
                             <div class="flex flex-wrap gap-2">
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">AI Product Manager</button>
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">AI Ethicist</button>
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">LLM Operations Engineer</button>
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">AI Tutor/Educator</button>
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">AI Content Creator</button>
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">AI Auditor</button>
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Robotics Process Automation (RPA) Specialist (AI-focused)</button>
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">AI Bias Detection Specialist</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">AI Product Manager</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">AI Ethicist</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">LLM Operations Engineer</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">AI Tutor/Educator</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">AI Content Creator</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">AI Auditor</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">Robotics Process Automation (RPA) Specialist (AI-focused)</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">AI Bias Detection Specialist</button>
                             </div>
                         </div>
                         
                         <!-- Other Skills Topics -->
                         <div id="other-topics" class="topic-list hidden mb-4">
-                            <h4 class="font-medium text-gray-700 mb-2">Other Popular Skills:</h4>
+                            <h4 class="font-medium text-gray-700 dark:text-gray-300 mb-2">Other Popular Skills:</h4>
                             <div class="flex flex-wrap gap-2">
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Photography</button>
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Music Production</button>
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Digital Marketing</button>
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Video Editing</button>
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Cooking</button>
-                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 hover:bg-magentaLight hover:text-white rounded-full text-sm transition-colors duration-300">Fitness</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">Photography</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">Music Production</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">Digital Marketing</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">Video Editing</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">Cooking</button>
+                                <button type="button" class="topic-btn px-3 py-1 bg-gray-200 dark:bg-gray-600 dark:text-gray-300 hover:bg-magentaLight hover:text-white dark:hover:bg-magenta rounded-full text-sm transition-colors duration-300">Fitness</button>
                             </div>
                         </div>
                         
                         <!-- Input with selected topics and custom input -->
                         <div class="relative">
-                            <input type="text" id="topic" name="topic" placeholder="e.g., Machine Learning, JavaScript, Data Science" class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-magenta focus:border-magenta" required>
+                            <input type="text" id="topic" name="topic" placeholder="e.g., Quantum Computing, Modern Web Development, Sustainable Agriculture" class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-magenta focus:border-magenta dark:bg-gray-600 dark:border-gray-500 dark:text-white" required>
                             <div id="selected-topics" class="mt-2 flex flex-wrap gap-2"></div>
+
+                            <!-- Example Prompts -->
+                            <div class="mt-4">
+                                <p class="text-gray-600 dark:text-gray-300 text-sm mb-2">Try one of these:</p>
+                                <div class="flex flex-wrap gap-2" id="example-prompts">
+                                    <button type="button" class="example-prompt-btn bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 px-3 py-1.5 rounded-full text-xs hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">Machine Learning with Python</button>
+                                    <button type="button" class="example-prompt-btn bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 px-3 py-1.5 rounded-full text-xs hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">Blockchain fundamentals</button>
+                                    <button type="button" class="example-prompt-btn bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 px-3 py-1.5 rounded-full text-xs hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">Cloud Computing for Beginners</button>
+                                    <button type="button" class="example-prompt-btn bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 px-3 py-1.5 rounded-full text-xs hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">Data Science Roadmap</button>
+                                    
+                                    <!-- Additional prompts -->
+                                    <button type="button" class="example-prompt-btn bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 px-3 py-1.5 rounded-full text-xs hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">Generative AI with LLMs</button>
+                                    <button type="button" class="example-prompt-btn bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 px-3 py-1.5 rounded-full text-xs hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">Cybersecurity Basics</button>
+                                    <button type="button" class="example-prompt-btn bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 px-3 py-1.5 rounded-full text-xs hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">Full-Stack Web Development</button>
+                                    <button type="button" class="example-prompt-btn bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 px-3 py-1.5 rounded-full text-xs hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">Data Engineering Pipeline</button>
+                                    <button type="button" class="example-prompt-btn bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 px-3 py-1.5 rounded-full text-xs hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">Prompt Engineering Techniques</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     
                     <!-- Learning Style -->
                     <div>
-                        <label for="learning_style" class="block text-lg font-medium text-gray-700 mb-2">Your Learning Style</label>
+                        <label for="learning_style" class="block text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">Your Learning Style</label>
                         <select id="learning_style" name="learning_style" required
                                 class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-magenta focus:border-magenta mb-4">
                             <option value="visual">Visual - Learn best through images, diagrams, and spatial understanding</option>
@@ -626,20 +664,20 @@
                     
                     <!-- Duration in Weeks -->
                     <div>
-                        <label for="duration_weeks" class="block text-lg font-medium text-gray-700 mb-2">
+                        <label for="duration_weeks" class="block text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">
                             Duration (in weeks)
                         </label>
                         <input type="number" id="duration_weeks" name="duration_weeks" min="1" max="52" required
-                               class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-magenta focus:border-magenta"
+                               class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-magenta focus:border-magenta dark:bg-gray-600 dark:border-gray-500 dark:text-white"
                                placeholder="e.g., 4">
-                        <p class="mt-1 text-sm text-gray-500">How many weeks do you plan to study this topic?</p>
+                        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">How many weeks do you plan to study this topic?</p>
                     </div>
                     
                     <!-- Time Commitment -->
                     <div>
-                        <label for="time_commitment" class="block text-lg font-medium text-gray-700 mb-2">How much time can you commit weekly?</label>
+                        <label for="time_commitment" class="block text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">How much time can you commit weekly?</label>
                         <select id="time_commitment" name="time_commitment" required
-                                class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-magenta focus:border-magenta">
+                                class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-magenta focus:border-magenta dark:bg-gray-600 dark:border-gray-500 dark:text-white">
                             {% for commitment, description in time_commitments.items() %}
                                 <option value="{{ commitment }}">{{ commitment.title() }} - {{ description }}</option>
                             {% endfor %}
@@ -648,17 +686,17 @@
                     
                     <!-- Goals -->
                     <div>
-                        <label for="goals" class="block text-lg font-medium text-gray-700 mb-2">Your learning goals (comma-separated)</label>
+                        <label for="goals" class="block text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">Your learning goals (comma-separated)</label>
                         <input type="text" id="goals" name="goals"
-                               class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-magenta focus:border-magenta"
+                               class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-magenta focus:border-magenta dark:bg-gray-600 dark:border-gray-500 dark:text-white"
                                placeholder="e.g., Build a portfolio, Pass certification, Understand core concepts">
                     </div>
                     
                     <!-- Additional Info -->
                     <div>
-                        <label for="additional_info" class="block text-lg font-medium text-gray-700 mb-2">Any other preferences or information? (optional)</label>
+                        <label for="additional_info" class="block text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">Any other preferences or information? (optional)</label>
                         <textarea id="additional_info" name="additional_info" rows="3"
-                                  class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-magenta focus:border-magenta"
+                                  class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-magenta focus:border-magenta dark:bg-gray-600 dark:border-gray-500 dark:text-white"
                                   placeholder="Any specific topics to focus on or avoid, preferred resources, etc."></textarea>
                     </div>
                     
@@ -669,7 +707,7 @@
                             <div class="loading-spinner ml-3" id="loadingSpinner"></div>
                             <div class="absolute inset-0 h-full w-full scale-0 rounded-full transition-all duration-300 group-hover:scale-100 group-hover:bg-magentaLight/30"></div>
                         </button>
-                        <p class="text-center text-gray-500 mt-4 text-sm">Free, no credit card required</p>
+                        <p class="text-center text-gray-500 dark:text-gray-400 mt-4 text-sm">Free, no credit card required</p>
                     </div>
                 </form>
             </div>
@@ -677,46 +715,46 @@
     </section>
     
     <!-- Features Section -->
-    <section id="features" class="py-16 px-6">
+        <section id="features" class="py-16 px-6 bg-white dark:bg-gray-900">
         <div class="container mx-auto">
-            <h2 class="text-4xl font-bold text-center mb-4">Powered by Advanced AI</h2>
-            <p class="text-xl text-center text-gray-600 mb-12">Our intelligent agents work together to create the perfect learning experience</p>
+                         <h2 class="text-4xl font-bold text-center mb-4 dark:text-white">Powered by Advanced AI</h2>
+                         <p class="text-xl text-center text-gray-600 dark:text-gray-300 mb-12">Our intelligent agents work together to create the perfect learning experience</p>
             
             <div class="grid md:grid-cols-3 gap-8 mb-16">
-                <div class="bg-white p-8 rounded-xl shadow-lg card-hover">
+                <div class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg card-hover">
                     <div class="bg-sunshine rounded-lg p-4 inline-block mb-6">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                         </svg>
                     </div>
-                    <h3 class="text-2xl font-bold mb-3">AI-powered generation</h3>
-                    <p class="text-gray-700">Uses state-of-the-art AI technologies to create highly personalized learning plans tailored to your preferences.</p>
+                    <h3 class="text-2xl font-bold mb-3 dark:text-white">AI-powered generation</h3>
+                    <p class="text-gray-700 dark:text-gray-300">Uses state-of-the-art AI technologies to create highly personalized learning plans tailored to your preferences.</p>
                 </div>
                 
-                <div class="bg-white p-8 rounded-xl shadow-lg card-hover">
+                <div class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg card-hover">
                     <div class="bg-sunshine rounded-lg p-4 inline-block mb-6">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
                         </svg>
                     </div>
-                    <h3 class="text-2xl font-bold mb-3">Learning style adaptation</h3>
-                    <p class="text-gray-700">Tailors content to match your preferred learning style, whether visual, auditory, reading, or kinesthetic.</p>
+                    <h3 class="text-2xl font-bold mb-3 dark:text-white">Learning style adaptation</h3>
+                    <p class="text-gray-700 dark:text-gray-300">Tailors content to match your preferred learning style, whether visual, auditory, reading, or kinesthetic.</p>
                 </div>
                 
-                <div class="bg-white p-8 rounded-xl shadow-lg card-hover">
+                <div class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg card-hover">
                     <div class="bg-sunshine rounded-lg p-4 inline-block mb-6">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                         </svg>
                     </div>
-                    <h3 class="text-2xl font-bold mb-3">Progress tracking</h3>
-                    <p class="text-gray-700">Track your learning journey with intuitive milestones and achievements to keep you motivated.</p>
+                    <h3 class="text-2xl font-bold mb-3 dark:text-white">Progress tracking</h3>
+                    <p class="text-gray-700 dark:text-gray-300">Track your learning journey with intuitive milestones and achievements to keep you motivated.</p>
                 </div>
             </div>
 
             <!-- Agents Section -->
-            <h2 class="text-4xl font-bold text-center mt-20 mb-8">Meet Your AI Assistants</h2>
-            <p class="text-xl text-center text-gray-600 mb-12">Specialized AI agents to enhance your learning experience</p>
+            <h2 class="text-4xl font-bold text-center mt-20 mb-8 dark:text-white">Meet Your AI Assistants</h2>
+            <p class="text-xl text-center text-gray-600 dark:text-gray-300 mb-12">Specialized AI agents to enhance your learning experience</p>
             
             <!-- Agent cards removed. Agent selection will be integrated into chat input. -->
 
@@ -736,13 +774,13 @@
                 </div>
                 
                 <!-- Chat Messages -->
-                <div id="chatMessages" class="chat-messages p-4 space-y-3 bg-gray-50">
+                <div id="chatMessages" class="chat-messages p-4 space-y-3 bg-gray-50 dark:bg-gray-700">
                     <div class="text-center text-gray-500 py-8 initial-hello-message">
                         <div class="w-16 h-16 mx-auto bg-purple-100 rounded-full flex items-center justify-center mb-3">
                             <span class="text-3xl">👋</span>
                         </div>
-                        <h4 class="font-semibold text-gray-700">Hello! I'm your AI Learning Assistant</h4>
-                        <p class="text-sm text-gray-500 mt-1">How can I help you learn today?</p>
+                        <h4 class="font-semibold text-gray-700 dark:text-white">Hello! I'm your AI Learning Assistant</h4>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">How can I help you learn today?</p>
                         <div class="mt-4 space-x-2">
                             <button onclick="document.getElementById('chatInput').value = 'Show me learning paths'; sendMessage();" class="suggestion-button text-xs bg-purple-100 hover:bg-purple-200 text-purple-800 px-3 py-1.5 rounded-full">
                                 Show learning paths
@@ -755,9 +793,9 @@
                 </div>
                 
                 <!-- Chat Input -->
-                <div class="chat-input-container p-4 border-t border-gray-200">
+                <div class="chat-input-container p-4 border-t border-gray-200 dark:border-gray-600">
                     <div id="agentModeSelector" class="flex items-center space-x-2 mb-2">
-                        <span class="text-sm font-medium text-gray-600">Mode:</span>
+                        <span class="text-sm font-medium text-gray-600 dark:text-gray-300">Mode:</span>
                         <button type="button" id="selectChatModeBtn" class="agent-mode-btn agent-mode-active text-xs bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-1 rounded-full transition-colors">Chat</button>
                         <button type="button" id="selectResearchModeBtn" class="agent-mode-btn text-xs bg-pink-100 hover:bg-pink-200 text-pink-700 px-3 py-1 rounded-full transition-colors">Research</button>
                         <button type="button" id="selectTeachModeBtn" class="agent-mode-btn text-xs bg-yellow-100 hover:bg-yellow-200 text-yellow-700 px-3 py-1 rounded-full transition-colors">Path</button>
@@ -766,7 +804,7 @@
                         <div class="flex-1 relative">
                             <textarea 
                                 id="chatInput" 
-                                class="chat-input w-full rounded-lg p-3 pr-12 focus:ring-2 focus:ring-magenta focus:ring-opacity-50" 
+                                class="chat-input w-full rounded-lg p-3 pr-12 focus:ring-2 focus:ring-magenta focus:ring-opacity-50 dark:bg-gray-600 dark:text-white dark:placeholder-gray-400" 
                                 placeholder="Type your message..."
                                 rows="1"
                             ></textarea>
@@ -1388,5 +1426,24 @@
             }
         });
     </script>
+    <script>
+// Attach click handlers to example prompt buttons to populate topic input
+(function(){
+  document.addEventListener('DOMContentLoaded', function(){
+      const topicInput = document.getElementById('topic');
+      document.querySelectorAll('.example-prompt-btn').forEach(btn => {
+          btn.addEventListener('click', function(){
+              if(topicInput){
+                  topicInput.value = this.innerText.trim();
+                  topicInput.focus();
+                  // scroll to topic input if needed
+                  topicInput.scrollIntoView({behavior:'smooth', block:'center'});
+              }
+          });
+      });
+  });
+})();
+</script>
+<script src="{{ url_for('static', filename='js/theme.js') }}"></script>
 </body>
 </html>
