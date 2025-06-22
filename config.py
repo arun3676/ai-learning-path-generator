@@ -2,7 +2,9 @@ import os
 from dotenv import load_dotenv
 
 basedir = os.path.abspath(os.path.dirname(__file__))
-load_dotenv(os.path.join(basedir, '.env'))
+# Load .env file only if not on Render
+if not os.environ.get('RENDER'):
+    load_dotenv(os.path.join(basedir, '.env'))
 
 class Config:
     SECRET_KEY = os.environ.get('FLASK_SECRET_KEY') or 'you-will-never-guess-this-is-not-secure'
