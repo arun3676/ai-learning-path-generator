@@ -16,11 +16,10 @@ import json
 import logging
 from typing import Dict, Any
 
-import requests
+import openai
 
-PERPLEXITY_API_KEY = os.getenv("PERPLEXITY_API_KEY")
-
-SEARCH_URL = "https://api.perplexity.ai/search"  # hypothetical endpoint
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+openai.api_key = OPENAI_API_KEY
 
 _DEFAULT_SNAPSHOT: Dict[str, Any] = {
     "open_positions": "5,000+",
@@ -35,31 +34,25 @@ PROMPT_TEMPLATE = (
 )
 
 
-def _call_perplexity(prompt: str, timeout: int = 45) -> str:
+def _call_openai(prompt: str, timeout: int = 45) -> str:
     """Low-level helper to hit Perplexity search completions.
 
     This assumes a chat-completion-like interface; tweak if API differs.
     """
-    if not PERPLEXITY_API_KEY:
-        raise RuntimeError("PERPLEXITY_API_KEY env var not set")
+    if not OPENAI_API_KEY:
+        raise RuntimeError("OPENAI_API_KEY env var not set")
 
-    headers = {
-        "Authorization": f"Bearer {PERPLEXITY_API_KEY}",
-        "Content-Type": "application/json",
-    }
-    payload = {
-        "model": "pplx-70b-chat",  # default free/paid model
-        "messages": [
+    completion = openai.ChatCompletion.create(
+        model=os.getenv("DEFAULT_MODEL", "gpt-3.5-turbo"),
+        messages=[
             {"role": "system", "content": "You are a helpful assistant."},
             {"role": "user", "content": prompt},
         ],
-        "temperature": 0.2,
-        "max_tokens": 300,
-    }
-    resp = requests.post(SEARCH_URL, headers=headers, json=payload, timeout=timeout)
-    resp.raise_for_status()
-    data = resp.json()
-    content = data["choices"][0]["message"]["content"]
+        temperature=0.2,
+        max_tokens=300,
+        request_timeout=timeout,
+    )
+    content = completion.choices[0].message.content
     return content
 
 
@@ -86,12 +79,12 @@ def get_job_market_stats(topic: str) -> Dict[str, Any]:
         return _DEFAULT_SNAPSHOT.copy()
     prompt = PROMPT_TEMPLATE.format(topic=topic)
     try:
-        raw = _call_perplexity(prompt)
+        raw = _call_openai(prompt)
         data = _extract_json(raw)
         # Basic validation
         if not all(k in data for k in ("open_positions", "average_salary", "trending_employers")):
             raise ValueError("Missing keys in Perplexity JSON")
         return data
     except Exception as exc:  # broad catch – log then fallback
-        logging.warning("Perplexity job-market fetch failed: %s", exc)
+        logging.warning("OpenAI job-market fetch failed: %s", exc)
         return _DEFAULT_SNAPSHOT.copy()

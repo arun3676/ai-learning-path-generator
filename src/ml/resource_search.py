@@ -16,13 +16,10 @@ import logging
 import os
 from typing import Dict, List
 
-import requests
+import openai
 
-PERPLEXITY_API_KEY = os.getenv("PERPLEXITY_API_KEY")
-
-# NOTE: The public docs currently describe the chat-completions endpoint.
-# We reuse the same endpoint that our job-market helper uses.
-SEARCH_URL = "https://api.perplexity.ai/chat/completions"
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+openai.api_key = OPENAI_API_KEY
 
 
 def _stub_resources() -> List[Dict[str, str]]:
@@ -41,14 +38,9 @@ def search_resources(query: str, k: int = 3, timeout: int = 45) -> List[Dict[str
 
     Each dict has keys: `type`, `url`, `description`.
     """
-    if not PERPLEXITY_API_KEY:
-        logging.info("PERPLEXITY_API_KEY not set; returning stub resources")
+    if not OPENAI_API_KEY:
+        logging.info("OPENAI_API_KEY not set; returning stub resources")
         return _stub_resources()
-
-    headers = {
-        "Authorization": f"Bearer {PERPLEXITY_API_KEY}",
-        "Content-Type": "application/json",
-    }
 
     prompt = (
         "Return ONLY valid JSON array (no markdown) containing the top "
@@ -56,21 +48,18 @@ def search_resources(query: str, k: int = 3, timeout: int = 45) -> List[Dict[str
         "For each item include keys: type (video, article, etc.), url, description."
     )
 
-    payload = {
-        "model": os.getenv("PERPLEXITY_MODEL", "pplx-7b-online"),
-        "messages": [
-            {"role": "system", "content": "You are a helpful research assistant."},
-            {"role": "user", "content": prompt},
-        ],
-        "temperature": 0.2,
-        "max_tokens": 400,
-    }
-
     try:
-        resp = requests.post(SEARCH_URL, headers=headers, json=payload, timeout=timeout)
-        resp.raise_for_status()
-        data = resp.json()
-        content = data["choices"][0]["message"]["content"].strip()
+        completion = openai.ChatCompletion.create(
+            model=os.getenv("DEFAULT_MODEL", "gpt-3.5-turbo"),
+            messages=[
+                {"role": "system", "content": "You are a helpful research assistant."},
+                {"role": "user", "content": prompt},
+            ],
+            temperature=0.2,
+            max_tokens=400,
+            request_timeout=timeout,
+        )
+        content = completion.choices[0].message.content.strip()
 
         resources: List[Dict[str, str]] = json.loads(content)
         # Basic sanitisation & trimming
@@ -85,5 +74,5 @@ def search_resources(query: str, k: int = 3, timeout: int = 45) -> List[Dict[str
             )
         return cleaned or _stub_resources()
     except Exception as exc:  # broad catch – log then stub
-        logging.warning("Perplexity resource search failed: %s", exc)
+        logging.warning("OpenAI resource search failed: %s", exc)
         return _stub_resources()
