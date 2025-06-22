@@ -201,7 +201,7 @@ class LearningPathGenerator:
 
         try:
             # Use the main model orchestrator to get the response
-            response_str = self.model_orchestrator.get_response(
+            response_str = self.model_orchestrator.generate_response(
                 prompt, provider=ai_provider, model=ai_model
             )
 

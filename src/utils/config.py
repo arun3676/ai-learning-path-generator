@@ -9,19 +9,21 @@ from dotenv import load_dotenv
 # Load environment variables from .env file
 # Load environment variables from .env file, expecting it at project root (2 levels up from this file).
 # This ensures changes in .env are picked up correctly.
-dotenv_path = Path(__file__).resolve().parents[2] / '.env'
-if dotenv_path.is_file():
-    load_dotenv(dotenv_path=dotenv_path)
-    print(f"--- Successfully loaded .env from: {dotenv_path} ---")
-else:
-    # Fallback to default python-dotenv behavior (searches current dir and parents)
-    # This can be helpful if the script is run from an unexpected location.
-    print(f"--- .env not found at {dotenv_path}, attempting default load_dotenv() search. ---")
-    loaded_by_default = load_dotenv()
-    if loaded_by_default:
-        print(f"--- Successfully loaded .env from default location (e.g., {os.getcwd()}/.env or parent). ---")
+# Load .env file only if not on Render
+if not os.environ.get('RENDER'):
+    dotenv_path = Path(__file__).resolve().parents[2] / '.env'
+    if dotenv_path.is_file():
+        load_dotenv(dotenv_path=dotenv_path)
+        print(f"--- Successfully loaded .env from: {dotenv_path} ---")
     else:
-        print("--- WARNING: .env file not found by explicit path or default search. Environment variables may not be set. ---")
+        # Fallback to default python-dotenv behavior (searches current dir and parents)
+        # This can be helpful if the script is run from an unexpected location.
+        print(f"--- .env not found at {dotenv_path}, attempting default load_dotenv() search. ---")
+        loaded_by_default = load_dotenv()
+        if loaded_by_default:
+            print(f"--- Successfully loaded .env from default location (e.g., {os.getcwd()}/.env or parent). ---")
+        else:
+            print("--- WARNING: .env file not found by explicit path or default search. Environment variables may not be set. ---")
 
 # Development mode flag - checked before raising key errors
 DEV_MODE = os.getenv('DEV_MODE', 'False').lower() == 'true'
