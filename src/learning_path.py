@@ -387,8 +387,24 @@ class LearningPathGenerator:
                         ) for r in openai_results
                     ]
                 except Exception as _err:
-                    # If search fails, keep existing resources (already handled by stub inside helper)
-                    pass
+                    # If search fails, provide a default list of resources
+                    milestone.resources = [
+                        ResourceItem(
+                            type="article",
+                            url="https://www.example.com/article",
+                            description="Explore our curated list of articles to get started."
+                        ),
+                        ResourceItem(
+                            type="video",
+                            url="https://www.example.com/video",
+                            description="Watch our introductory videos to understand the basics."
+                        ),
+                        ResourceItem(
+                            type="book",
+                            url="https://www.example.com/book",
+                            description="Read our recommended book for in-depth knowledge."
+                        )
+                    ]
 
         topic_weights = {
             milestone.title: milestone.estimated_hours
