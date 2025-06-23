@@ -16,7 +16,7 @@ google_bp = make_google_blueprint(
         "https://www.googleapis.com/auth/userinfo.email",
         "openid",
     ],
-    redirect_url="/login/google/authorized",
+
 )
 
 bp = Blueprint("google_auth", __name__)
