@@ -1,11 +1,11 @@
-"""Perplexity-powered resource search helper.
+"""OpenAI-powered resource search helper.
 
-This module queries the Perplexity Chat Completion endpoint to retrieve
+This module queries the OpenAI Chat Completion endpoint to retrieve
 real, high-quality learning resources (videos, articles, docs) that a user
 can click to continue learning. It returns a simple list of dictionaries so
 upstream code can map them into `ResourceItem` Pydantic objects.
 
-If the `PERPLEXITY_API_KEY` environment variable is missing, or the API call
+If the `OPENAI_API_KEY` environment variable is missing, or the API call
 fails, we fall back to a single placeholder so the rest of the app
 continues to work.
 """
@@ -18,8 +18,9 @@ from typing import Dict, List
 
 import openai
 
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-openai.api_key = OPENAI_API_KEY
+# Initialize OpenAI with any key available at import time.
+# We will refresh this inside each call to ensure the latest env value is used.
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 
 def _stub_resources() -> List[Dict[str, str]]:
@@ -28,19 +29,22 @@ def _stub_resources() -> List[Dict[str, str]]:
         {
             "type": "article",
             "url": "https://example.com/placeholder-resource",
-            "description": "Sample resource – add your PERPLEXITY_API_KEY for real links.",
+            "description": "Add your OpenAI API key to see real learning resources.",
         }
     ]
 
 
 def search_resources(query: str, k: int = 3, timeout: int = 45) -> List[Dict[str, str]]:
-    """Search Perplexity and return up to *k* learning-resource dicts.
+    """Search OpenAI and return up to *k* learning-resource dicts.
 
     Each dict has keys: `type`, `url`, `description`.
     """
-    if not OPENAI_API_KEY:
+    api_key = os.getenv("OPENAI_API_KEY")
+    if not api_key:
         logging.info("OPENAI_API_KEY not set; returning stub resources")
         return _stub_resources()
+    # Ensure we use the freshest key for every request
+    openai.api_key = api_key
 
     prompt = (
         "Return ONLY valid JSON array (no markdown) containing the top "

@@ -748,7 +748,7 @@ def view_path(path_id):
 
 @bp.route('/job_market', methods=['GET'])
 def job_market():
-    """Return real-time job-market snapshot using Perplexity search."""
+    """Return real-time job-market snapshot using OpenAI search."""
     topic = request.args.get('topic', 'Data Scientist')
     try:
         stats = get_job_market_stats(topic)

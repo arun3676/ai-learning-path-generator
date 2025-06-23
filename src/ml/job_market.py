@@ -1,6 +1,6 @@
-"""Helpers to fetch real-time job-market data using Perplexity Search API.
+"""Helpers to fetch real-time job-market data using OpenAI API.
 
-The function `get_job_market_stats` queries Perplexity.ai with a carefully
+The function `get_job_market_stats` queries OpenAI with a carefully
 crafted prompt asking for a JSON-only response containing:
   - open_positions: string (e.g. "15,000+")
   - average_salary: string (e.g. "$110,000 - $150,000")
@@ -18,8 +18,9 @@ from typing import Dict, Any
 
 import openai
 
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-openai.api_key = OPENAI_API_KEY
+# Initialize OpenAI with any key available at import time.
+# We will refresh this inside each call to ensure the latest env value is used.
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 _DEFAULT_SNAPSHOT: Dict[str, Any] = {
     "open_positions": "5,000+",
@@ -35,12 +36,13 @@ PROMPT_TEMPLATE = (
 
 
 def _call_openai(prompt: str, timeout: int = 45) -> str:
-    """Low-level helper to hit Perplexity search completions.
-
-    This assumes a chat-completion-like interface; tweak if API differs.
-    """
-    if not OPENAI_API_KEY:
+    """Low-level helper to hit OpenAI chat completions."""
+    api_key = os.getenv("OPENAI_API_KEY")
+    if not api_key:
         raise RuntimeError("OPENAI_API_KEY env var not set")
+    
+    # Ensure we use the freshest key for every request
+    openai.api_key = api_key
 
     completion = openai.ChatCompletion.create(
         model=os.getenv("DEFAULT_MODEL", "gpt-3.5-turbo"),
@@ -67,11 +69,11 @@ def _extract_json(text: str) -> Dict[str, Any]:
                 return json.loads(inner)
             except json.JSONDecodeError:
                 pass
-    raise ValueError("Unable to parse JSON from Perplexity response")
+    raise ValueError("Unable to parse JSON from OpenAI response")
 
 
 def get_job_market_stats(topic: str) -> Dict[str, Any]:
-    """Return job-market stats for given topic using Perplexity search.
+    """Return job-market stats for given topic using OpenAI search.
 
     Falls back to default snapshot on any failure.
     """
@@ -83,7 +85,7 @@ def get_job_market_stats(topic: str) -> Dict[str, Any]:
         data = _extract_json(raw)
         # Basic validation
         if not all(k in data for k in ("open_positions", "average_salary", "trending_employers")):
-            raise ValueError("Missing keys in Perplexity JSON")
+            raise ValueError("Missing keys in OpenAI JSON")
         return data
     except Exception as exc:  # broad catch – log then fallback
         logging.warning("OpenAI job-market fetch failed: %s", exc)

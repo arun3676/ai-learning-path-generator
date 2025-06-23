@@ -18,7 +18,6 @@ from src.utils.config import (
     DEFAULT_REGION,
     EXPERTISE_LEVELS,
     LEARNING_STYLES,
-    PERPLEXITY_API_KEY,
     TIME_COMMITMENTS,
 )
 from src.utils.helpers import (
@@ -26,7 +25,7 @@ from src.utils.helpers import (
     difficulty_to_score,
     match_resources_to_learning_style,
 )
-# New import for Perplexity-powered resource search
+# Import for OpenAI-powered resource search
 from src.ml.resource_search import search_resources
 
 
@@ -183,7 +182,7 @@ class LearningPathGenerator:
 
         Args:
             skills: The list of skills to find related job roles for.
-            ai_provider: The AI provider to use (e.g., 'openai', 'perplexity').
+            ai_provider: The AI provider to use (e.g., 'openai').
             ai_model: The specific AI model to use.
 
         Returns:
@@ -379,12 +378,13 @@ class LearningPathGenerator:
                 )
                 milestone.job_market_data.related_roles = related_roles
 
-                # Fetch real learning resources via Perplexity search API and override / augment resources
+                # Fetch real learning resources via OpenAI search API and override / augment resources
                 try:
-                    perplexity_results = search_resources(milestone.title, k=3)
+                    openai_results = search_resources(milestone.title, k=3)
                     milestone.resources = [
-                        ResourceItem(type=r.get("type", "article"), url=r.get("url", ""), description=r.get("description", ""))
-                        for r in perplexity_results
+                        ResourceItem(
+                            **r
+                        ) for r in openai_results
                     ]
                 except Exception as _err:
                     # If search fails, keep existing resources (already handled by stub inside helper)

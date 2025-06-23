@@ -31,11 +31,12 @@ DEV_MODE = os.getenv('DEV_MODE', 'False').lower() == 'true'
 # API Keys
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 DEEPSEEK_API_KEY = os.getenv("DEEPSEEK_API_KEY")
+# Deprecated - kept for backward compatibility but not used
 PERPLEXITY_API_KEY = os.getenv("PERPLEXITY_API_KEY")
 
-# Ensure at least one API key is available (unless in DEV_MODE)
-if not DEV_MODE and not any([OPENAI_API_KEY, DEEPSEEK_API_KEY, PERPLEXITY_API_KEY]):
-    raise EnvironmentError("No valid AI provider API key found. Please set OPENAI_API_KEY, DEEPSEEK_API_KEY, or PERPLEXITY_API_KEY in your environment.")
+# Ensure OpenAI API key is available (unless in DEV_MODE)
+if not DEV_MODE and not OPENAI_API_KEY:
+    raise EnvironmentError("OPENAI_API_KEY environment variable is required (unless DEV_MODE=true).")
 
 # Default model provider (can be 'openai' or 'deepseek')
 DEFAULT_PROVIDER = os.getenv("DEFAULT_PROVIDER", "openai").lower()
@@ -46,9 +47,8 @@ EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "text-embedding-ada-002")
 MAX_TOKENS = int(os.getenv("MAX_TOKENS", "1000"))
 TEMPERATURE = float(os.getenv("TEMPERATURE", "0.7"))
 
-# Perplexity model (see https://docs.perplexity.ai/guides/model-cards)
-# Default to the lightweight online model; can be overridden via the PERPLEXITY_MODEL env var.
-PERPLEXITY_MODEL = os.getenv("PERPLEXITY_MODEL", "pplx-7b-online")
+# (Deprecated) Perplexity settings – retained for legacy tests but not used by the app.
+PERPLEXITY_MODEL = os.getenv("PERPLEXITY_MODEL", "pplx-7b-online")  # noqa: E501
 
 # Vector database settings
 VECTOR_DB_PATH = os.getenv("VECTOR_DB_PATH", "./vector_db")

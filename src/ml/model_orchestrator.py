@@ -40,13 +40,11 @@ from langchain.chains.llm import LLMChain
 
 from src.utils.config import (
     OPENAI_API_KEY,
-    DEEPSEEK_API_KEY,
-    PERPLEXITY_API_KEY,
-    PERPLEXITY_MODEL,
+    DEEPSEEK_API_KEY,  # Kept for legacy compatibility
     DEFAULT_PROVIDER,
     DEFAULT_MODEL,
     MAX_TOKENS,
-    TEMPERATURE,
+    TEMPERATURE
 )
 
 class ModelOrchestrator:
@@ -97,11 +95,8 @@ class ModelOrchestrator:
             if not self.api_key:
                 raise ValueError("DeepSeek API key is required. Please provide it or set the DEEPSEEK_API_KEY environment variable.")
             print("--- ModelOrchestrator.__init__: DeepSeek provider selected, client initialization SKIPPED for now ---")
-        elif self.provider == 'perplexity':
-            self.api_key = api_key or PERPLEXITY_API_KEY
-            if not self.api_key:
-                raise ValueError("Perplexity API key is required. Please provide it or set the PERPLEXITY_API_KEY environment variable.")
-            print("--- ModelOrchestrator.__init__: Perplexity provider selected, will use HTTP completion ---")
+        # Only OpenAI and DeepSeek providers are supported now
+        # (OpenAI is the primary and recommended provider)
         else:
             raise ValueError(f"Unsupported provider: {self.provider}. Use 'openai' or 'deepseek'.")
             
@@ -160,8 +155,7 @@ class ModelOrchestrator:
                     temperature=temp,
                     max_tokens=MAX_TOKENS,
                 )
-            elif self.provider == 'perplexity':
-                print(f"--- ModelOrchestrator.init_language_model: Perplexity provider selected, will use HTTP completion ---")
+            # OpenAI is the primary provider now
         except Exception as e:
             print(f"Error initializing language model: {str(e)}")
             raise
@@ -188,8 +182,7 @@ class ModelOrchestrator:
                 self.api_key = OPENAI_API_KEY
             elif self.provider == 'deepseek':
                 self.api_key = DEEPSEEK_API_KEY
-            elif self.provider == 'perplexity':
-                self.api_key = PERPLEXITY_API_KEY
+            # OpenAI is the primary provider now
             else:
                 raise ValueError(f"Unsupported provider: {provider}. Use 'openai' or 'deepseek'.")
                 
@@ -386,12 +379,7 @@ class ModelOrchestrator:
                 else:
                     print("DEBUG: WARNING - No DeepSeek API key found!")
                     
-            elif self.provider == 'perplexity':
-                api_key = PERPLEXITY_API_KEY
-                if api_key:
-                    print(f"DEBUG: Using Perplexity API key starting with: {api_key[:5]}{'*' * 10}")
-                else:
-                    print("DEBUG: WARNING - No Perplexity API key found!")
+            # OpenAI is the primary provider now
             
             if self.provider == 'openai':
                 from src.direct_openai import generate_completion
@@ -411,8 +399,7 @@ class ModelOrchestrator:
                     temp,
                     system_message="You are an expert AI assistant that specializes in generating structured responses following specified schemas. Always include all required fields in your JSON response."
                 )
-            elif self.provider == 'perplexity':
-                response_text = self._perplexity_completion(full_prompt, temp)
+            # OpenAI is the primary provider now
             else:
                 raise ValueError(f"Unknown provider: {self.provider}")
                 
@@ -668,40 +655,6 @@ class ModelOrchestrator:
             return _post(messages_retry)
         except Exception as e:
             print(f"DEBUG: DeepSeek API call failed: {str(e)}")
-            print(traceback.format_exc())
-            raise
-
-    def _perplexity_completion(self, prompt, temperature):
-        """Call Perplexity AI completion endpoint."""
-        import requests, traceback, time, json
-        api_key = PERPLEXITY_API_KEY
-        url = "https://api.perplexity.ai/chat/completions"
-        
-        try:
-            headers = {
-                "Authorization": f"Bearer {api_key}",
-                "Content-Type": "application/json"
-            }
-            payload = {
-                "model": PERPLEXITY_MODEL,
-                "messages": [
-                    {"role": "user", "content": prompt}
-                ],
-                "temperature": temperature or 0.3,
-                "max_tokens": min(MAX_TOKENS, 512),  # Perplexity caps at 512
-                "stream": False
-            }
-            start = time.time()
-            response = requests.post(url, headers=headers, json=payload, timeout=120)
-            if response.status_code != 200:
-                print(f"DEBUG: Perplexity response status {response.status_code}: {response.text[:400]}")
-                response.raise_for_status()
-            data = response.json()
-            text = data.get('choices', [{}])[0].get('message', {}).get('content', '')
-            print(f"DEBUG: Perplexity completion in {time.time()-start:.2f}s, {len(text)} chars")
-            return text
-        except Exception as e:
-            print(f"DEBUG: Perplexity API call failed: {e}")
             print(traceback.format_exc())
             raise
 

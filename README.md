@@ -14,11 +14,11 @@ The system combines OpenAI's language models with vector database technology to 
 
 ## Features
 
-- 🧠 **AI-powered path generation** using LangChain and OpenAI
+- 🥸 **AI-powered path generation** using LangChain and OpenAI
 - 🎯 **Learning style adaptation** with support for visual, auditory, reading, and kinesthetic learners
 - 📊 **Difficulty assessment** of content using NLP analysis
 - 📈 **Progress tracking** with milestone prediction
-- 📆 **Study scheduling** with customizable time commitments
+- 📅 **Study scheduling** with customizable time commitments
 - 🔍 **Resource recommendations** tailored to learning style
 - 💾 **Vector database** for efficient semantic search
 - 🌐 **Interactive web interface** with modern UI/UX
@@ -28,44 +28,21 @@ The system combines OpenAI's language models with vector database technology to 
 
 - **AI/ML**: LangChain, OpenAI, SentenceTransformers
 - **Vector Database**: ChromaDB for semantic document storage
-=======
-This project uses AI to create customized learning paths based on:
-- Topic selection
-- User's expertise level
-- Learning style preferences
-- Time availability
-
-## Features
-- 🤖 AI-powered path generation
-- 📊 Difficulty assessment
-- 📈 Progress tracking
-- 🌐 Interactive web interface
-- 📚 Resource recommendations
-
-## Tech Stack
-- **AI/ML**: LangChain, OpenAI, SentenceTransformers
-- **Database**: ChromaDB for vector storage
->>>>>>> 9b8b2e98932f5384f9c6ce135c1ef98e1f213177
 - **Backend**: Python, Flask
 - **Frontend**: HTML, CSS (Tailwind)
 
 ## Getting Started
 
 ### Prerequisites
-<<<<<<< HEAD
 
-=======
->>>>>>> 9b8b2e98932f5384f9c6ce135c1ef98e1f213177
 - Python 3.8+
 - OpenAI API key
-- (Optional) Perplexity AI API key – enables real resource search
 
 ### Installation
-<<<<<<< HEAD
 
 1. Clone the repository
 ```bash
-git clone https://github.com/yourusername/ai-learning-path-generator-v2.git
+git clone https://github.com/arun3676/ai-learning-path-generator-v2.git
 cd ai-learning-path-generator-v2
 ```
 
@@ -183,7 +160,6 @@ docker run -e PORT=5000 -e OPENAI_API_KEY=... -p 5000:5000 learning-path
 ## License
 
 MIT
-=======
 ```bash
 ai_learning_path_generator/
 ├── src/
@@ -271,26 +247,5 @@ Key Features
 
 Built With
 
-LangChain & OpenAI
-ChromaDB
-Python & Flask
-HTML & Tailwind CSS
-
-License
-MIT
-Contact
-Your Name - your.email@example.com
-Acknowledgments
-
-OpenAI for GPT API
-LangChain framework
-ChromaDB for vector storage
-
-
-
-📝 License
-This project is licensed under the MIT License - see the LICENSE file for details.
-📧 Contact
 Arun Kumar Chukkala - arunkiran721@gmail.com
 Project Link: https://github.com/arun3676/ai-learning-path-generator
->>>>>>> 9b8b2e98932f5384f9c6ce135c1ef98e1f213177
