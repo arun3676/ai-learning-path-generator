@@ -11,4 +11,11 @@ class Config:
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
         'sqlite:///' + os.path.join(basedir, 'app.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+    # Ensure cookies work with OAuth redirects in production
+    if os.environ.get('RENDER'):
+        SESSION_COOKIE_SECURE = True       # Cookie only over HTTPS
+        SESSION_COOKIE_SAMESITE = 'None'   # Allow cross-site redirects (Google OAuth)
+        REMEMBER_COOKIE_SECURE = True
+        REMEMBER_COOKIE_SAMESITE = 'None'
     LOG_TO_STDOUT = os.environ.get('LOG_TO_STDOUT')
