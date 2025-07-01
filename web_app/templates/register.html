@@ -134,5 +134,83 @@
         </div>
     </footer>
     <script src="{{ url_for('static', filename='js/theme.js') }}"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const usernameInput = document.getElementById('username');
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+            const usernameFeedback = document.getElementById('username-feedback');
+            const passwordStrength = document.getElementById('password-strength');
+            const suggestUsernameBtn = document.getElementById('suggest-username-btn');
+
+            // 1. Check Username Availability
+            usernameInput.addEventListener('input', debounce(async function () {
+                const username = usernameInput.value;
+                if (username.length < 3) {
+                    usernameFeedback.innerHTML = '';
+                    return;
+                }
+                const response = await fetch('/auth/check-username', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: username })
+                });
+                const data = await response.json();
+                if (data.available) {
+                    usernameFeedback.innerHTML = `<span class="text-green-500 text-xs">Great choice! '${username}' is available.</span>`;
+                } else {
+                    usernameFeedback.innerHTML = `<span class="text-red-500 text-xs">Oops! '${username}' is taken. Try another?</span>`;
+                }
+            }, 500));
+
+            // 2. Suggest Username
+            suggestUsernameBtn.addEventListener('click', async function () {
+                const email = emailInput.value;
+                if (!email) {
+                    usernameFeedback.innerHTML = `<span class="text-yellow-600 text-xs">Please enter your email first.</span>`;
+                    return;
+                }
+                const response = await fetch('/auth/suggest-username', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email })
+                });
+                const data = await response.json();
+                if (data.suggestion) {
+                    usernameInput.value = data.suggestion;
+                    usernameFeedback.innerHTML = `<span class="text-blue-500 text-xs">How about this one? You can change it!</span>`;
+                }
+            });
+
+            // 3. Password Strength Meter
+            passwordInput.addEventListener('input', async function () {
+                const password = passwordInput.value;
+                if (!password) {
+                    passwordStrength.innerHTML = '';
+                    return;
+                }
+                const response = await fetch('/auth/check-password-strength', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password: password })
+                });
+                const data = await response.json();
+                let strengthHTML = `<div class="text-xs">${data.message}</div>`;
+                strengthHTML += `<div class="w-full bg-gray-200 rounded-full h-2.5 mt-2"><div class="h-2.5 rounded-full ${data.color}" style="width: ${data.strength_percent}%"></div></div>`;
+                passwordStrength.innerHTML = strengthHTML;
+            });
+
+            // Debounce function to limit API calls
+            function debounce(func, delay) {
+                let timeout;
+                return function(...args) {
+                    const context = this;
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => func.apply(context, args), delay);
+                };
+            }
+        });
+    </script>
 </body>
 </html>

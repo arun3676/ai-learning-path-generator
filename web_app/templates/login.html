@@ -108,12 +108,7 @@
                     {% endif %}
                 {% endwith %}
                 
-                <a href="{{ url_for('google.login') }}" class="w-full flex items-center justify-center gap-3 bg-red-600 hover:bg-red-700 text-white font-semibold py-3 rounded-lg shadow mb-6">
-                        <svg class="w-5 h-5" viewBox="0 0 533.5 544.3"><path fill="#FFFFFF" d="M533.5 278.4c0-17.3-1.5-34-4.3-50.2H272v95h147.4c-6.3 34-25 62.7-53.3 82v68h86.1c50.3-46.4 80.3-114.7 80.3-194.8z"/><path fill="#FFFFFF" d="M272 544.3c72.6 0 133.5-24 178-65.1l-86.1-68c-24 16-54.6 25.4-91.9 25.4-70.7 0-130.6-47.7-152-111.4H32.4v69.9c44.8 88.1 135.6 149.2 239.6 149.2z"/><path fill="#FFFFFF" d="M120 326.7c-10.9-32.7-10.9-68.3 0-101L32.4 155.9c-44.8 88.1-44.8 191.6 0 279.7l87.6-69z"/><path fill="#FFFFFF" d="M272 107.7c39.5-.6 77 13.7 105.9 39.1l79.5-79.5C411.5 23.2 344.2-1.2 272 0 168 0 77.2 61.1 32.4 149.2l87.6 69c21.4-63.7 81.3-111.5 152-110.5z"/></svg>
-                        Continue with Google
-                    </a>
-
-                    <form method="POST" action="{{ url_for('auth.login') }}">
+                <form method="POST" action="{{ url_for('auth.login') }}">
                     {{ form.hidden_tag() }}
                     
                     <div class="mb-4">
