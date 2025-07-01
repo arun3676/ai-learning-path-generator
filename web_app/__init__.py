@@ -38,8 +38,10 @@ def create_app(config_class=Config):
 
     # Google OAuth blueprint (Flask-Dance)
     from web_app.google_oauth import google_bp, bp as google_auth_bp
-    app.register_blueprint(google_bp, url_prefix="/login")  # handles /login/google
-    app.register_blueprint(google_auth_bp)
+    # Register Flask-Dance blueprint at root level for default OAuth flow
+    app.register_blueprint(google_bp, url_prefix="")  # Will handle /google directly 
+    # Register our auth blueprint for callbacks and login helpers
+    app.register_blueprint(google_auth_bp, url_prefix="/auth")  # For /auth routes
 
 
     # Import models here to ensure they are registered with SQLAlchemy

@@ -17,6 +17,13 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(120), index=True, unique=True, nullable=False)
     password_hash = db.Column(db.String(256))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    last_seen = db.Column(db.DateTime, default=datetime.utcnow)
+    registration_source = db.Column(db.String(20), default='email_password')  # 'email_password', 'google', etc.
+    login_count = db.Column(db.Integer, default=0)
+    
+    # Profile information (optional)
+    display_name = db.Column(db.String(100))  # For a more personalized display name vs username
+    bio = db.Column(db.Text)
     
     # Relationships for Feature 1: User Accounts & Progress Tracking
     # A user can have multiple learning paths they've generated or saved
